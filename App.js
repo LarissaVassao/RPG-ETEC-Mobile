@@ -6,8 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Home from './src/telas/Home';
-import Usuario from './src/telas/Usuario';
-import Clientes from './src/telas/Clientes';
+import EntrarCampanha from './src/telas/EntrarCampanha';
+import CriarCampanha from './src/telas/CriarCampanha';
 import Login from './src/telas/Login';
 import Cadastro from './src/telas/Cadastro';
 
@@ -26,13 +26,11 @@ function Tabs(){
           iconName = focused
             ? 'home-outline'
             : 'home-outline';
-        } else if (route.name === 'Usuario') {
-          iconName = focused ? 'person-outline' : 'person-outline';
-        }else if (route.name === 'Clientes') {
-          iconName = focused ? 'people-outline' : 'people-outline';
+        } else if (route.name === 'Entrar em uma campanha') {
+          iconName = focused ? 'log-in-outline' : 'log-in-outline';
+        }else if (route.name === 'Criar uma campanha') {
+          iconName = focused ? 'create-outline' : 'create-outline';
         }
-        
-        //aqui define os ícones que irão aparecer nas Tabs
         return <Ionicons name={iconName} size={size} color={color} />;
       },
     })}
@@ -40,11 +38,14 @@ function Tabs(){
       labelStyle: {
         fontSize: 12},
       activeTintColor: '#3f64c7',
-      inactiveTintColor: 'gray',      
+      inactiveTintColor: 'gray',    
+      tabBarStyle:{
+        height: 1000
+      }  
     }}    
     >
-      <Tab.Screen name= "Usuario" component={Usuario}></Tab.Screen>
-      <Tab.Screen name= "Clientes" component={Clientes}></Tab.Screen>
+      <Tab.Screen name= "Entrar em uma campanha" component={EntrarCampanha}></Tab.Screen>
+      <Tab.Screen name= "Criar uma campanha" component={CriarCampanha}></Tab.Screen>
     </Tab.Navigator>
   )
 }
@@ -57,7 +58,7 @@ export default function App() {
  <NavigationContainer>
  <Stack.Navigator initialRouteName='Login'>
 
-   <Stack.Screen 
+   {/* <Stack.Screen 
        name="Usuario" 
        component={Tabs}
        options={{
@@ -70,11 +71,12 @@ export default function App() {
        }}
        >
 
-   </Stack.Screen>
+   </Stack.Screen> */}
    <Stack.Screen name="Login" component={Login} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Cadastro" component={Cadastro} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Home" component={Home} options={{headerShown: false}}></Stack.Screen>      
-   <Stack.Screen name="Clientes" component={Clientes} ></Stack.Screen>
+   <Stack.Screen name="CriarCampanha" component={CriarCampanha} options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="EntrarCampanha" component={EntrarCampanha}  options={{headerShown: false}}></Stack.Screen>
  </Stack.Navigator>
 </NavigationContainer>
   );
