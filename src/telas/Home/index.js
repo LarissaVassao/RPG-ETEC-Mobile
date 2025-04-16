@@ -1,13 +1,14 @@
 import React, {useState} from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import {Ionicons} from '@expo/vector-icons';
 
 export default function Home({route, navigation}){
     return(
         
         <View style={styles.container}>
             <View style={styles.nav}> 
-             
+                
                 <Image style={{width:60, height: 60}} resizeMode = "contain" source={require('../../../assets/img/logo.png')}></Image>
             </View>
 
@@ -19,12 +20,12 @@ export default function Home({route, navigation}){
                 end={{ x: 1, y: 0 }}
                 style={StyleSheet.absoluteFillObject}
                 />  
-                <Text style={styles.texto}>Criar uma Campanha de RPG</Text>
+                <Text style={styles.texto}>Criar uma Campanha</Text>
                 <TouchableOpacity
                     style={styles.botao}
                     onPress={() => navigation.navigate("CriarCampanha")}
                     >
-                    <Text style={styles.textoBotao}>Criar</Text>
+                    <Text style={styles.textoBotao}>  </Text>
                 </TouchableOpacity>
 
             </View>
@@ -37,12 +38,12 @@ export default function Home({route, navigation}){
                 end={{ x: 1, y: 0 }}
                 style={StyleSheet.absoluteFillObject}
                 />  
-                <Text style={styles.texto}>Entrar em uma Campanha de RPG</Text>
+                <Text style={styles.texto}>Entrar em uma Campanha</Text>
                 <TouchableOpacity
                     style={styles.botao}
                     onPress={() => navigation.navigate("EntrarCampanha")}
                     >
-                    <Text style={styles.textoBotao}>Entrar</Text>
+                    <Text style={styles.textoBotao}><Ionicons name="log-in-outline" size={30}></Ionicons></Text>
                 </TouchableOpacity>
             </View>
 
@@ -55,7 +56,7 @@ export default function Home({route, navigation}){
                     style={styles.botao2}
                     onPress={() => navigation.navigate("Login")}
                     >
-                    <Text style={styles.textoBotao2}>Acessar</Text>
+                    <Text style={styles.textoBotao2}></Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -80,7 +81,10 @@ const styles = StyleSheet.create({
         borderColor: '#3B004F', 
         justifyContent: 'center',
         alignItems: 'center', 
-        padding: 20
+        padding: 20,
+        shadowRadius: 5,
+        textShadowColor: '#A450FF',
+        
 
     },
     titTutorial: {
@@ -161,19 +165,22 @@ const styles = StyleSheet.create({
     },
     botao:{
         backgroundColor: "#fff",
-        width:200,
+        width:100,
         height: 30,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 7,
         padding: 10,
         marginTop: 10,
-        borderRadius: 50
+        borderRadius: 20,
+        borderColor: '#000',
+        borderWidth: 3
     },
     textoBotao: {
         color: '#623372',
         fontSize: 18,
-        fontWeight: 'semibold'
+        fontWeight: 'semibold',
+        alignItems: 'center'
     },
     botao2:{
         backgroundColor: "#3B004F",

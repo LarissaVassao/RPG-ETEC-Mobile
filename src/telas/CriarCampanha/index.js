@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function  EntrarCampanha({ navigation }){
     return(
         <View style={styles.container}>
-            <Text style={styles.texto}>Tela de Criar</Text>
+          
 
         </View>
     )

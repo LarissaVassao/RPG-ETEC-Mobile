@@ -26,8 +26,8 @@ export default function Login({navigation}){
       <KeyboardAvoidingView 
         style={styles.background}>
         <View style={styles.logo}>
-          <Image style={{width:320}} resizeMode = "contain" source={require('../../../assets/img/logo.png')}></Image>
-          <Text style={styles.titulo}>Login</Text>
+          <Image style={{width:320}} resizeMode = "contain" source={require('../../../assets/img/logo.png')}
+          ></Image>
         </View>
     
       <Animated.View 

@@ -27,7 +27,6 @@ export default function Login({navigation}){
       <KeyboardAvoidingView 
         style={styles.background}>
         <View style={styles.logo}>
-            <Text style={styles.titulo}>Cadastro</Text>
             <Image style={{width:320}} resizeMode = "contain" source={require('../../../assets/img/logo.png')}></Image>
         </View>
     
