@@ -1,202 +1,117 @@
-import React, {useState} from "react";
+import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import {Ionicons} from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Home({route, navigation}){
-    return(
-        
-        <View style={styles.container}>
-            <View style={styles.nav}> 
-                
-                <Image style={{width:60, height: 60}} resizeMode = "contain" source={require('../../../assets/img/logo.png')}></Image>
-            </View>
+export default function Home({ navigation }) {
+  return (
+    <View style={styles.container}>
+      {/* Cabeçalho com Logo */}
+      <View style={styles.header}>
+        <Image
+          style={styles.logo}
+          source={require('../../../assets/img/logo.png')}
+        />
+      </View>
 
-            <Text style={styles.titulo}>Bem vindo, [Usuario]! </Text> {/*Futuramente linkar com usuário*/}
-            <View style={styles.criarC}> 
-                <LinearGradient
-                colors={['#623372', '#b673ff']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={StyleSheet.absoluteFillObject}
-                />  
-                <Text style={styles.texto}>Criar uma Campanha</Text>
-                <TouchableOpacity
-                    style={styles.botao}
-                    onPress={() => navigation.navigate("CriarCampanha")}
-                    >
-                    <Text style={styles.textoBotao}>  </Text>
-                </TouchableOpacity>
+      {/* Saudação */}
+      <Text style={styles.welcomeText}>Bem-vindo</Text>
 
-            </View>
+      {/* Área de Botões com Gradiente */}
+      <View style={styles.buttonsContainer}>
+        {/* Botão Entrar com Gradiente */}
+        <TouchableOpacity 
+          style={styles.actionButton}
+          onPress={() => navigation.navigate("EntrarCampanha")}
+        >
+          <LinearGradient
+            colors={['#623372', '#b673ff']}
+            style={styles.gradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <Ionicons name="log-in-outline" size={40} color="#fff" />
+          </LinearGradient>
+        </TouchableOpacity>
 
+        {/* Botão Criar com Gradiente Invertido */}
+        <TouchableOpacity 
+          style={styles.actionButton}
+          onPress={() => navigation.navigate("CriarCampanha")}
+        >
+          <LinearGradient
+            colors={['#b673ff', '#623372']}
+            style={styles.gradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <Ionicons name="add-outline" size={40} color="#fff" />
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
 
-            <View style={styles.entrarC}> 
-                <LinearGradient
-                colors={['#b673ff', '#623372']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={StyleSheet.absoluteFillObject}
-                />  
-                <Text style={styles.texto}>Entrar em uma Campanha</Text>
-                <TouchableOpacity
-                    style={styles.botao}
-                    onPress={() => navigation.navigate("EntrarCampanha")}
-                    >
-                    <Text style={styles.textoBotao}><Ionicons name="log-in-outline" size={30}></Ionicons></Text>
-                </TouchableOpacity>
-            </View>
-
-
-            <View style={styles.tutorial}>
-                <Text style={styles.titTutorial}>ACESSAR AS REGRAS DO RPG</Text>
-                <Text style={styles.textTutorial}>Jogos de interpretação (RPG) combatem a depressão ao estimular conexões sociais, reduzindo o isolamento. E por isso temos um sistema que poderá ser visto ao clicar no botão abaixo: </Text>
-
-                <TouchableOpacity
-                    style={styles.botao2}
-                    onPress={() => navigation.navigate("Login")}
-                    >
-                    <Text style={styles.textoBotao2}></Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
+      {/* Botão de Ajuda */}
+      <TouchableOpacity 
+        style={styles.helpButton}
+        onPress={() => navigation.navigate("Tutorial")}
+      >
+        <Ionicons name="help-outline" size={30} color="#3B004F" />
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    tutorial: {
-        width: '85%',
-        height: 220,
-        overflow: 'hidden',
-        borderRadius: 15,
-        margin: 30,
-        backgroundColor: '#fff',
-        borderWidth: 2,         
-        borderColor: '#3B004F', 
-        justifyContent: 'center',
-        alignItems: 'center', 
-        padding: 20,
-        shadowRadius: 5,
-        textShadowColor: '#A450FF',
-        
-
-    },
-    titTutorial: {
-       fontSize: 15,
-       fontWeight: 'semibold'
-    }, 
-    textTutorial: {
-        textAlign: 'justify',
-        fontSize: 15
-    },
-    nav: {
-        width: '100%',
-        height: 50,
-        backgroundColor: '#3B004F', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        position: 'absolute',
-        top: 0,
-        zIndex: 1,
-    },
-    titulo: {
-        fontSize: 30,
-        alignItems: 'center',
-        color: '#3B004F',
-        fontWeight: 'bold',
-        marginTop: 60,
-        zIndex:1,
-        marginBottom: 20,
-      },
-
-
-    criarC: {
-        width:'90%',
-        height: 90,
-        //marginLeft: - 60,
-        borderBottomRightRadius: 50,
-        borderTopRightRadius: 50,
-        marginTop: 0,
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignItems: 'center',
-        alignSelf: 'flex-start',
-    },
-    entrarC: {
-        width: '90%',
-        height: 90,
-        //marginRight: -30,
-        borderBottomLeftRadius: 50,
-        borderTopLeftRadius: 50,
-        marginTop: 30,
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'flex-end', 
-       
-    },
-    texto: {
-      fontFamily: 'Comic-Sans',
-      fontSize: 20,
-      color: '#fff',
-    },
-    input:{
-        textAlign: 'center',
-        width: 100,
-        borderWidth: 5,
-        borderColor: 'black'
-    },
-    logo:{
-        flex: 1,
-        alignSelf: 'center',
-        justifyContent: 'center'
-    },
-    imgBg:{
-        width: '100%',
-        height: '100%',
-        opacity: 1
-    },
-    botao:{
-        backgroundColor: "#fff",
-        width:100,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 7,
-        padding: 10,
-        marginTop: 10,
-        borderRadius: 20,
-        borderColor: '#000',
-        borderWidth: 3
-    },
-    textoBotao: {
-        color: '#623372',
-        fontSize: 18,
-        fontWeight: 'semibold',
-        alignItems: 'center'
-    },
-    botao2:{
-        backgroundColor: "#3B004F",
-        width:200,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 7,
-        padding: 10,
-        marginTop: 10,
-        borderRadius: 50
-    },
-    textoBotao2: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'semibold'
-    },
-  });
-  
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 40,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+  },
+  welcomeText: {
+    fontSize: 24,
+    color: '#3B004F',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 40,
+  },
+  buttonsContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  actionButton: {
+    width: '100%',
+    height: 80,
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 20,
+    elevation: 3,
+  },
+  gradient: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  helpButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#3B004F',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

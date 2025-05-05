@@ -1,25 +1,111 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 
-export default function  CriarCampanha({ navigation }){
-    return(
-        <View style={styles.container}>
-            <Text style={styles.texto}>Tela de Entrar</Text>
+export default function App() {
+  const [id, setID] = useState('');
+  const [senha, setSenha] = useState('');
 
+  return (
+    <ScrollView 
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.content}>
+        <Text style={styles.title}>Entrar em uma Campanha</Text>
+        
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>ID DA CAMPANHA</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Digite o id da campanha"
+            placeholderTextColor="#999"
+            value={id}
+            onChangeText={setID}
+          />
         </View>
-    )
+
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>SENHA</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Digite a senha para entrar"
+            placeholderTextColor="#999"
+            value={senha}
+            onChangeText={setSenha}
+          />
+        </View>
+
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>CRIAR CAMPANHA</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+    padding: 24,
+    paddingTop: 40,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#623372',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  formGroup: {
+    marginBottom: 25,
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#b673ff',
+    marginBottom: 8,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 16,
+    fontSize: 16,
+    color: '#333',
+    borderWidth: 2,
+    borderColor: '#e9ecef',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  multilineInput: {
+    minHeight: 140,
+    textAlignVertical: 'top',
+  },
+  button: {
+    backgroundColor: '#623372',
+    borderRadius: 10,
+    padding: 18,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
+    shadowColor: '#623372',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
-  texto: {
-    fontFamily: 'Comic-Sans',
-    fontSize: 40,
-    color: '#8465',
-  }
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
 });
