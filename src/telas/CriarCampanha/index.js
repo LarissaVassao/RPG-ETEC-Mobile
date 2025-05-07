@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Adicione esta importação
 
-export default function App() {
+export default function App({ navigation }) { // Adicione navigation como prop
   const [nomeCampanha, setNomeCampanha] = useState('');
   const [descricao, setDescricao] = useState('');
 
@@ -11,6 +12,14 @@ export default function App() {
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.content}>
+        {/* Botão adicionado no canto superior esquerdo */}
+        <TouchableOpacity 
+          style={styles.helpButton}
+          onPress={() => navigation.navigate("Home")}
+        >
+          <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
+        </TouchableOpacity>
+        
         <Text style={styles.title}>Criar uma Campanha</Text>
         
         <View style={styles.formGroup}>
@@ -109,5 +118,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 1,
+  },
+  helpButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    zIndex: 1,
+  },
+  backButton: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#3B004F',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
