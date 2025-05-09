@@ -46,7 +46,9 @@ export default function App({ navigation }) { // Adicione navigation como prop
           />
         </View>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button}
+          onPress={() => navigation.navigate("Personagem")}
+        >
           <Text style={styles.buttonText}>CRIAR CAMPANHA</Text>
         </TouchableOpacity>
       </View>

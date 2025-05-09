@@ -11,6 +11,7 @@ import CriarCampanha from './src/telas/CriarCampanha';
 import Login from './src/telas/Login';
 import Cadastro from './src/telas/Cadastro';
 import Tutorial from './src/telas/Tutorial';
+import Personagem from './src/telas/Personagem';
 
 import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
@@ -76,6 +77,8 @@ export default function App() {
    <Stack.Screen name="CriarCampanha" component={CriarCampanha} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="EntrarCampanha" component={EntrarCampanha}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Tutorial" component={Tutorial}  options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="Personagem" component={Personagem}  options={{headerShown: false}}></Stack.Screen>
+
  </Stack.Navigator>
 </NavigationContainer>
   );
