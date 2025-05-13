@@ -12,6 +12,8 @@ import Login from './src/telas/Login';
 import Cadastro from './src/telas/Cadastro';
 import Tutorial from './src/telas/Tutorial';
 import Personagem from './src/telas/Personagem';
+import ListaPersonagens from './src/telas/ListaPersonagens';
+import TelaCampanha from './src/telas/TelaCampanha';
 
 import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
@@ -24,11 +26,13 @@ function Tabs(){
         let iconName;
         color= '#d0d'
         size = 30
-        if (route.name === 'Home') {
+        if (route.name === 'TelaCampanha') {
           iconName = focused
             ? 'home-outline'
             : 'home-outline';
 
+        }else if (route.name === 'ListaPersonagens') {
+          iconName = focused ? 'person-outline' : 'person-outline';
         }
 
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -44,7 +48,7 @@ function Tabs(){
       }  
     }}    
     >
-     
+       <Tab.Screen name= "ListaPersonagens" component={ListaPersonagens}></Tab.Screen>
     </Tab.Navigator>
   )
 }
@@ -78,6 +82,9 @@ export default function App() {
    <Stack.Screen name="EntrarCampanha" component={EntrarCampanha}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Tutorial" component={Tutorial}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Personagem" component={Personagem}  options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="ListaPersonagens" component={ListaPersonagens} ></Stack.Screen>
+   <Stack.Screen name="TelaCampanha" component={TelaCampanha}></Stack.Screen>
+
 
  </Stack.Navigator>
 </NavigationContainer>

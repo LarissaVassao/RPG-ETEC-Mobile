@@ -8,7 +8,7 @@ export default function Personagem({ navigation }) {
     const [jogador, setJogador] = useState('');
     const [nivelPersonagem, setNivelPersonagem] = useState('');
     const [antepassado, setAntepassado] = useState(0);
-    const [creditoPersonagem, setCreditoPersonagem] = useState('');
+
     
     const antepassados = [
         {ant: "Herdeiro", valor: 1},
