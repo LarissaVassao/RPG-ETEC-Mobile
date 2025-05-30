@@ -5,7 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 export default function  TelaCampanha({ navigation }){
     return(
         <View style={styles.container}>
-         
+         <TouchableOpacity 
+                         style={styles.backButton}
+                         onPress={() => navigation.navigate("Home")}
+                     >
+                         <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
+           </TouchableOpacity>
         </View>
     )
 }

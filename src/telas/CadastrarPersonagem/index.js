@@ -3,9 +3,22 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Image 
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
 
-export default function Personagem({ navigation }) {
+export default function CadastrarPersonagem({ navigation }) {
     const [nomePersonagem, setNomePersonagem] = useState('');
     const [jogador, setJogador] = useState('');
+    const [nivelPersonagem, setNivelPersonagem] = useState('');
+    const [antepassado, setAntepassado] = useState(0);
+
+    
+    const antepassados = [
+        {ant: "Herdeiro", valor: 1},
+        {ant: "Órfão", valor: 2},
+        {ant: "Aposentado", valor: 3},
+    ];
+
+    let antepassadosItems = antepassados.map((v,k) => {
+        return <Picker.Item key={k} value={k} label={v.ant} />
+    })
 
     return (
         <View style={styles.mainContainer}>
@@ -31,7 +44,7 @@ export default function Personagem({ navigation }) {
                 keyboardShouldPersistTaps="handled"
             >
                 <View style={styles.content}>
-                    <Text style={styles.title}>Personagem</Text>
+                    <Text style={styles.title}>Ficha de Criação de Personagem</Text>
                     
                     {/* Campos do formulário com label e input na mesma linha */}
                     <View style={styles.formRow}>
@@ -60,8 +73,38 @@ export default function Personagem({ navigation }) {
                         </View>
                     </View>
                     
-                  
-                
+                    <View style={styles.formRow}>
+                        <Text style={styles.label}>Nível:</Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nível"
+                                placeholderTextColor="#999"
+                                value={nivelPersonagem}
+                                onChangeText={setNivelPersonagem}
+                                keyboardType="numeric"
+                            />
+                        </View>
+                    </View>
+                    
+                    <View style={styles.formRow}>
+                        <Text style={styles.label}>Antepassado:</Text>
+                        <View style={styles.pickerContainer}>
+                            <Picker
+                                style={styles.picker}
+                                selectedValue={antepassado}
+                                onValueChange={(itemValue) => setAntepassado(itemValue)}
+                                dropdownIconColor="#623372"
+                            >
+                                {antepassadosItems}
+                            </Picker>
+                        </View>
+                    </View>
+                    
+                    <TouchableOpacity style={styles.button}
+                     onPress={() => navigation.navigate("Personagem")}>
+                        <Text style={styles.buttonText}>CRIAR PERSONAGEM</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>

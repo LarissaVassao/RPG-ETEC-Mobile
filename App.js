@@ -11,6 +11,7 @@ import CriarCampanha from './src/telas/CriarCampanha';
 import Login from './src/telas/Login';
 import Cadastro from './src/telas/Cadastro';
 import Tutorial from './src/telas/Tutorial';
+import CadastrarPersonagem from './src/telas/CadastrarPersonagem';
 import Personagem from './src/telas/Personagem';
 import ListaPersonagens from './src/telas/ListaPersonagens';
 import TelaCampanha from './src/telas/TelaCampanha';
@@ -24,7 +25,7 @@ function Tabs(){
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-        color= '#d0d'
+        color= '#3B004F'
         size = 30
         if (route.name === 'TelaCampanha') {
           iconName = focused
@@ -42,13 +43,16 @@ function Tabs(){
       labelStyle: {
         fontSize: 12},
       activeTintColor: '#3f64c7',
-      inactiveTintColor: 'gray',    
+      inactiveTintColor: 'gray', 
+      display: 'none',   
       tabBarStyle:{
         height: 1000
       }  
     }}    
     >
-       <Tab.Screen name= "ListaPersonagens" component={ListaPersonagens}></Tab.Screen>
+       <Tab.Screen name= "TelaCampanha" component={TelaCampanha} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+      <Tab.Screen name= "ListaPersonagens" component={ListaPersonagens} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+
     </Tab.Navigator>
   )
 }
@@ -81,9 +85,11 @@ export default function App() {
    <Stack.Screen name="CriarCampanha" component={CriarCampanha} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="EntrarCampanha" component={EntrarCampanha}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Tutorial" component={Tutorial}  options={{headerShown: false}}></Stack.Screen>
-   <Stack.Screen name="Personagem" component={Personagem}  options={{headerShown: false}}></Stack.Screen>
-   <Stack.Screen name="ListaPersonagens" component={ListaPersonagens} ></Stack.Screen>
-   <Stack.Screen name="TelaCampanha" component={TelaCampanha}></Stack.Screen>
+   <Stack.Screen name="CadastrarPersonagem" component={CadastrarPersonagem}  options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="ListaPersonagens" component={ListaPersonagens} options={{headerShown: false}} ></Stack.Screen>
+   <Stack.Screen name="Personagem" component={Personagem} options={{headerShown: false}} ></Stack.Screen>
+   <Stack.Screen name="TelaCampanha" component={Tabs} options={{headerShown: false}}></Stack.Screen>
+   
 
 
  </Stack.Navigator>
