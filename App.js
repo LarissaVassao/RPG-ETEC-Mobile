@@ -15,6 +15,7 @@ import CadastrarPersonagem from './src/telas/CadastrarPersonagem';
 import Personagem from './src/telas/Personagem';
 import ListaPersonagens from './src/telas/ListaPersonagens';
 import TelaCampanha from './src/telas/TelaCampanha';
+import Mapa from './src/telas/Mapa';
 
 import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
@@ -29,11 +30,14 @@ function Tabs(){
         size = 30
         if (route.name === 'TelaCampanha') {
           iconName = focused
-            ? 'home-outline'
+            ? 'home'
             : 'home-outline';
 
         }else if (route.name === 'ListaPersonagens') {
-          iconName = focused ? 'person-outline' : 'person-outline';
+          iconName = focused ? 'person' : 'person-outline';
+        }
+        else if (route.name === 'Mapa'){
+          iconName = focused ? 'map' : 'map-outline'
         }
 
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -50,8 +54,10 @@ function Tabs(){
       }  
     }}    
     >
-       <Tab.Screen name= "TelaCampanha" component={TelaCampanha} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+      <Tab.Screen name= "TelaCampanha" component={TelaCampanha} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
       <Tab.Screen name= "ListaPersonagens" component={ListaPersonagens} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+      <Tab.Screen name= "Mapa" component={Mapa} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+
 
     </Tab.Navigator>
   )
@@ -89,9 +95,7 @@ export default function App() {
    <Stack.Screen name="ListaPersonagens" component={ListaPersonagens} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="Personagem" component={Personagem} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="TelaCampanha" component={Tabs} options={{headerShown: false}}></Stack.Screen>
-   
-
-
+   <Stack.Screen name="Mapa" component={Mapa} options={{headerShown: false}}></Stack.Screen>
  </Stack.Navigator>
 </NavigationContainer>
   );
