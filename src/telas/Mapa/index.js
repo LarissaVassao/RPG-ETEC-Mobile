@@ -9,13 +9,15 @@ import {
   Animated,
   TouchableOpacity,
 } from 'react-native';
+import { ScrollView } from 'react-native-web';
 
 const TOKEN_IMAGE = require('../../../assets/img/logo.png');
 
 export default function Mapa({ navigation }) {
   const [tokens, setTokens] = useState([]);
   const [showGrid, setShowGrid] = useState(false);
-  const [gridSize, setGridSize] = useState('8');
+  const [gridWidth, setGridWidth] = useState('8');
+  const [gridHeight, setGridHeight] = useState('8');
   const [cellSize, setCellSize] = useState('40');
 
   const addToken = () => {
@@ -23,59 +25,81 @@ export default function Mapa({ navigation }) {
     setTokens([...tokens, { id, x: 1, y: 1 }]);
   };
 
-  const parsedGridSize = parseInt(gridSize, 10);
+  const parsedWidth = parseInt(gridWidth, 10);
+  const parsedHeight = parseInt(gridHeight, 10);
   const parsedCellSize = parseInt(cellSize, 10);
 
-  function validate(){
-    if (!isNaN(parsedGridSize) && !isNaN(parsedCellSize)) {
-              setShowGrid(true);
-            }
+  function validate() {
+    if (
+      !isNaN(parsedWidth) &&
+      !isNaN(parsedHeight) &&
+      !isNaN(parsedCellSize)
+    ) {
+      if (parsedWidth > 0 && parsedHeight > 0 && parsedCellSize > 0) {
+        setShowGrid(true);
+      } else {
+        alert('Todos os valores devem ser positivos!');
+      }
+    } else {
+      alert('Todos os valores devem ser números!');
+    }
   }
 
   return (
     <View style={styles.container}>
       {!showGrid && (
         <Form
-          gridSize={gridSize}
-          setGridSize={setGridSize}
+          gridWidth={gridWidth}
+          setGridWidth={setGridWidth}
+          gridHeight={gridHeight}
+          setGridHeight={setGridHeight}
           cellSize={cellSize}
           setCellSize={setCellSize}
-          onStart={() => {validate()}}
+          onStart={() => validate()}
         />
       )}
 
       {showGrid && (
         <>
-          <Grid gridSize={parsedGridSize} cellSize={parsedCellSize} />
+        <ScrollView horizontal>
+        <ScrollView>
+          <Grid
+            gridWidth={parsedWidth}
+            gridHeight={parsedHeight}
+            cellSize={parsedCellSize}
+          />
           {tokens.map((token) => (
             <DraggableToken
               key={token.id}
               initialX={token.x}
               initialY={token.y}
               cellSize={parsedCellSize}
-              gridSize={parsedGridSize}
+              gridWidth={parsedWidth}
+              gridHeight={parsedHeight}
             />
           ))}
           <TouchableOpacity style={styles.button} onPress={addToken}>
             <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => setShowGrid(false)}>
+          <Text style={styles.buttonText}>Hide Grid</Text>
+          </TouchableOpacity>
+          </ScrollView>
+          </ScrollView>
         </>
       )}
-
-      {showGrid && (<TouchableOpacity style={styles.button} onPress={() => setShowGrid(false)}>
-        <Text style={styles.buttonText}>Hide Grid</Text>
-      </TouchableOpacity>)}
     </View>
   );
 }
 
 // Grid component
-const Grid = ({ gridSize, cellSize }) => {
+const Grid = ({ gridWidth, gridHeight, cellSize }) => {
   return (
+  
     <View style={{ flexDirection: 'column' }}>
-      {Array.from({ length: gridSize }).map((_, row) => (
+      {Array.from({ length: gridHeight }).map((_, row) => (
         <View style={{ flexDirection: 'row' }} key={`row-${row}`}>
-          {Array.from({ length: gridSize }).map((_, col) => (
+          {Array.from({ length: gridWidth }).map((_, col) => (
             <View
               key={`cell-${row}-${col}`}
               style={{
@@ -93,14 +117,31 @@ const Grid = ({ gridSize, cellSize }) => {
 };
 
 // Form component
-const Form = ({ gridSize, setGridSize, cellSize, setCellSize, onStart}) => {
+const Form = ({
+  gridWidth,
+  setGridWidth,
+  gridHeight,
+  setGridHeight,
+  cellSize,
+  setCellSize,
+  onStart,
+}) => {
   return (
     <View style={styles.formContainer}>
-      <Text style={styles.label}>Grid Size</Text>
+      <Text style={styles.label}>Grid Width</Text>
       <TextInput
         style={styles.input}
-        value={gridSize}
-        onChangeText={setGridSize}
+        value={gridWidth}
+        onChangeText={setGridWidth}
+        keyboardType="numeric"
+        placeholder="e.g. 8"
+      />
+
+      <Text style={styles.label}>Grid Height</Text>
+      <TextInput
+        style={styles.input}
+        value={gridHeight}
+        onChangeText={setGridHeight}
         keyboardType="numeric"
         placeholder="e.g. 8"
       />
@@ -113,6 +154,7 @@ const Form = ({ gridSize, setGridSize, cellSize, setCellSize, onStart}) => {
         keyboardType="numeric"
         placeholder="e.g. 40"
       />
+
       <TouchableOpacity style={styles.button} onPress={onStart}>
         <Text style={styles.buttonText}>Show Grid</Text>
       </TouchableOpacity>
@@ -121,7 +163,7 @@ const Form = ({ gridSize, setGridSize, cellSize, setCellSize, onStart}) => {
 };
 
 // Draggable token component
-const DraggableToken = ({ initialX, initialY, cellSize, gridSize }) => {
+const DraggableToken = ({ initialX, initialY, cellSize, gridWidth, gridHeight }) => {
   const pan = useRef(
     new Animated.ValueXY({
       x: initialX * cellSize,
@@ -143,11 +185,11 @@ const DraggableToken = ({ initialX, initialY, cellSize, gridSize }) => {
         pan.flattenOffset();
 
         const newX = Math.min(
-          gridSize - 1,
+          gridWidth - 1,
           Math.max(0, Math.round(pan.x._value / cellSize))
         );
         const newY = Math.min(
-          gridSize - 1,
+          gridHeight - 1,
           Math.max(0, Math.round(pan.y._value / cellSize))
         );
 
@@ -203,7 +245,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 4,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   input: {
     width: 100,
