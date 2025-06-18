@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Adicione esta importação
+import { Ionicons } from '@expo/vector-icons'; 
 
-export default function App({ navigation }) { // Adicione navigation como prop
+export default function App({ navigation }) { 
   const [nomeCampanha, setNomeCampanha] = useState('');
   const [descricao, setDescricao] = useState('');
 
@@ -12,7 +12,6 @@ export default function App({ navigation }) { // Adicione navigation como prop
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.content}>
-        {/* Botão adicionado no canto superior esquerdo */}
         <TouchableOpacity 
           style={styles.helpButton}
           onPress={() => navigation.navigate("Home")}

@@ -1,12 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
-      {/* Cabeçalho com Logo */}
       <View style={styles.header}>
         <Image
           style={styles.logo}
@@ -14,48 +12,29 @@ export default function Home({ navigation }) {
         />
       </View>
 
-      {/* Saudação */}
-      <Text style={styles.welcomeText}>Bem-vindo</Text>
+      <Text style={styles.welcomeText}>Bem-Vindo(a)</Text>
 
-      {/* Área de Botões com Gradiente */}
       <View style={styles.buttonsContainer}>
-        {/* Botão Entrar com Gradiente */}
         <TouchableOpacity 
           style={styles.actionButton}
           onPress={() => navigation.navigate("EntrarCampanha")}
         >
-          <LinearGradient
-            colors={['#623372', '#b673ff']}
-            style={styles.gradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <Ionicons name="log-in-outline" size={40} color="#fff" />
-          </LinearGradient>
+          <Ionicons name="log-in-outline" size={40} color="#fff" />
         </TouchableOpacity>
 
-        {/* Botão Criar com Gradiente Invertido */}
         <TouchableOpacity 
           style={styles.actionButton}
           onPress={() => navigation.navigate("CriarCampanha")}
         >
-          <LinearGradient
-            colors={['#b673ff', '#623372']}
-            style={styles.gradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <Ionicons name="add-outline" size={40} color="#fff" />
-          </LinearGradient>
+          <Ionicons name="add-outline" size={40} color="#fff" />
         </TouchableOpacity>
       </View>
 
-      {/* Botão de Ajuda */}
       <TouchableOpacity 
         style={styles.helpButton}
         onPress={() => navigation.navigate("Tutorial")}
       >
-        <Ionicons name="help-outline" size={30} color="#3B004F" />
+        <Ionicons name="help-outline" size={40} color="#3B004F" />
       </TouchableOpacity>
     </View>
   );
@@ -69,37 +48,38 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: -10,
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 200,
+    height: 200,
   },
   welcomeText: {
-    fontSize: 24,
-    color: '#3B004F',
-    fontWeight: '600',
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#623372',
+    marginBottom: 20,
     textAlign: 'center',
-    marginBottom: 40,
   },
   buttonsContainer: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: 40,
+    paddingHorizontal: 30,
   },
   actionButton: {
     width: '100%',
-    height: 80,
+    height: 55,
     borderRadius: 8,
-    overflow: 'hidden',
-    marginBottom: 20,
-    elevation: 3,
-  },
-  gradient: {
-    flex: 1,
+    backgroundColor: '#623372',  
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 30,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   helpButton: {
     position: 'absolute',
@@ -107,10 +87,10 @@ const styles = StyleSheet.create({
     right: 30,
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 35,
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#3B004F',
+    borderColor: '#623372',
     justifyContent: 'center',
     alignItems: 'center',
   },

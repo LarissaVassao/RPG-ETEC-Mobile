@@ -22,7 +22,6 @@ export default function CadastrarPersonagem({ navigation }) {
 
     return (
         <View style={styles.mainContainer}>
-            {/* Header com logo centralizada */}
             <View style={styles.header}>
                 <Image 
                     style={styles.logo} 
@@ -31,7 +30,6 @@ export default function CadastrarPersonagem({ navigation }) {
                 />
             </View>
 
-            {/* Botão de voltar */}
             <TouchableOpacity 
                 style={styles.backButton}
                 onPress={() => navigation.navigate("Home")}
@@ -46,7 +44,6 @@ export default function CadastrarPersonagem({ navigation }) {
                 <View style={styles.content}>
                     <Text style={styles.title}>Ficha de Criação de Personagem</Text>
                     
-                    {/* Campos do formulário com label e input na mesma linha */}
                     <View style={styles.formRow}>
                         <Text style={styles.label}>Nome:</Text>
                         <View style={styles.inputContainer}>
