@@ -51,7 +51,7 @@ export default function Personagem({ navigation }) {
 
             <TouchableOpacity 
                 style={styles.backButton}
-                onPress={() => navigation.navigate("ListaPersonagens")}
+                onPress={() => navigation.navigate("TelaCampanha")}
             >
                 <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
             </TouchableOpacity>

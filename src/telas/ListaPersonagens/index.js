@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
   botaoPersonagem: {
     width: '95%',
     height: 60,
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
+    borderTopWidth: 1.5,
+    borderBottomWidth: 1.5,
     borderColor: '#623372',
     borderRadius: 0,
   },
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   textoBotaoPersonagem: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: '400',
     color: '#3B004F',
     marginLeft: 10,
     flex: 1,
