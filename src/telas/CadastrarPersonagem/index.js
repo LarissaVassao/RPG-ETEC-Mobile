@@ -32,7 +32,7 @@ export default function CadastrarPersonagem({ navigation }) {
 
             <TouchableOpacity 
                 style={styles.backButton}
-                onPress={() => navigation.navigate("TelaCampanha")}
+                onPress={() => navigation.navigate("TelaPrincipal")}
             >
                 <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
             </TouchableOpacity>
