@@ -27,7 +27,7 @@ export default function ListaPersonagens({ navigation }) {
                         resizeMode="contain" 
                         source={require('../../../assets/img/logo.png')} 
                     />
-                    <Text style={styles.textoBotaoPersonagem}>[NomePersonagem]</Text>          
+                    <Text style={styles.textoBotaoPersonagem}>[NomePersonagem]</Text>         
                 </View>
             </TouchableOpacity>
         </View>
@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     flex: 1,
     textAlignVertical: 'center', 
-    includeFontPadding: false,  
-    lineHeight: 10,           
+    
   },
 });

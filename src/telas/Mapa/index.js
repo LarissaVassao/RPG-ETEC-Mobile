@@ -6,10 +6,10 @@ import {
   View,
   Image,
   PanResponder,
+  ScrollView,
   Animated,
   TouchableOpacity,
 } from 'react-native';
-import { ScrollView } from 'react-native-web';
 
 const TOKEN_IMAGE = require('../../../assets/img/logo.png');
 
@@ -19,6 +19,12 @@ export default function Mapa({ navigation }) {
   const [gridWidth, setGridWidth] = useState('8');
   const [gridHeight, setGridHeight] = useState('8');
   const [cellSize, setCellSize] = useState('40');
+
+const updateTokenPosition = (id, newX, newY) => {
+  setTokens(prev =>
+    prev.map(token => token.id === id ? { ...token, x: newX, y: newY } : token)
+  );
+};
 
   const addToken = () => {
     const id = Date.now().toString();
@@ -71,11 +77,13 @@ export default function Mapa({ navigation }) {
           {tokens.map((token) => (
             <DraggableToken
               key={token.id}
+              id={token.id}
               initialX={token.x}
               initialY={token.y}
               cellSize={parsedCellSize}
               gridWidth={parsedWidth}
               gridHeight={parsedHeight}
+              onDrop={updateTokenPosition}
             />
           ))}
           <TouchableOpacity style={styles.button} onPress={addToken}>
@@ -163,7 +171,7 @@ const Form = ({
 };
 
 // Draggable token component
-const DraggableToken = ({ initialX, initialY, cellSize, gridWidth, gridHeight }) => {
+const DraggableToken = ({id, initialX, initialY, cellSize, gridWidth, gridHeight, onDrop }) => {
   const pan = useRef(
     new Animated.ValueXY({
       x: initialX * cellSize,
@@ -197,6 +205,8 @@ const DraggableToken = ({ initialX, initialY, cellSize, gridWidth, gridHeight })
           toValue: { x: newX * cellSize, y: newY * cellSize },
           useNativeDriver: false,
         }).start();
+
+        onDrop?.(id, newX, newY);
       },
     })
   ).current;
@@ -222,6 +232,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1,
+    paddingHorizontal: 25,
+    paddingTop: 20,
   },
   button: {
     backgroundColor: '#800080',
