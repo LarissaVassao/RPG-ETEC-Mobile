@@ -46,7 +46,7 @@ export default function App({ navigation }) {
         </View>
 
         <TouchableOpacity style={styles.button}
-          onPress={() => navigation.navigate("TelaPrincipal")}
+          onPress={() => navigation.navigate("TelaCampanha")}
         >
           <Text style={styles.buttonText}>CRIAR CAMPANHA</Text>
         </TouchableOpacity>

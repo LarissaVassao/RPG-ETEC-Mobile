@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Image, Picker } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import CadastrarPersonagem from '../CadastrarPersonagem';
 
 export default function Personagem({ navigation }) {
     const [nomePersonagem, setNomePersonagem] = useState('');
     const [jogador, setJogador] = useState('');
     const [nivel, setNivel] = useState('');
     const [idade, setIdade] = useState('');
+    const [antepassado, setAntepassado] = useState('');
     
     const [forca, setForca] = useState('1');
     const [agilidade, setAgilidade] = useState('1');
@@ -33,6 +35,16 @@ export default function Personagem({ navigation }) {
     const [persuasao, setPersuasao] = useState('1');
     const [primeirosSocorros, setPrimeirosSocorros] = useState('1');
     const [procurar, setProcurar] = useState('1');
+
+    const antepassados = [
+        {ant: "Médico", valor: 1},
+        {ant: "Professor", valor: 2},
+        {ant: "Artista", valor: 3},
+    ];
+
+let antepassadosItems = antepassados.map((v,k) => {
+        return <Picker.Item key={k} value={k} label={v.ant} />
+    })
 
     return (
         <View style={styles.mainContainer}>
@@ -84,7 +96,19 @@ export default function Personagem({ navigation }) {
                             />
                         </View>
                     </View>
-
+<View style={styles.formRow}>
+                        <Text style={styles.label}>Antepassado:</Text>
+                        <View style={styles.pickerContainer}>
+                            <Picker
+                                style={styles.picker}
+                                selectedValue={antepassado}
+                                onValueChange={(itemValue) => setAntepassado(itemValue)}
+                                dropdownIconColor="#623372"
+                            >
+                                {antepassadosItems}
+                            </Picker>
+                        </View>
+                    </View>
                     <View style={styles.combinedRow}>
                         <View style={styles.combinedField}>
                             <Text style={styles.label}>Nível:</Text>
@@ -114,6 +138,7 @@ export default function Personagem({ navigation }) {
                             </View>
                         </View>
                     </View>
+                    
                     <View>
                         <Text style={styles.sectionTitle}>Atributos</Text>
                         
@@ -216,7 +241,7 @@ export default function Personagem({ navigation }) {
                             </View>
                         </View>
                     </View>
-
+                    
                     <View>
                         <Text style={styles.sectionTitle}>Perícias</Text>
                     

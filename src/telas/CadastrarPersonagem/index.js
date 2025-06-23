@@ -11,9 +11,9 @@ export default function CadastrarPersonagem({ navigation }) {
 
     
     const antepassados = [
-        {ant: "Herdeiro", valor: 1},
-        {ant: "Órfão", valor: 2},
-        {ant: "Aposentado", valor: 3},
+        {ant: "Médico", valor: 1},
+        {ant: "Professor", valor: 2},
+        {ant: "Artista", valor: 3},
     ];
 
     let antepassadosItems = antepassados.map((v,k) => {
