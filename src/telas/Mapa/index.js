@@ -87,10 +87,10 @@ const updateTokenPosition = (id, newX, newY) => {
             />
           ))}
           <TouchableOpacity style={styles.button} onPress={addToken}>
-            <Text style={styles.buttonText}>Add</Text>
+            <Text style={styles.buttonText}>Criar Token</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => setShowGrid(false)}>
-          <Text style={styles.buttonText}>Hide Grid</Text>
+          <Text style={styles.buttonText}>Alterar Mapa</Text>
           </TouchableOpacity>
           </ScrollView>
           </ScrollView>
@@ -164,7 +164,7 @@ const Form = ({
       />
 
       <TouchableOpacity style={styles.button} onPress={onStart}>
-        <Text style={styles.buttonText}>Show Grid</Text>
+        <Text style={styles.buttonText}>Mostrar Mapa</Text>
       </TouchableOpacity>
     </View>
   );
@@ -244,6 +244,17 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 5,
     alignSelf: 'center',
+  },
+  buttonPermanent:{
+    backgroundColor: '#800080',
+    width: 120,
+    height: 40,
+    marginLeft: 20,
+    marginTop: 20,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute'
   },
   buttonText: {
     color: '#fff',

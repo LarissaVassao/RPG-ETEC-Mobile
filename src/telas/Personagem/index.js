@@ -1,49 +1,68 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Image, Picker } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, Image} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
-import CadastrarPersonagem from '../CadastrarPersonagem';
+//import CadastrarPersonagem from '../CadastrarPersonagem';
 
 export default function Personagem({ navigation }) {
     const [nomePersonagem, setNomePersonagem] = useState('');
     const [jogador, setJogador] = useState('');
     const [nivel, setNivel] = useState('');
     const [idade, setIdade] = useState('');
-    const [antepassado, setAntepassado] = useState('');
+    const [antepassado, setAntepassado] = useState('Médico');
     
-    const [forca, setForca] = useState('1');
-    const [agilidade, setAgilidade] = useState('1');
-    const [constituicao, setConstituicao] = useState('1');
-    const [vontade, setVontade] = useState('1');
-    const [inteligencia, setInteligencia] = useState('1');
-    const [percepcao, setPercepcao] = useState('1');
-    const [sorte, setSorte] = useState('1');
-    const [acalmar, setAcalmar] = useState('1');
-    const [acrobacia, setAcrobacia] = useState('1');
-    const [atletismo, setAtletismo] = useState('1');
-    const [atualidades, setAtualidades] = useState('1');
-    const [analise, setAnalise] = useState('1');
-    const [charme, setCharme] = useState('1');
-    const [eletronicos, setEletronicos] = useState('1');
-    const [enganar, setEnganar] = useState('1');
-    const [furtividade, setFurtividade] = useState('1');
-    const [informatica, setInformatica] = useState('1');
-    const [iniciativa, setIniciativa] = useState('1');
-    const [intimidacao, setIntimidacao] = useState('1');
-    const [intuicao, setIntuicao] = useState('1');
-    const [medicina, setMedicina] = useState('1');
-    const [mecanica, setMecanica] = useState('1');
-    const [persuasao, setPersuasao] = useState('1');
-    const [primeirosSocorros, setPrimeirosSocorros] = useState('1');
-    const [procurar, setProcurar] = useState('1');
-
     const antepassados = [
-        {ant: "Médico", valor: 1},
-        {ant: "Professor", valor: 2},
-        {ant: "Artista", valor: 3},
-    ];
+    { label: 'Médico', value: 'Médico' },
+    { label: 'Professor', value: 'Professor' },
+    { label: 'Artista', value: 'Artista' }
+  ];
 
-let antepassadosItems = antepassados.map((v,k) => {
-        return <Picker.Item key={k} value={k} label={v.ant} />
+  const atributosDef = [
+    { key: 'forca', label: 'Força' },
+    { key: 'agilidade', label: 'Agilidade' },
+    { key: 'constituicao', label: 'Constituição' },
+    { key: 'vontade', label: 'Vontade' },
+    { key: 'inteligencia', label: 'Inteligência' },
+    { key: 'percepcao', label: 'Percepção' },
+    { key: 'sorte', label: 'Sorte' }
+  ];
+
+  const periciasDef = [
+    { key: 'acalmar', label: 'Acalmar' },
+    { key: 'acrobacia', label: 'Acrobacia' },
+    { key: 'atletismo', label: 'Atletismo' },
+    { key: 'atualidades', label: 'Atualidades' },
+    { key: 'analise', label: 'Análise' },
+    { key: 'charme', label: 'Charme' },
+    { key: 'eletronicos', label: 'Eletrônicos' },
+    { key: 'enganar', label: 'Enganar' },
+    { key: 'furtividade', label: 'Furtividade' },
+    { key: 'informatica', label: 'Informática' },
+    { key: 'iniciativa', label: 'Iniciativa' },
+    { key: 'intimidacao', label: 'Intimidação' },
+    { key: 'intuicao', label: 'Intuição' },
+    { key: 'medicina', label: 'Medicina' },
+    { key: 'mecanica', label: 'Mecânica' },
+    { key: 'persuasao', label: 'Persuasão' },
+    { key: 'primeirosSocorros', label: 'Primeiros-Socorros' },
+    { key: 'procurar', label: 'Procurar' }
+  ];
+
+  const [atributos, setAtributos] = useState(
+    atributosDef.reduce((acc, a) => ({ ...acc, [a.key]: '1' }), {})
+  );
+  const [pericias, setPericias] = useState(
+    periciasDef.reduce((acc, p) => ({ ...acc, [p.key]: '1' }), {})
+  );
+  const alterarPericia = (pericia, valor) =>{
+    setPericias({...pericias, [pericia]: valor})
+  }
+  const alterarAtributo = (atributo, valor) =>{
+    setAtributos({...atributos, [atributo]: valor})
+  }
+
+let antepassadosItems = antepassados.map((item,id) => {
+        return <Picker.Item key={item.value} value={item.value} label={item.label} />
     })
 
     return (
@@ -96,7 +115,7 @@ let antepassadosItems = antepassados.map((v,k) => {
                             />
                         </View>
                     </View>
-<View style={styles.formRow}>
+                    <View style={styles.formRow}>
                         <Text style={styles.label}>Antepassado:</Text>
                         <View style={styles.pickerContainer}>
                             <Picker
@@ -109,8 +128,8 @@ let antepassadosItems = antepassados.map((v,k) => {
                             </Picker>
                         </View>
                     </View>
-                    <View style={styles.combinedRow}>
-                        <View style={styles.combinedField}>
+                    <View style={styles.wrapRow}>
+                        <View style={styles.combinedRow}>
                             <Text style={styles.label}>Nível:</Text>
                             <View style={styles.inputContainer}>
                                 <TextInput
@@ -124,7 +143,7 @@ let antepassadosItems = antepassados.map((v,k) => {
                             </View>
                         </View>
                         
-                        <View style={styles.combinedField}>
+                        <View style={styles.combinedRow}>
                             <Text style={styles.label}>Idade:</Text>
                             <View style={styles.inputContainer}>
                                 <TextInput
@@ -139,363 +158,40 @@ let antepassadosItems = antepassados.map((v,k) => {
                         </View>
                     </View>
                     
-                    <View>
+                    <View>                        
                         <Text style={styles.sectionTitle}>Atributos</Text>
-                        
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Força:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={forca}
-                                        onChangeText={setForca}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
+                        <View style={styles.wrapRow}>
+                        {atributosDef.map(({ key, label }) => (
+                        <View style={styles.combinedRow} key={key}>
+                            <Text style={styles.label}>{label}:</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                style={styles.input}
+                                value={atributos[key]}
+                                keyboardType="numeric"
+                                textAlign="center"
+                                onChangeText={val => alterarAtributo(key, val)}
+                                />
                             </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Vontade:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={vontade}
-                                        onChangeText={setVontade}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
                             </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Agilidade:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={agilidade}
-                                        onChangeText={setAgilidade}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Inteligência:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={inteligencia}
-                                        onChangeText={setInteligencia}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Constituição:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={constituicao}
-                                        onChangeText={setConstituicao}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Percepção:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={percepcao}
-                                        onChangeText={setPercepcao}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.singleAttributeRow}>
-                            <View style={styles.singleAttributeContainer}>
-                                <Text style={styles.label}>Sorte:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={sorte}
-                                        onChangeText={setSorte}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                    
-                    <View>
+                        ))}</View>
+                        {/* ---------- PERÍCIAS ---------- */}
                         <Text style={styles.sectionTitle}>Perícias</Text>
-                    
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Acalmar:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={acalmar}
-                                        onChangeText={setAcalmar}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
+                        <View style={styles.wrapRow}>
+                        {periciasDef.map(({ key, label }) => (
+                        <View style={styles.combinedRow} key={key}>
+                            <Text style={styles.label}>{label}:</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                style={styles.input}
+                                value={pericias[key]}
+                                keyboardType="numeric"
+                                textAlign="center"
+                                onChangeText={val => alterarPericia(key, val)}
+                                />
                             </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Acrobacia:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={acrobacia}
-                                        onChangeText={setAcrobacia}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
                             </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Atletismo:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={atletismo}
-                                        onChangeText={setAtletismo}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Atualidades:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={atualidades}
-                                        onChangeText={setAtualidades}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Análise:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={analise}
-                                        onChangeText={setAnalise}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Charme:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={charme}
-                                        onChangeText={setCharme}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Eletrônicos:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={eletronicos}
-                                        onChangeText={setEletronicos}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Enganar:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={enganar}
-                                        onChangeText={setEnganar}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Furtividade:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={furtividade}
-                                        onChangeText={setFurtividade}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Informática:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={informatica}
-                                        onChangeText={setInformatica}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Iniciativa:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={iniciativa}
-                                        onChangeText={setIniciativa}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Intimidação:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={intimidacao}
-                                        onChangeText={setIntimidacao}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Intuição:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={intuicao}
-                                        onChangeText={setIntuicao}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Medicina:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={medicina}
-                                        onChangeText={setMedicina}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Mecânica:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={mecanica}
-                                        onChangeText={setMecanica}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Persuasão:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={persuasao}
-                                        onChangeText={setPersuasao}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={styles.combinedRow}>
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Primeiros-Socorros:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={primeirosSocorros}
-                                        onChangeText={setPrimeirosSocorros}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                            
-                            <View style={styles.combinedField}>
-                                <Text style={styles.label}>Procurar:</Text>
-                                <View style={styles.attributeInputContainer}>
-                                    <TextInput
-                                        style={styles.attributeInput}
-                                        value={procurar}
-                                        onChangeText={setProcurar}
-                                        keyboardType="numeric"
-                                        textAlign="center"
-                                    />
-                                </View>
-                            </View>
-                        </View>
+                        ))}</View>
                     </View>
                 </View>
             </ScrollView>
@@ -519,6 +215,19 @@ const styles = StyleSheet.create({
         width: 75,
         height: 75,
     },
+    pickerContainer: {
+    borderWidth: 1,
+    width: 150,
+    height: 50,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    overflow: 'hidden',       
+    backgroundColor: '#fff',
+  },
+  picker: {
+    height: 50,               
+    width: '100%',
+  },
     backButton: {
         position: 'absolute',
         top: 15,
@@ -551,26 +260,19 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 15,
+        marginVertical: 5,
     },
     combinedRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 15,
+        width: '48%'
     },
-    combinedField: {
+    wrapRow: {
         flexDirection: 'row',
-        alignItems: 'center',
-        width: '48%',
-    },
-    singleAttributeRow: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginBottom: 15,
-    },
-    singleAttributeContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '48%',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     label: {
         width: 90,
@@ -585,7 +287,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },
-    attributeInputContainer: {
+    inputContainer: {
         flex: 1,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
@@ -595,8 +297,9 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         fontSize: 15,
         color: '#333',
+        textAlign: 'center',
     },
-    attributeInput: {
+    input: {
         paddingVertical: 5,
         fontSize: 15,
         color: '#333',
