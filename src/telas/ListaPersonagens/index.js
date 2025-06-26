@@ -5,6 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 export default function ListaPersonagens({ navigation }) {
     return(
         <View style={styles.container}>
+          <TouchableOpacity 
+                                   style={styles.backButton}
+                                   onPress={() => navigation.navigate("Home")}
+                               >
+                                   <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
+                     </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.botaoCriar}
                 onPress={() => navigation.navigate("CadastrarPersonagem")}
@@ -40,6 +46,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
   },
+  backButton: {
+    position: 'absolute',
+    top: 60,
+    left: 15,
+    zIndex: 1,
+},
   title: {
     fontSize: 20,
     fontWeight: '800',

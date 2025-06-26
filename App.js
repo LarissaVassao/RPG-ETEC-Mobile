@@ -54,7 +54,7 @@ function Tabs(){
       }  
     }}    
     >
-      <Tab.Screen name= "TelaCampanha" component={TelaCampanha} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+      {/* <Tab.Screen name= "TelaCampanha" component={TelaCampanha} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen> */}
       <Tab.Screen name= "ListaPersonagens" component={ListaPersonagens} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
       <Tab.Screen name= "Mapa" component={Mapa} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
 

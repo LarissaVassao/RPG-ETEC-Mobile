@@ -10,15 +10,17 @@ import {
   Animated,
   TouchableOpacity,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; 
+
 
 const TOKEN_IMAGE = require('../../../assets/img/logo.png');
 
 export default function Mapa({ navigation }) {
   const [tokens, setTokens] = useState([]);
   const [showGrid, setShowGrid] = useState(false);
-  const [gridWidth, setGridWidth] = useState('8');
-  const [gridHeight, setGridHeight] = useState('8');
-  const [cellSize, setCellSize] = useState('40');
+  const [gridWidth, setGridWidth] = useState('10');
+  const [gridHeight, setGridHeight] = useState('10');
+  const [cellSize, setCellSize] = useState('50');
 
 const updateTokenPosition = (id, newX, newY) => {
   setTokens(prev =>
@@ -53,6 +55,12 @@ const updateTokenPosition = (id, newX, newY) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity 
+                         style={styles.backButton}
+                         onPress={() => navigation.navigate("Home")}
+                     >
+                         <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
+           </TouchableOpacity>
       {!showGrid && (
         <Form
           gridWidth={gridWidth}
@@ -136,7 +144,7 @@ const Form = ({
 }) => {
   return (
     <View style={styles.formContainer}>
-      <Text style={styles.label}>Grid Width</Text>
+      <Text style={styles.label}>Largura</Text>
       <TextInput
         style={styles.input}
         value={gridWidth}
@@ -145,7 +153,7 @@ const Form = ({
         placeholder="e.g. 8"
       />
 
-      <Text style={styles.label}>Grid Height</Text>
+      <Text style={styles.label}>Altura</Text>
       <TextInput
         style={styles.input}
         value={gridHeight}
@@ -154,7 +162,7 @@ const Form = ({
         placeholder="e.g. 8"
       />
 
-      <Text style={styles.label}>Square Size</Text>
+      <Text style={styles.label}>Tamanho do Quadrado</Text>
       <TextInput
         style={styles.input}
         value={cellSize}

@@ -32,7 +32,7 @@ export default function CadastrarPersonagem({ navigation }) {
 
             <TouchableOpacity 
                 style={styles.backButton}
-                onPress={() => navigation.navigate("TelaPrincipal")}
+                onPress={() => navigation.navigate("TelaCampanha")}
             >
                 <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
             </TouchableOpacity>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     },
     picker: {
         marginLeft: -5, // Compensa o padding interno do Picker
-        height: 40, // Altura consistente com os inputs
+        height: 50, // Altura consistente com os inputs
         color: '#333',
     },
     button: {

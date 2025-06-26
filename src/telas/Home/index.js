@@ -32,7 +32,6 @@ export default function Home({ navigation }) {
 
       <TouchableOpacity 
         style={styles.helpButton}
-        onPress={() => navigation.navigate("Tutorial")}
       >
         <Ionicons name="help-outline" size={40} color="#3B004F" />
       </TouchableOpacity>
