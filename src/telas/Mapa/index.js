@@ -56,11 +56,11 @@ const updateTokenPosition = (id, newX, newY) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity 
-                         style={styles.backButton}
-                         onPress={() => navigation.navigate("Home")}
-                     >
-                         <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
-           </TouchableOpacity>
+        style={styles.backButton}
+        onPress={() => navigation.navigate("Home")}
+        >
+          <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
+      </TouchableOpacity>
       {!showGrid && (
         <Form
           gridWidth={gridWidth}
