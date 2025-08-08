@@ -100,6 +100,9 @@ export default function Home({ navigation }) {
             <View style={styles.attributesBackgroundBottom}>  </View>
             <View style={styles.attributesBackgroundBottom}>  </View>
           </View>
+          <View > 
+            <View> <Text>Colcocar sorte </Text> </View> 
+          </View>
           
 
           <Text>Vida</Text>
@@ -278,7 +281,7 @@ const styles = StyleSheet.create({
 
   attributeContainer:{
     position: 'absolute',
-    top: 230, 
+    top: 1, 
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: 2, 
