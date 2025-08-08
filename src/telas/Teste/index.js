@@ -89,17 +89,33 @@ export default function Home({ navigation }) {
       </View>
 
       {activeView === 'red' && <View style={styles.redView}> 
+          <View style={styles.attributeContainer}> 
+            <View style={styles.attributesBackgroundTop}>  </View>
+            <View style={styles.attributesBackgroundTop}>  </View>
+            <View style={styles.attributesBackgroundTop}>  </View>
+          </View>
+          
+          <View style={[styles.attributeContainer, {marginTop: 120}]}> 
+            <View style={styles.attributesBackgroundBottom}>  </View>
+            <View style={styles.attributesBackgroundBottom}>  </View>
+            <View style={styles.attributesBackgroundBottom}>  </View>
+          </View>
+          
+
           <Text>Vida</Text>
           <Text>Crédito</Text>        
           <Text>Mental</Text> 
           <Text>Energia</Text>
           <Text>Atributos</Text>
+          <Text>CA - cARGA</Text>
+          <Text>mOVIMENTO</Text>
+
         </View>}
       {activeView === 'green' && <View style={styles.greenView} >
           <Text>Pericia</Text>
         </View>}
       {activeView === 'blue' && <View style={styles.blueView} >
-          <Text>Mochila</Text>
+          <Text>Mochila - Armadura</Text>
         </View>}
       {activeView === 'pink' && <View style={styles.pinkView} >
           <Text>Olho</Text>
@@ -220,16 +236,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   buttons: {
-    width: 89,
+    width: '23%',
     height: 80,
     borderRadius: 10,
     borderBottomEndRadius:0,
     borderBottomLeftRadius:0,
-    marginInline: 5,
+    marginInline: '1%',
     justifyContent: 'center', 
     alignItems: 'center', 
   },
-
     redView: {
     position: 'absolute',
     top: 290,
@@ -258,4 +273,42 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#124A69',
   },
+
+
+
+  attributeContainer:{
+    position: 'absolute',
+    top: 230, 
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 2, 
+  },
+  attributesBackgroundTop:{
+    width: '30%',
+    height: 110,
+    backgroundColor: '#124A69',
+    marginInline: 5,
+    borderTopEndRadius: 10,
+    borderTopStartRadius: 10,
+
+  },
+ attributesBackgroundBottom:{
+    width: '30%',
+    height: 110,
+    backgroundColor: '#124A69',
+    marginInline: 5,
+    borderBottomEndRadius: 10,
+    borderBottomStartRadius: 10,
+
+  },
+  
+  attributesName: {
+
+  },
+  attributesValue: {
+
+  },
+
+
+
 });
