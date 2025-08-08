@@ -13,12 +13,16 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.bar} />
+
+
       <TouchableOpacity 
         style={styles.backButton}
         onPress={() => navigation.navigate("Home")}
         >
-        <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
+        <Ionicons name="arrow-back-outline" size={30} color="#00283D" />
       </TouchableOpacity>
+
+      <View style={styles.columnStyle} />
 
       <View style={styles.namePlayer}>
         <Text style={styles.playerText}>Jogador(a):</Text>
@@ -67,34 +71,42 @@ export default function Home({ navigation }) {
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity 
-          style={[styles.buttons, {backgroundColor: '#FF5733'}]} 
+          style={[styles.buttons, {backgroundColor: '#dceff9'}]} 
           onPress={() => handleButtonPress('red')}
-        ><Ionicons name="person-circle-outline" size={80} color="#3B004F"/> </TouchableOpacity>
+        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/> </TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.buttons, {backgroundColor: '#33FF57'}]} 
+          style={[styles.buttons, {backgroundColor: '#96CFEE'}]} 
           onPress={() => handleButtonPress('green')}
-        ><Ionicons name="person-circle-outline" size={80} color="#3B004F"/> </TouchableOpacity>
+        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/> </TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.buttons, {backgroundColor: '#3357FF'}]} 
+          style={[styles.buttons, {backgroundColor: '#2295D1'}]} 
           onPress={() => handleButtonPress('blue')}
-        ><Ionicons name="person-circle-outline" size={80} color="#3B004F"/></TouchableOpacity>
+        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.buttons, {backgroundColor: '#F033FF'}]} 
+          style={[styles.buttons, {backgroundColor: '#124A69'}]} 
           onPress={() => handleButtonPress('pink')}
-        ><Ionicons name="person-circle-outline" size={80} color="#3B004F"/></TouchableOpacity>
+        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
       </View>
 
       {activeView === 'red' && <View style={styles.redView}> 
-        
+          <Text>Vida</Text>
+          <Text>Crédito</Text>        
+          <Text>Mental</Text> 
+          <Text>Energia</Text>
+          <Text>Atributos</Text>
         </View>}
       {activeView === 'green' && <View style={styles.greenView} >
-        
+          <Text>Pericia</Text>
         </View>}
       {activeView === 'blue' && <View style={styles.blueView} >
-        
+          <Text>Mochila</Text>
         </View>}
       {activeView === 'pink' && <View style={styles.pinkView} >
-        
+          <Text>Olho</Text>
+          <Text>Cabelo</Text>        
+          <Text>Aparencia</Text> 
+          <Text>Tamanho</Text> 
+          <Text>Biografia</Text>
         </View>}
     </View>
   );
@@ -112,9 +124,16 @@ const styles = StyleSheet.create({
     top: 40,
     width: '100%',
     height: 50,
-    backgroundColor: '#D9EAFF',
+    backgroundColor: '#E0F4FF',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  columnStyle: {
+    position: 'absolute',
+    top: 40,
+    width: 5,
+    height: '100%',
+    backgroundColor: '#E0F4FF',
   },
   playerText: {
     fontSize: 16,
@@ -128,7 +147,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: '#333',
     fontSize: 16,
-
   },
   backButton: {
   position: 'absolute',
@@ -136,7 +154,7 @@ const styles = StyleSheet.create({
   left: 0,
   zIndex: 2,
   padding: 10,
-  backgroundColor: 'rgba(86,131,185, 0.1)', // Branco com 50% de transparência
+  backgroundColor: 'rgba(86,131,185, 0.1)',
   borderRadius: 100,
 },
   bar: {
@@ -154,7 +172,9 @@ const styles = StyleSheet.create({
     height: 150,
     borderBottomRightRadius: 100,
     zIndex: 1,
-    borderBottomColor: '#D9EAFF',
+    borderBottomColor: '#E0F4FF',
+    borderWidth: 5,
+    borderColor: '#E0F4FF',
   },
   characterBase: {
     position: 'absolute',
@@ -162,7 +182,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     backgroundColor: '#ffffffb6',
-    
   },
   nameCharacter: {
     top: 0,
@@ -193,12 +212,9 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#ccc',
   },
-
-  
   buttonsContainer: {
     position: 'absolute',
-    top: 200, 
-    //width: '100%',
+    top: 210, 
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: 0,
@@ -210,36 +226,36 @@ const styles = StyleSheet.create({
     borderBottomEndRadius:0,
     borderBottomLeftRadius:0,
     marginInline: 5,
-    justifyContent: 'center', // Centraliza verticalmente
+    justifyContent: 'center', 
     alignItems: 'center', 
   },
 
     redView: {
     position: 'absolute',
-    top: 280,
+    top: 290,
     width: '100%',
     height: '100%',
-    backgroundColor: '#FF5733',
+    backgroundColor: '#dceff9',
   },
   greenView: {
     position: 'absolute',
-    top: 280,
+    top: 290,
     width: '100%',
     height: '100%',
-    backgroundColor: '#33FF57',
+    backgroundColor: '#96CFEE',
   },
   blueView: {
     position: 'absolute',
-    top: 280,
+    top: 290,
     width: '100%',
     height: '100%',
-    backgroundColor: '#3357FF',
+    backgroundColor: '#2295D1',
   },
   pinkView: {
     position: 'absolute',
-    top: 280,
+    top: 290,
     width: '100%',
     height: '100%',
-    backgroundColor: '#F033FF',
+    backgroundColor: '#124A69',
   },
 });
