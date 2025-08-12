@@ -89,29 +89,43 @@ export default function Home({ navigation }) {
       </View>
 
       {activeView === 'red' && <View style={styles.redView}> 
-          <View style={styles.attributeContainer}> 
-            <View style={styles.attributesBackgroundTop}>  </View>
-            <View style={styles.attributesBackgroundTop}>  </View>
-            <View style={styles.attributesBackgroundTop}>  </View>
-          </View>
-          
-          <View style={[styles.attributeContainer, {marginTop: 120}]}> 
-            <View style={styles.attributesBackgroundBottom}>  </View>
-            <View style={styles.attributesBackgroundBottom}>  </View>
-            <View style={styles.attributesBackgroundBottom}>  </View>
-          </View>
-          <View > 
-            <View> <Text>Colcocar sorte </Text> </View> 
-          </View>
-          
+          <View style={styles.lifeBackground}>       
+            <Text>Vida</Text>
+            {/* 
+            exemplo - ( _ / _ ) +
+            -> Row,
+            
+            */}
 
-          <Text>Vida</Text>
-          <Text>Crédito</Text>        
-          <Text>Mental</Text> 
-          <Text>Energia</Text>
-          <Text>Atributos</Text>
-          <Text>CA - cARGA</Text>
-          <Text>mOVIMENTO</Text>
+
+           </View>
+          <View style={styles.creditBackground}>       <Text>Crédito</Text> </View>
+          <View style={styles.mentalBackground}>       <Text>Mental</Text> </View>
+          <View style={styles.energyBackground}>       <Text>Energia</Text> </View>
+          <View style={styles.attributessBackground}>       <Text>Atributos</Text> </View>
+          <View style={styles.acBackground}>       <Text>CA</Text> </View>
+          <View style={styles.loadBackground}>       <Text>cARGA</Text> </View>
+          <View style={styles.movementBackground}>       <Text>mOVIMENTO</Text> </View>
+
+
+          {/* <View>
+            <View style={styles.attributeContainer}> 
+              <View style={styles.attributesBackgroundTop}>  </View>
+              <View style={styles.attributesBackgroundTop}>  </View>
+              <View style={styles.attributesBackgroundTop}>  </View>
+            </View>
+            
+            <View style={[styles.attributeContainer, {marginTop: 120}]}> 
+              <View style={styles.attributesBackgroundBottom}>  </View>
+              <View style={styles.attributesBackgroundBottom}>  </View>
+              <View style={styles.attributesBackgroundBottom}>  </View>
+            </View>
+            
+            <View style={[styles.attributeContainerLuck]}> 
+              <View style={styles.attributeBackgroundLuck}> <Text>Colcocar sorte </Text> </View> 
+            </View>
+          </View> */}
+
 
         </View>}
       {activeView === 'green' && <View style={styles.greenView} >
@@ -279,6 +293,23 @@ const styles = StyleSheet.create({
 
 
 
+
+  lifeBackground:{
+    backgroundColor: '#1bff3aff',
+    alignSelf: 'center' ,
+    width: '70%',
+    height:50
+  },
+  creditBackground:{},
+  mentalBackground: {},
+  energyBackground: {},
+  attributessBackground:{},
+  acBackground:{},
+  loadBackground: {},
+  movementBackground: {},
+  
+
+
   attributeContainer:{
     position: 'absolute',
     top: 1, 
@@ -304,7 +335,18 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 10,
 
   },
-  
+   attributeContainerLuck:{
+    position: 'absolute',
+    alignItems: 'center',
+    width: '100%',
+  },
+  attributeBackgroundLuck: {
+    top: 250,
+    width: '70%',
+    height: 110,
+    backgroundColor: '#124A69',
+    borderRadius: 10
+  },
   attributesName: {
 
   },
