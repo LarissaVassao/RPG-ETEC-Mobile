@@ -89,56 +89,62 @@ export default function Home({ navigation }) {
       </View>
 
       {activeView === 'red' && <View style={styles.redView}> 
-          <View style={styles.lifeBackground}>       
-            <Text>Vida</Text>
-            <View> 
-              <View style={styles.subtractT}>    </View>   
-              <View style={styles.parenthesisT}>  
-                <View style={styles.boxT}>    </View>
-                <View style={styles.boxT}>    </View>
-              </View>
-              <View style={styles.additionT}>    </View>
-            </View>
-            {/* 
-            exemplo - ( _ / _ ) +
-            -> Row,
-            
-            */}
 
+        <View style={styles.containerBackground}>
+           <Text>Vida:</Text>
+          <View style={styles.subtractAndAdditionbox}>    </View>   
+          <View style={styles.lifeBackground}>  
+                <View style={styles.boxT}>    </View>
+                <View style={styles.boxT}>    </View>     
           </View>
-           
+          <View style={styles.subtractAndAdditionbox}>    </View>
+        </View> 
+
+         <View style={styles.containerBackground}>
+           <Text>Mental:</Text>
+          <View style={styles.subtractAndAdditionbox}>    </View>   
+          <View style={styles.lifeBackground}>  
+                <View style={styles.boxT}>    </View>
+                <View style={styles.boxT}>    </View>     
+          </View>
+          <View style={styles.subtractAndAdditionbox}>    </View>
+        </View> 
+
+         <View style={styles.containerBackground}>
+           <Text>Energia:</Text>
+          <View style={styles.subtractAndAdditionbox}>    </View>   
+          <View style={styles.lifeBackground}>  
+                <View style={styles.boxT}>    </View>
+                <View style={styles.boxT}>    </View>     
+          </View>
+          <View style={styles.subtractAndAdditionbox}>    </View>
+        </View> 
+        {/* utiliar coluna para vida mental e energia ficarem na mesma coluna e o resto na outra */}
+
            <View style={styles.mentalBackground}>       
             <Text>Mental</Text>
             <View> 
-              <View style={styles.subtractT}>    </View>   
+              <View style={styles.subtractAndAdditionbox}>    </View>   
               <View style={styles.parenthesisT}>  
                 <View style={styles.boxT}>    </View>
                 <View style={styles.boxT}>    </View>
               </View>
-              <View style={styles.additionT}>    </View>
+              <View style={styles.subtractAndAdditionbox}>    </View>
             </View>
-            {/* 
-            exemplo - ( _ / _ ) +
-            -> Row,
             
-            */}
 
           </View>
            <View style={styles.energyBackground}>       
             <Text>Energia</Text>
             <View> 
-              <View style={styles.subtractT}>    </View>   
+              <View style={styles.subtractAndAdditionbox}>    </View>   
               <View style={styles.parenthesisT}>  
                 <View style={styles.boxT}>    </View>
                 <View style={styles.boxT}>    </View>
               </View>
-              <View style={styles.additionT}>    </View>
+              <View style={styles.subtractAndAdditionbox}>    </View>
             </View>
-            {/* 
-            exemplo - ( _ / _ ) +
-            -> Row,
-            
-            */}
+           
 
           </View>
            
@@ -335,12 +341,33 @@ const styles = StyleSheet.create({
 
 
 
-  tellerBackground:{
-    backgroundColor: '#1bff3aff',
-    alignSelf: 'center' ,
-    width: '70%',
-    height:50
+  containerBackground: {
+    top: 10,
+    justifyContent: 'space-around',
+    width: '90%',
+    flexDirection: 'row',
   },
+
+  lifeBackground:{
+    backgroundColor: '#79899D',
+    alignSelf: 'center' ,
+    width: '40%',
+    height:45,
+    borderRadius: 50,
+    borderColor: '#4B617C',
+    borderWidth:3
+  },
+// exemploVida:  - ( _ / _ ) +
+
+  subtractAndAdditionbox: {
+    backgroundColor: '#79899D',
+    width: '15%',
+    height:45,
+    borderWidth:3,
+    borderColor: '#4B617C',
+
+  },
+
   creditBackground:{},
   mentalBackground: {},
   energyBackground: {},
