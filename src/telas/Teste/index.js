@@ -91,17 +91,58 @@ export default function Home({ navigation }) {
       {activeView === 'red' && <View style={styles.redView}> 
           <View style={styles.lifeBackground}>       
             <Text>Vida</Text>
+            <View> 
+              <View style={styles.subtractT}>    </View>   
+              <View style={styles.parenthesisT}>  
+                <View style={styles.boxT}>    </View>
+                <View style={styles.boxT}>    </View>
+              </View>
+              <View style={styles.additionT}>    </View>
+            </View>
             {/* 
             exemplo - ( _ / _ ) +
             -> Row,
             
             */}
 
+          </View>
+           
+           <View style={styles.mentalBackground}>       
+            <Text>Mental</Text>
+            <View> 
+              <View style={styles.subtractT}>    </View>   
+              <View style={styles.parenthesisT}>  
+                <View style={styles.boxT}>    </View>
+                <View style={styles.boxT}>    </View>
+              </View>
+              <View style={styles.additionT}>    </View>
+            </View>
+            {/* 
+            exemplo - ( _ / _ ) +
+            -> Row,
+            
+            */}
 
-           </View>
+          </View>
+           <View style={styles.energyBackground}>       
+            <Text>Energia</Text>
+            <View> 
+              <View style={styles.subtractT}>    </View>   
+              <View style={styles.parenthesisT}>  
+                <View style={styles.boxT}>    </View>
+                <View style={styles.boxT}>    </View>
+              </View>
+              <View style={styles.additionT}>    </View>
+            </View>
+            {/* 
+            exemplo - ( _ / _ ) +
+            -> Row,
+            
+            */}
+
+          </View>
+           
           <View style={styles.creditBackground}>       <Text>Crédito</Text> </View>
-          <View style={styles.mentalBackground}>       <Text>Mental</Text> </View>
-          <View style={styles.energyBackground}>       <Text>Energia</Text> </View>
           <View style={styles.attributessBackground}>       <Text>Atributos</Text> </View>
           <View style={styles.acBackground}>       <Text>CA</Text> </View>
           <View style={styles.loadBackground}>       <Text>cARGA</Text> </View>
@@ -294,7 +335,7 @@ const styles = StyleSheet.create({
 
 
 
-  lifeBackground:{
+  tellerBackground:{
     backgroundColor: '#1bff3aff',
     alignSelf: 'center' ,
     width: '70%',
