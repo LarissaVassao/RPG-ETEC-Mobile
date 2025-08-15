@@ -91,16 +91,13 @@ export default function Home({ navigation }) {
       {activeView === 'red' && <View style={styles.redView}> 
 
           <View style={{flexDirection: 'row', width: '90%', top: 10}}>
-            {/* Coluna dos textos */}
-            <View style={{justifyContent: 'space-around', marginRight: 10}}>
+            <View style={{justifyContent: 'space-around', marginRight: 10, marginLeft: 10}}>
               <Text>Vida:</Text>
               <Text>Mental:</Text>
               <Text>Energia:</Text>
             </View>
             
-            {/* Coluna dos controles */}
-            <View style={{flex: 1}}>
-              {/* Controle de Vida */}
+            <View style={{flex: 1, paddingHorizontal: -7}}>
               <View style={styles.containerBackground}>
                 <View style={styles.subtractAndAdditionbox}></View>   
                 <View style={styles.lifeBackground}>  
@@ -110,7 +107,6 @@ export default function Home({ navigation }) {
                 <View style={styles.subtractAndAdditionbox}></View>
               </View>
               
-              {/* Controle de Mental */}
               <View style={styles.containerBackground}>
                 <View style={styles.subtractAndAdditionbox}></View>   
                 <View style={styles.lifeBackground}>  
@@ -120,7 +116,6 @@ export default function Home({ navigation }) {
                 <View style={styles.subtractAndAdditionbox}></View>
               </View>
               
-              {/* Controle de Energia */}
               <View style={styles.containerBackground}>
                 <View style={styles.subtractAndAdditionbox}></View>   
                 <View style={styles.lifeBackground}>  
@@ -130,14 +125,29 @@ export default function Home({ navigation }) {
                 <View style={styles.subtractAndAdditionbox}></View>
               </View>
             </View>
-          </View>
-                    
-          <View style={styles.creditBackground}>       <Text>Crédito</Text> </View>
-          <View style={styles.attributessBackground}>       <Text>Atributos</Text> </View>
-          <View style={styles.acBackground}>       <Text>CA</Text> </View>
-          <View style={styles.loadBackground}>       <Text>cARGA</Text> </View>
-          <View style={styles.movementBackground}>       <Text>mOVIMENTO</Text> </View>
 
+          </View>
+
+          <View style={styles.three}> 
+            <View> 
+              
+              <Text>CA</Text>
+
+             </View>
+
+            <View> <Text>|</Text> </View>
+
+            <View>  <Text>Carga</Text> </View>
+
+            <View> <Text>|</Text> </View>
+
+            <View>  <Text>Movimento</Text> </View>
+
+          </View>
+
+          <View style={styles.creditBackground}>       <Text>Crédito</Text> </View>
+
+          {/* CA | Carga | Movimento */}
 
           {/* <View>
             <View style={styles.attributeContainer}> 
@@ -324,40 +334,43 @@ const styles = StyleSheet.create({
 
 
 
+containerBackground: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  
+  marginBottom: 7, 
+},
 
-  containerBackground: {
+lifeBackground: {
+  backgroundColor: '#79899D',
+  width: '50%',
+  height: 45,
+  borderRadius: 50,
+  borderColor: '#4B617C',
+  borderWidth: 3,
+  flexDirection: 'row',
+  justifyContent: 'space-around',
+  alignItems: 'center',
+},
+
+subtractAndAdditionbox: {
+  backgroundColor: '#79899D',
+  width: '15%',
+  height: 45,
+  borderWidth: 3,
+  borderColor: '#4B617C',
+  borderRadius: 3
+},
+
+three: {
     top: 10,
     justifyContent: 'space-around',
     width: '90%',
     flexDirection: 'row',
-  },
 
-  lifeBackground:{
-    backgroundColor: '#79899D',
-    alignSelf: 'center' ,
-    width: '40%',
-    height:45,
-    borderRadius: 50,
-    borderColor: '#4B617C',
-    borderWidth:3
-  },
+},
 
-  subtractAndAdditionbox: {
-    backgroundColor: '#79899D',
-    width: '15%',
-    height:45,
-    borderWidth:3,
-    borderColor: '#4B617C',
-
-  },
-
-  creditBackground:{},
-  mentalBackground: {},
-  energyBackground: {},
-  attributessBackground:{},
-  acBackground:{},
-  loadBackground: {},
-  movementBackground: {},
   
 
 
