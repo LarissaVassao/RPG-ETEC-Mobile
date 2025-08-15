@@ -90,64 +90,48 @@ export default function Home({ navigation }) {
 
       {activeView === 'red' && <View style={styles.redView}> 
 
-        <View style={styles.containerBackground}>
-           <Text>Vida:</Text>
-          <View style={styles.subtractAndAdditionbox}>    </View>   
-          <View style={styles.lifeBackground}>  
-                <View style={styles.boxT}>    </View>
-                <View style={styles.boxT}>    </View>     
-          </View>
-          <View style={styles.subtractAndAdditionbox}>    </View>
-        </View> 
-
-         <View style={styles.containerBackground}>
-           <Text>Mental:</Text>
-          <View style={styles.subtractAndAdditionbox}>    </View>   
-          <View style={styles.lifeBackground}>  
-                <View style={styles.boxT}>    </View>
-                <View style={styles.boxT}>    </View>     
-          </View>
-          <View style={styles.subtractAndAdditionbox}>    </View>
-        </View> 
-
-         <View style={styles.containerBackground}>
-           <Text>Energia:</Text>
-          <View style={styles.subtractAndAdditionbox}>    </View>   
-          <View style={styles.lifeBackground}>  
-                <View style={styles.boxT}>    </View>
-                <View style={styles.boxT}>    </View>     
-          </View>
-          <View style={styles.subtractAndAdditionbox}>    </View>
-        </View> 
-        {/* utiliar coluna para vida mental e energia ficarem na mesma coluna e o resto na outra */}
-
-           <View style={styles.mentalBackground}>       
-            <Text>Mental</Text>
-            <View> 
-              <View style={styles.subtractAndAdditionbox}>    </View>   
-              <View style={styles.parenthesisT}>  
-                <View style={styles.boxT}>    </View>
-                <View style={styles.boxT}>    </View>
-              </View>
-              <View style={styles.subtractAndAdditionbox}>    </View>
+          <View style={{flexDirection: 'row', width: '90%', top: 10}}>
+            {/* Coluna dos textos */}
+            <View style={{justifyContent: 'space-around', marginRight: 10}}>
+              <Text>Vida:</Text>
+              <Text>Mental:</Text>
+              <Text>Energia:</Text>
             </View>
             
-
-          </View>
-           <View style={styles.energyBackground}>       
-            <Text>Energia</Text>
-            <View> 
-              <View style={styles.subtractAndAdditionbox}>    </View>   
-              <View style={styles.parenthesisT}>  
-                <View style={styles.boxT}>    </View>
-                <View style={styles.boxT}>    </View>
+            {/* Coluna dos controles */}
+            <View style={{flex: 1}}>
+              {/* Controle de Vida */}
+              <View style={styles.containerBackground}>
+                <View style={styles.subtractAndAdditionbox}></View>   
+                <View style={styles.lifeBackground}>  
+                  <View style={styles.boxT}></View>
+                  <View style={styles.boxT}></View>     
+                </View>
+                <View style={styles.subtractAndAdditionbox}></View>
               </View>
-              <View style={styles.subtractAndAdditionbox}>    </View>
+              
+              {/* Controle de Mental */}
+              <View style={styles.containerBackground}>
+                <View style={styles.subtractAndAdditionbox}></View>   
+                <View style={styles.lifeBackground}>  
+                  <View style={styles.boxT}></View>
+                  <View style={styles.boxT}></View>     
+                </View>
+                <View style={styles.subtractAndAdditionbox}></View>
+              </View>
+              
+              {/* Controle de Energia */}
+              <View style={styles.containerBackground}>
+                <View style={styles.subtractAndAdditionbox}></View>   
+                <View style={styles.lifeBackground}>  
+                  <View style={styles.boxT}></View>
+                  <View style={styles.boxT}></View>     
+                </View>
+                <View style={styles.subtractAndAdditionbox}></View>
+              </View>
             </View>
-           
-
           </View>
-           
+                    
           <View style={styles.creditBackground}>       <Text>Crédito</Text> </View>
           <View style={styles.attributessBackground}>       <Text>Atributos</Text> </View>
           <View style={styles.acBackground}>       <Text>CA</Text> </View>
@@ -357,7 +341,6 @@ const styles = StyleSheet.create({
     borderColor: '#4B617C',
     borderWidth:3
   },
-// exemploVida:  - ( _ / _ ) +
 
   subtractAndAdditionbox: {
     backgroundColor: '#79899D',
