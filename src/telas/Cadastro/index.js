@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput, Alert } from 'react-native';
 
 export default function Cadastro({ navigation }) {
     const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
@@ -22,6 +22,54 @@ export default function Cadastro({ navigation }) {
         ]).start();
     }, []);
 
+    async function saveData() {            
+            const res = await  api.get('rpgetec/checarUsuarios.php', {params: { user: usuario, email: email}});
+        if (res.data.unique){
+            navigation.navigate("Login");
+        
+           if (usuario == "" || email == "" || senha == "") {
+            showMessage({
+                message: "Erro ao Salvar",
+                description: 'Preencha os Campos Obrigatórios!',
+                type: "warning",
+            });
+            return;
+        }
+        try {
+            const obj = {
+                nome: usuario, 
+                email: email,               
+                senha: senha,       
+            }
+            const res = await api.post('rpgetec/salvar.php', obj);
+            if (res.data.sucesso === false) {
+                showMessage({
+                    message: "Erro ao Salvar",
+                    description: res.data.mensagem,
+                    type: "warning",
+                    duration: 3000,                    
+                });  
+                limparCampos();            
+                return;
+            }
+
+            setSucess(true);
+            showMessage({
+                message: "Salvo com Sucesso",
+                description: "Registro Salvo",
+                type: "success",
+                duration: 800,             
+            });          
+        } catch (error) {
+            Alert.alert("Ops", "Alguma coisa deu errado, tente novamente.");
+            setSucess(false);
+        }
+    }
+    else{
+            Alert.alert("Email ou Usuario ja cadastrado!");
+        }
+ 
+    }     
     return (
         <KeyboardAvoidingView style={styles.background}>
             <Animated.View
@@ -63,7 +111,7 @@ export default function Cadastro({ navigation }) {
                     <View style={styles.viewBotao}>
                         <TouchableOpacity
                             style={styles.botao}
-                            onPress={() => navigation.navigate("Login")}
+                            onPress={() => saveData()}
                         >
                             <Text style={styles.textoBotao}>Criar conta</Text>
                         </TouchableOpacity>

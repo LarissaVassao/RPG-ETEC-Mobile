@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput, Alert } from 'react-native';
 
 export default function Login({ navigation }) {
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
@@ -20,6 +20,17 @@ export default function Login({ navigation }) {
       })
     ]).start();
   }, []);
+
+  async function login(){
+    const res = await  api.get('rpgetec/checarUsuarios.php', {params: {email: email, senha: senha}});
+    if (res.data.success)
+    {
+    navigation.navigate("Home", { email, senha })
+    }
+    else{
+      Alert.alert("Senha ou Email incorreto(s)!")
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.background}>
