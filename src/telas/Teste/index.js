@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity,ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 
 export default function Home({ navigation }) {
-  const [activeView, setActiveView] = useState('red'); // Inicia com redView visível
+  const [activeView, setActiveView] = useState('red'); 
 
   const handleButtonPress = (color) => {
     setActiveView(color);
@@ -170,7 +170,17 @@ export default function Home({ navigation }) {
 
         </View>}
       {activeView === 'green' && <View style={styles.greenView} >
+        {/* Adicionar o scrollview */}
+            <View style={styles.skillContainer}>
+              
+              <View style={styles.skillBackground}>
+              <TouchableOpacity style={styles.skillTouchable}></TouchableOpacity>  
+              <Text skillText>AAAAAAAAA</Text>
+              </View>
+
+            </View>
           <Text>Pericia</Text>
+
         </View>}
       {activeView === 'blue' && <View style={styles.blueView} >
           <Text>Mochila - Armadura</Text>
@@ -373,6 +383,30 @@ three: {
 
   
 
+
+  skillContainer: {
+     width: '95%',
+     alignSelf: 'center',
+     top: 10
+  },
+  skillBackground: {
+    height: 50,
+    width: '100%',
+    backgroundColor: '#ff00aa',
+    borderColor: '#2e1f29ff',
+    borderWidth: 2,
+    borderRadius: 10,
+    flexDirection: 'row',
+
+  },
+  skillText: {
+
+  },
+  skillTouchable: {
+    backgroundColor: '#aaa',
+    height: '85%',
+    width: 50,
+  },
 
   attributeContainer:{
     position: 'absolute',
