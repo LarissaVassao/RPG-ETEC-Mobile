@@ -171,17 +171,52 @@ export default function Home({ navigation }) {
         </View>}
       {activeView === 'green' && <View style={styles.greenView} >
         {/* Adicionar o scrollview */}
-            <View style={styles.skillContainer}>
-              
-              <View style={styles.skillBackground}>
-              <TouchableOpacity style={styles.skillTouchable}></TouchableOpacity>  
-              <Text skillText>AAAAAAAAA</Text>
-              </View>
+<ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+  {/* Container de Skills */}
+  <View style={styles.skillContainer}>
+    <View style={styles.skillBackground}>
+      
+      <Text style={styles.skillText}>Skill</Text>
 
-            </View>
-          <Text>Pericia</Text>
+      <TouchableOpacity style={styles.skillTouchable}>
+        <Ionicons name="add-outline" size={40} color="#fff" />
+      </TouchableOpacity> 
+
+      <TextInput 
+        style={styles.skillInput}
+        placeholder=""
+        placeholderTextColor="#ccc"
+      />
+
+      <TouchableOpacity style={styles.skillTouchable}>
+        <Ionicons name="add-outline" size={40} color="#fff" />
+      </TouchableOpacity>  
+    </View>
+  </View>
+
+  {/* Outros elementos abaixo */}
+  <View style={styles.otherContainer}>
+    <View style={styles.otherElement}>
+      <Text style={styles.otherText}>Elemento 1</Text>
+    </View>
+    
+    <View style={styles.otherElement}>
+      <Text style={styles.otherText}>Elemento 2</Text>
+    </View>
+    
+    <View style={styles.otherElement}>
+      <Text style={styles.otherText}>Elemento 3</Text>
+    </View>
+    
+    <View style={styles.otherElement}>
+      <Text style={styles.otherText}>Elemento 4</Text>
+    </View>
+  </View>
+</ScrollView>
 
         </View>}
+
+
       {activeView === 'blue' && <View style={styles.blueView} >
           <Text>Mochila - Armadura</Text>
         </View>}
@@ -382,31 +417,75 @@ three: {
 },
 
   
+scrollView: {
+  flex: 1,
+  backgroundColor: '#fff',
+},
+scrollContent: {
+  paddingBottom: 20, // Espaço no final para não cortar elementos
+},
+skillContainer: {
+  width: '95%',
+  alignSelf: 'center',
+  marginTop: 10,
+  marginBottom: 15,
+},
+skillBackground: {
+  height: 50,
+  width: '100%',
+  backgroundColor: '#ff00aa',
+  borderColor: '#2e1f29ff',
+  borderWidth: 2,
+  borderRadius: 10,
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingHorizontal: 10,
+  gap: 10, // Distância de 10px entre os elementos
+},
+skillText: {
+  color: '#fff',
+  fontWeight: 'bold',
+  fontSize: 16,
+  flex: 1,
+},
+skillTouchable: {
+  backgroundColor: '#9c9c9cff',
+  height: 40,
+  width: 40,
+  borderRadius: 8,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+skillInput: {
+  backgroundColor: '#9c9c9cff',
+  height: 40,
+  flex: 2,
+  borderRadius: 8,
+  paddingHorizontal: 10,
+  width: 40,
+  color: '#f999ff',
+  fontSize: 16,
+},
+otherContainer: {
+  width: '95%',
+  alignSelf: 'center',
+  gap: 15, // Espaço entre os elementos
+},
+otherElement: {
+  backgroundColor: '#f8f8f8',
+  padding: 20,
+  borderRadius: 12,
+  borderWidth: 1,
+  borderColor: '#e0e0e0',
+  alignItems: 'center',
+},
+otherText: {
+  fontSize: 16,
+  fontWeight: '600',
+  color: '#333',
+},
 
-
-  skillContainer: {
-     width: '95%',
-     alignSelf: 'center',
-     top: 10
-  },
-  skillBackground: {
-    height: 50,
-    width: '100%',
-    backgroundColor: '#ff00aa',
-    borderColor: '#2e1f29ff',
-    borderWidth: 2,
-    borderRadius: 10,
-    flexDirection: 'row',
-
-  },
-  skillText: {
-
-  },
-  skillTouchable: {
-    backgroundColor: '#aaa',
-    height: '85%',
-    width: 50,
-  },
 
   attributeContainer:{
     position: 'absolute',
