@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity,ScrollView } from 'react-native';
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
 
 export default function Home({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
@@ -12,13 +11,13 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
+      {/* Header Fixo */}
       <View style={styles.bar} />
-
-
+      
       <TouchableOpacity 
         style={styles.backButton}
         onPress={() => navigation.navigate("Home")}
-        >
+      >
         <Ionicons name="arrow-back-outline" size={30} color="#00283D" />
       </TouchableOpacity>
 
@@ -88,6 +87,10 @@ export default function Home({ navigation }) {
         ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
       </View>
 
+
+ <View style={styles.mainContent}>
+
+
       {activeView === 'red' && <View style={styles.redView}> 
 
           <View style={{flexDirection: 'row', width: '90%', top: 10}}>
@@ -99,30 +102,42 @@ export default function Home({ navigation }) {
             
             <View style={{flex: 1, paddingHorizontal: -7}}>
               <View style={styles.containerBackground}>
-                <View style={styles.subtractAndAdditionbox}></View>   
+                <View style={styles.subtractAndAdditionbox}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </View>   
                 <View style={styles.lifeBackground}>  
                   <View style={styles.boxT}></View>
                   <View style={styles.boxT}></View>     
                 </View>
-                <View style={styles.subtractAndAdditionbox}></View>
+                <View style={styles.subtractAndAdditionbox}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </View>
               </View>
               
               <View style={styles.containerBackground}>
-                <View style={styles.subtractAndAdditionbox}></View>   
+                <View style={styles.subtractAndAdditionbox}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </View>   
                 <View style={styles.lifeBackground}>  
                   <View style={styles.boxT}></View>
                   <View style={styles.boxT}></View>     
                 </View>
-                <View style={styles.subtractAndAdditionbox}></View>
+                <View style={styles.subtractAndAdditionbox}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </View>
               </View>
               
               <View style={styles.containerBackground}>
-                <View style={styles.subtractAndAdditionbox}></View>   
+                <View style={styles.subtractAndAdditionbox}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </View>   
                 <View style={styles.lifeBackground}>  
                   <View style={styles.boxT}></View>
                   <View style={styles.boxT}></View>     
                 </View>
-                <View style={styles.subtractAndAdditionbox}></View>
+                <View style={styles.subtractAndAdditionbox}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </View>
               </View>
             </View>
 
@@ -144,10 +159,11 @@ export default function Home({ navigation }) {
             <View>  <Text>Movimento</Text> </View>
 
           </View>
+               {/* CA | Carga | Movimento */}
 
           <View style={styles.creditBackground}>       <Text>Crédito</Text> </View>
 
-          {/* CA | Carga | Movimento */}
+          {/* Credito centralizado com text imput do lado */}
 
           {/* <View>
             <View style={styles.attributeContainer}> 
@@ -169,52 +185,302 @@ export default function Home({ navigation }) {
 
 
         </View>}
-      {activeView === 'green' && <View style={styles.greenView} >
-        {/* Adicionar o scrollview */}
-<ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-  {/* Container de Skills */}
-  <View style={styles.skillContainer}>
-    <View style={styles.skillBackground}>
-      
-      <Text style={styles.skillText}>Skill</Text>
+      {activeView === 'green' && <ScrollView 
+            style={styles.greenView}
+            contentContainerStyle={styles.scrollContent}
+          >
+            <Text style={styles.skillTitle}>Habilidades</Text>
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Acalmar</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
 
-      <TouchableOpacity style={styles.skillTouchable}>
-        <Ionicons name="add-outline" size={40} color="#fff" />
-      </TouchableOpacity> 
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Acrobacia</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Atletismo</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
 
-      <TextInput 
-        style={styles.skillInput}
-        placeholder=""
-        placeholderTextColor="#ccc"
-      />
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Atualidades</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
 
-      <TouchableOpacity style={styles.skillTouchable}>
-        <Ionicons name="add-outline" size={40} color="#fff" />
-      </TouchableOpacity>  
-    </View>
-  </View>
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Análise</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
 
-  {/* Outros elementos abaixo */}
-  <View style={styles.otherContainer}>
-    <View style={styles.otherElement}>
-      <Text style={styles.otherText}>Elemento 1</Text>
-    </View>
-    
-    <View style={styles.otherElement}>
-      <Text style={styles.otherText}>Elemento 2</Text>
-    </View>
-    
-    <View style={styles.otherElement}>
-      <Text style={styles.otherText}>Elemento 3</Text>
-    </View>
-    
-    <View style={styles.otherElement}>
-      <Text style={styles.otherText}>Elemento 4</Text>
-    </View>
-  </View>
-</ScrollView>
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Charme</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
 
-        </View>}
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Eletronicos</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Enganar</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Furtividade</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Informática</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Iniciativa</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Intimidação</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Intuição</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Medicina</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Mecânica</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Persuasão</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Primeiros-Socorros</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+            <View style={styles.skillContainer}>
+              <View style={styles.skillBackground}>
+                <Text style={styles.skillText}>Procurar</Text>
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="remove-outline" size={40} color="#fff" />
+                </TouchableOpacity> 
+                <TextInput 
+                  style={styles.skillInput}
+                  placeholderTextColor="#ccc"
+                />
+                <TouchableOpacity style={styles.skillTouchable}>
+                  <Ionicons name="add-outline" size={40} color="#fff" />
+                </TouchableOpacity>  
+              </View>
+            </View>
+
+
+            
+          </ScrollView>}
 
 
       {activeView === 'blue' && <View style={styles.blueView} >
@@ -227,6 +493,7 @@ export default function Home({ navigation }) {
           <Text>Tamanho</Text> 
           <Text>Biografia</Text>
         </View>}
+        </View>
     </View>
   );
 }
@@ -236,8 +503,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    position: 'relative',
   },
+   mainContent: {
+    flex: 1,
+    marginTop: 290, // Ajuste esta altura conforme necessário
+    },
   namePlayer: {
     position: 'absolute',
     top: 40,
@@ -348,144 +618,126 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center', 
   },
-    redView: {
-    position: 'absolute',
-    top: 290,
-    width: '100%',
-    height: '100%',
+   redView: {
+    flex: 1,
     backgroundColor: '#dceff9',
+    padding: 10,
   },
   greenView: {
-    position: 'absolute',
-    top: 290,
-    width: '100%',
-    height: '100%',
+    flex: 1,
     backgroundColor: '#96CFEE',
   },
   blueView: {
-    position: 'absolute',
-    top: 290,
-    width: '100%',
-    height: '100%',
+    flex: 1,
     backgroundColor: '#2295D1',
+    padding: 10,
   },
   pinkView: {
-    position: 'absolute',
-    top: 290,
-    width: '100%',
-    height: '100%',
+    flex: 1,
     backgroundColor: '#124A69',
+    padding: 10,
   },
 
 
 
-containerBackground: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  
-  marginBottom: 7, 
-},
-
-lifeBackground: {
-  backgroundColor: '#79899D',
-  width: '50%',
-  height: 45,
-  borderRadius: 50,
-  borderColor: '#4B617C',
-  borderWidth: 3,
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  alignItems: 'center',
-},
-
-subtractAndAdditionbox: {
-  backgroundColor: '#79899D',
-  width: '15%',
-  height: 45,
-  borderWidth: 3,
-  borderColor: '#4B617C',
-  borderRadius: 3
-},
-
-three: {
-    top: 10,
-    justifyContent: 'space-around',
-    width: '90%',
+  containerBackground: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    
+    marginBottom: 7, 
+  },
 
-},
+  lifeBackground: {
+    backgroundColor: '#79899D',
+    width: '50%',
+    height: 45,
+    borderRadius: 50,
+    borderColor: '#4B617C',
+    borderWidth: 3,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
 
+  subtractAndAdditionbox: {
+    backgroundColor: '#79899D',
+    width: '15%',
+    height: 45,
+    borderWidth: 3,
+    borderColor: '#4B617C',
+    borderRadius: 3
+  },
+
+  three: {
+      top: 10,
+      justifyContent: 'space-around',
+      width: '90%',
+      flexDirection: 'row',
+
+  },
+
+    
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 20,
+  },
+
+  //skill
   
-scrollView: {
-  flex: 1,
-  backgroundColor: '#fff',
-},
-scrollContent: {
-  paddingBottom: 20, // Espaço no final para não cortar elementos
-},
-skillContainer: {
-  width: '95%',
-  alignSelf: 'center',
-  marginTop: 10,
-  marginBottom: 15,
-},
-skillBackground: {
-  height: 50,
-  width: '100%',
-  backgroundColor: '#ff00aa',
-  borderColor: '#2e1f29ff',
-  borderWidth: 2,
-  borderRadius: 10,
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  paddingHorizontal: 10,
-  gap: 10, // Distância de 10px entre os elementos
-},
-skillText: {
-  color: '#fff',
-  fontWeight: 'bold',
-  fontSize: 16,
-  flex: 1,
-},
-skillTouchable: {
-  backgroundColor: '#9c9c9cff',
-  height: 40,
-  width: 40,
-  borderRadius: 8,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-skillInput: {
-  backgroundColor: '#9c9c9cff',
-  height: 40,
-  flex: 2,
-  borderRadius: 8,
-  paddingHorizontal: 10,
-  width: 40,
-  color: '#f999ff',
-  fontSize: 16,
-},
-otherContainer: {
-  width: '95%',
-  alignSelf: 'center',
-  gap: 15, // Espaço entre os elementos
-},
-otherElement: {
-  backgroundColor: '#f8f8f8',
-  padding: 20,
-  borderRadius: 12,
-  borderWidth: 1,
-  borderColor: '#e0e0e0',
-  alignItems: 'center',
-},
-otherText: {
-  fontSize: 16,
-  fontWeight: '600',
-  color: '#333',
-},
-
+  skillTitle: {
+  textAlign: 'center',
+  fontSize:30,
+  top: 2,
+  fontWeight: 'bold'
+  },
+  skillContainer: {
+    width: '95%',
+    alignSelf: 'center',
+    marginTop: 10,
+    marginBottom: 15,
+  },
+  skillBackground: {
+    width: '100%',
+    backgroundColor: '#f8f8f8',
+    borderColor: '#e0e0e0',
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10, 
+  },
+  skillText: {
+    color: '#333',
+    fontWeight: 'bold',
+    fontSize: 18,
+    flex:5,
+    textAlign: 'center'
+  },
+  skillTouchable: {
+    backgroundColor: '#9c9c9cff',
+    height: 40,
+    width: 40,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  skillInput: {
+    backgroundColor: '#9c9c9cff',
+    height: 40,
+    flex: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    width: 10,
+    color: '#ffffffff',
+    fontSize: 18,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
 
   attributeContainer:{
     position: 'absolute',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 
@@ -33,7 +33,7 @@ export default function ListaPersonagens({ navigation }) {
                         resizeMode="contain" 
                         source={require('../../../assets/img/logo.png')} 
                     />
-                    <Text style={styles.textoBotaoPersonagem}>[NomePersonagem]</Text>         
+                    <Text style={styles.textoBotaoPersonagem}>NomePersonagem</Text>         
                 </View>
             </TouchableOpacity>
         </View>
