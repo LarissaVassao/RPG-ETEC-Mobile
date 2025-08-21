@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { showMessage } from "react-native-flash-message";
+
+import api from "../../../services/api.js";
 
 export default function Cadastro({ navigation }) {
     const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
@@ -13,20 +16,18 @@ export default function Cadastro({ navigation }) {
             Animated.spring(offset.y, {
                 toValue: 0,
                 speed: 4,
-                bounciness: 20
+                bounciness: 20,
+                useNativeDriver: true
             }),
             Animated.timing(opac, {
                 toValue: 1,
                 duration: 2000,
+                useNativeDriver: true
             })
         ]).start();
     }, []);
 
     async function saveData() {            
-            const res = await  api.get('rpgetec/checarUsuarios.php', {params: { user: usuario, email: email}});
-        if (res.data.unique){
-            navigation.navigate("Login");
-        
            if (usuario == "" || email == "" || senha == "") {
             showMessage({
                 message: "Erro ao Salvar",
@@ -35,7 +36,11 @@ export default function Cadastro({ navigation }) {
             });
             return;
         }
-        try {
+        else{
+            
+            const res = await  api.get('rpgetec/checarUsuarios.php', {params: { user: usuario, email: email}});
+            if (res.data.unique){
+                try {
             const obj = {
                 nome: usuario, 
                 email: email,               
@@ -48,28 +53,26 @@ export default function Cadastro({ navigation }) {
                     description: res.data.mensagem,
                     type: "warning",
                     duration: 3000,                    
-                });  
-                limparCampos();            
+                });              
                 return;
             }
-
-            setSucess(true);
             showMessage({
                 message: "Salvo com Sucesso",
                 description: "Registro Salvo",
                 type: "success",
                 duration: 800,             
-            });          
+            });     
+            navigation.navigate("Login");     
         } catch (error) {
             Alert.alert("Ops", "Alguma coisa deu errado, tente novamente.");
-            setSucess(false);
         }
-    }
-    else{
+            
+        }
+        else{
             Alert.alert("Email ou Usuario ja cadastrado!");
         }
- 
     }     
+}     
     return (
         <KeyboardAvoidingView style={styles.background}>
             <Animated.View
@@ -176,7 +179,7 @@ const styles = StyleSheet.create({
     textoBotao: {
         color: '#FFF',
         fontSize: 18,
-        fontWeight: 'semibold'
+        fontWeight: '600'
     },
     texto: {
         fontSize: 18,
