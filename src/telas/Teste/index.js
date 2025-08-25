@@ -3,7 +3,6 @@ import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, ScrollView,
 import { Ionicons } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
 
-
 export default function Home({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
 
@@ -11,27 +10,26 @@ export default function Home({ navigation }) {
     setActiveView(color);
   };
 
-  // Estados e dados (coloque no início do seu componente)
+  // Estado corrigido com item completo incluindo rarity
 const [rpgEquipments, setRpgEquipments] = useState([
   {
     id: 1,
     name: "Espada Longa",
     type: "arma",
     price: 150,
-    rarity: "comum",
+    rarity: "comum", 
     bonus: 5,
     description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo."
   },
-
 ]);
 
-const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-const handleTypeChange = (itemId, newType) => {
-  setRpgEquipments(prev => prev.map(item => 
-    item.id === itemId ? { ...item, type: newType } : item
-  ));
-};
+  const handleTypeChange = (itemId, newType) => {
+    setRpgEquipments(prev => prev.map(item => 
+      item.id === itemId ? { ...item, type: newType } : item
+    ));
+  };
 
 
   return (
@@ -509,127 +507,134 @@ const handleTypeChange = (itemId, newType) => {
           </ScrollView>}
 
 
-      {activeView === 'blue' && <View style={styles.blueView} >
-     
-          {/* Título da Seção */}
-          <Text style={styles.sectionTitle}>Inventário de Equipamentos</Text>
-          
-          {/* Tabela de Equipamentos */}
-          <View style={styles.tableContainer}>
-            {/* Cabeçalho da Tabela */}
-            <View style={styles.tableHeader}>
-              <Text style={[styles.headerText, styles.headerName]}>Nome do Item</Text>
-              <Text style={[styles.headerText, styles.headerType]}>Tipo</Text>
-              <Text style={[styles.headerText, styles.headerPrice]}>Valor</Text>
-              <View style={[styles.headerText, styles.headerActions]} />
+ 
+  {activeView === 'blue' && <View style={styles.blueView}>
+    {/* Título da Seção */}
+    <Text style={styles.sectionTitle}>Inventário de Equipamentos</Text>
+    
+    {/* Tabela de Equipamentos */}
+    <View style={styles.tableContainer}>
+      {/* Cabeçalho da Tabela */}
+      <View style={styles.tableHeader}>
+        <Text style={[styles.headerText, styles.headerName]}>Nome do Item</Text>
+        <Text style={[styles.headerText, styles.headerType]}>Tipo</Text>
+        <Text style={[styles.headerText, styles.headerPrice]}>Valor</Text>
+        <View style={[styles.headerText, styles.headerActions]} />
+      </View>
+
+      {/* Linhas da Tabela */}
+      <ScrollView style={styles.tableBody}>
+        {rpgEquipments.map((item) => (
+          <TouchableOpacity 
+            key={item.id} 
+            style={styles.tableRow}
+            onPress={() => setSelectedItem(item)}
+          >
+            {/* Nome do Item */}
+            <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
+            
+            {/* Combobox de Tipo */}
+            <View style={styles.cellType}>
+              <Picker
+                selectedValue={item.type}
+                style={styles.picker}
+                onValueChange={(itemValue) => handleTypeChange(item.id, itemValue)}
+                dropdownIconColor="#092534"
+              >
+                <Picker.Item label="Arma" value="arma" />
+                <Picker.Item label="Armadura" value="armadura" />
+                <Picker.Item label="Escudo" value="escudo" />
+                <Picker.Item label="Tesouro" value="tesouro" />
+                <Picker.Item label="Poção" value="pocao" />
+                <Picker.Item label="Amuleto" value="amuleto" />
+                <Picker.Item label="Anel" value="anel" />
+                <Picker.Item label="Consumível" value="consumivel" />
+              </Picker>
             </View>
 
-            {/* Linhas da Tabela */}
-            <ScrollView style={styles.tableBody}>
-              {rpgEquipments.map((item, index) => (
-                <TouchableOpacity 
-                  key={item.id} 
-                  style={styles.tableRow}
-                  onPress={() => setSelectedItem(item)}
-                >
-                  {/* Nome do Item */}
-                  <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
-                  
-                  {/* Combobox de Tipo */}
-                  <View style={styles.cellType}>
-                    <Picker
-                      selectedValue={item.type}
-                      style={styles.picker}
-                      onValueChange={(itemValue) => handleTypeChange(item.id, itemValue)}
-                      dropdownIconColor="#8B4513"
-                    >
-                      <Picker.Item label="Arma" value="arma" />
-                      <Picker.Item label="Armadura" value="armadura" />
-                      <Picker.Item label="Escudo" value="escudo" />
-                      <Picker.Item label="Tesouro" value="tesouro" />
-                      <Picker.Item label="Poção" value="pocao" />
-                      <Picker.Item label="Amuleto" value="amuleto" />
-                      <Picker.Item label="Anel" value="anel" />
-                      <Picker.Item label="Consumível" value="consumivel" />
-                    </Picker>
-                  </View>
+            {/* Preço em Ouro */}
+            <Text style={[styles.cellText, styles.cellPrice]}>
+              {item.price} <Text style={styles.credit}></Text>
+            </Text>
 
-                  {/* Preço em Ouro */}
-                  <Text style={[styles.cellText, styles.cellPrice]}>
-                    {item.price} <Text style={styles.goldText}></Text>
-                  </Text>
+            {/* Ícone de Informações */}
+            <View style={styles.cellActions}>
+              <TouchableOpacity onPress={() => setSelectedItem(item)}>
+                <Ionicons name="information-circle-outline" size={24} color="#092534" />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
 
-                  {/* Ícone de Informações */}
-                  <View style={styles.cellActions}>
-                    <Ionicons name="information-circle-outline" size={24} color="#8B4513" />
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+    // Substitua o Modal atual por este código corrigido:
+<Modal
+  visible={!!selectedItem}
+  animationType="fade"
+  transparent={true}
+  onRequestClose={() => setSelectedItem(null)}
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.modalContainer}>
+      {selectedItem && (
+        <>
+          {/* Cabeçalho do Modal */}
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>{selectedItem.name}</Text>
+            <Text style={styles.modalType}>{selectedItem.type}</Text>
           </View>
 
-          {/* Modal de Descrição */}
-          <Modal
-            visible={!!selectedItem}
-            animationType="fade"
-            transparent={true}
-            onRequestClose={() => setSelectedItem(null)}
+          {/* Informações do Item - AGORA DENTRO DE SCROLLVIEW */}
+          <ScrollView 
+            style={styles.modalContentScroll}
+            contentContainerStyle={styles.modalContentContainer}
           >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalContainer}>
-                {selectedItem && (
-                  <>
-                    {/* Cabeçalho do Modal */}
-                    <View style={styles.modalHeader}>
-                      <Text style={styles.modalTitle}>{selectedItem.name}</Text>
-                      <Text style={styles.modalType}>{selectedItem.type}</Text>
-                    </View>
-
-                    {/* Informações do Item */}
-                    <View style={styles.modalContent}>
-                      <View style={styles.modalInfoRow}>
-                        <Text style={styles.modalLabel}>Valor:</Text>
-                        <Text style={styles.modalValue}>
-                          {selectedItem.price} <Text style={styles.goldText}>peças de ouro</Text>
-                        </Text>
-                      </View>
-
-                      <View style={styles.modalInfoRow}>
-                        <Text style={styles.modalLabel}>Raridade:</Text>
-                        <Text style={[styles.modalValue, styles[selectedItem.rarity]]}>
-                          {selectedItem.rarity}
-                        </Text>
-                      </View>
-
-                      {selectedItem.bonus && (
-                        <View style={styles.modalInfoRow}>
-                          <Text style={styles.modalLabel}>Bônus:</Text>
-                          <Text style={styles.modalBonus}>+{selectedItem.bonus}</Text>
-                        </View>
-                      )}
-
-                      {/* Descrição */}
-                      <View style={styles.descriptionContainer}>
-                        <Text style={styles.modalLabel}>Descrição:</Text>
-                        <Text style={styles.modalDescription}>
-                          {selectedItem.description}
-                        </Text>
-                      </View>
-                    </View>
-
-                    {/* Botão de Fechar */}
-                    <TouchableOpacity 
-                      style={styles.modalCloseButton}
-                      onPress={() => setSelectedItem(null)}
-                    >
-                      <Text style={styles.modalCloseText}>Fechar</Text>
-                    </TouchableOpacity>
-                  </>
-                )}
-              </View>
+            <View style={styles.modalInfoRow}>
+              <Text style={styles.modalLabel}>Valor:</Text>
+              <Text style={styles.modalValue}>
+                {selectedItem.price} <Text style={styles.credit}>céditos</Text>
+              </Text>
             </View>
-          </Modal>
-        </View>}
+
+            <View style={styles.modalInfoRow}>
+              <Text style={styles.modalLabel}>Raridade:</Text>
+              <Text style={[styles.modalValue, styles[selectedItem.rarity]]}>
+                {selectedItem.rarity}
+              </Text>
+            </View>
+
+            {selectedItem.bonus && (
+              <View style={styles.modalInfoRow}>
+                <Text style={styles.modalLabel}>Bônus:</Text>
+                <Text style={styles.modalBonus}>+{selectedItem.bonus}</Text>
+              </View>
+            )}
+
+            {/* Descrição */}
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.modalLabel}>Descrição:</Text>
+              <Text style={styles.modalDescription}>
+                {selectedItem.description}
+              </Text>
+            </View>
+          </ScrollView>
+
+          {/* Botão de Fechar */}
+          <TouchableOpacity 
+            style={styles.modalCloseButton}
+            onPress={() => setSelectedItem(null)}
+          >
+            <Text style={styles.modalCloseText}>Fechar</Text>
+          </TouchableOpacity>
+        </>
+      )}
+    </View>
+  </View>
+</Modal>
+  </View>}
+
+
       {activeView === 'pink' && <View style={styles.pinkView} >
           <Text>Olho</Text>
           <Text>Cabelo</Text>        
@@ -771,7 +776,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#96CFEE',
   },
-  blueView: {
+ blueView: {
     flex: 1,
     backgroundColor: '#2295D1',
     padding: 10,
@@ -787,33 +792,29 @@ const styles = StyleSheet.create({
   //
 
   // Estilos
-blueView: {
-  flex: 1,
-  padding: 15,
-  backgroundColor: '#1a1a1a',
-},
+
 sectionTitle: {
-  fontSize: 24,
+  fontSize: 27,
   fontWeight: 'bold',
-  color: '#FFD700',
+  color: '#ffffffff',
   textAlign: 'center',
   marginBottom: 20,
   fontFamily: 'System',
-  textShadowColor: '#8B4513',
+  textShadowColor: '#a19420ff',
   textShadowOffset: { width: 1, height: 1 },
   textShadowRadius: 2,
 },
 tableContainer: {
   flex: 1,
-  backgroundColor: '#2c2c2c',
+  backgroundColor: '#cccccc8e',
   borderRadius: 12,
   overflow: 'hidden',
   borderWidth: 2,
-  borderColor: '#8B4513',
+  borderColor: '#09253494',
 },
 tableHeader: {
   flexDirection: 'row',
-  backgroundColor: '#8B4513',
+  backgroundColor: '#092534',
   padding: 15,
   borderBottomWidth: 2,
   borderBottomColor: '#FFD700',
@@ -870,108 +871,122 @@ picker: {
   color: '#ffffffff',
   borderRadius: 6,
   borderWidth: 1,
-  borderColor: '#8B4513',
+  borderColor: '#092534',
 },
-goldText: {
+credit: {
   color: '#FFD700',
   fontWeight: 'bold',
 },
-modalOverlay: {
-  flex: 1,
-  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: 20,
-},
-modalContainer: {
-  backgroundColor: '#2c2c2c',
-  padding: 25,
-  borderRadius: 15,
-  width: '90%',
-  maxHeight: '80%',
-  borderWidth: 3,
-  borderColor: '#8B4513',
-},
-modalHeader: {
-  borderBottomWidth: 2,
-  borderBottomColor: '#8B4513',
-  paddingBottom: 15,
-  marginBottom: 20,
-},
-modalTitle: {
-  fontSize: 22,
-  fontWeight: 'bold',
-  color: '#FFD700',
-  textAlign: 'center',
-  marginBottom: 5,
-},
-modalType: {
-  fontSize: 16,
-  color: '#8B4513',
-  textAlign: 'center',
-  textTransform: 'capitalize',
-  fontStyle: 'italic',
-},
-modalContent: {
-  flex: 1,
-},
-modalInfoRow: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginBottom: 12,
-  padding: 8,
-  backgroundColor: '#333',
-  borderRadius: 6,
-},
-modalLabel: {
-  color: '#8B4513',
-  fontWeight: 'bold',
-  fontSize: 14,
-},
-modalValue: {
-  color: '#FFF',
-  fontSize: 14,
-  fontWeight: '600',
-},
-modalBonus: {
-  color: '#00FF00',
-  fontWeight: 'bold',
-  fontSize: 16,
-},
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    height: '100%'
+  },
+  modalContainer: {
+    backgroundColor: '#686868ff',
+    padding: 25,
+    borderRadius: 15,
+    width: '90%',
+    maxHeight: '80%', // Altura máxima
+    borderWidth: 3,
+    borderColor: '#ffffffff',
+  },
+  modalContentScroll: {
+  maxHeight: 250, 
+  },
+  modalContentContainer: {
+    paddingBottom: 20, // Espaço extra no final
+  },
+  modalHeader: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#ffffffff',
+    paddingBottom: 15,
+    marginBottom: 15,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#5bb5ffff',
+    textAlign: 'center',
+    marginBottom: 5,
+  },
+  modalType: {
+    fontSize: 16,
+    color: '#dadadaff',
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    fontStyle: 'italic',
+  },
+  modalInfoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    padding: 10,
+    backgroundColor: '#5e5e5eff',
+    borderRadius: 6,
+  },
+  modalLabel: {
+    color: '#a9e1ffff',
+    fontWeight: 'bold',
+    fontSize: 14,
+    flex: 1,
+  },
+  modalValue: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: '600',
+    flex: 1,
+    textAlign: 'right',
+  },
+  modalBonus: {
+    color: '#00f7ffff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+ 
+  modalDescription: {
+    color: '#CCC',
+    fontSize: 14,
+    lineHeight: 20,
+    fontStyle: 'italic',
+    marginTop: 8,
+  },
+  modalCloseButton: {
+    backgroundColor: '#59a2f7ff',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 15,
+    borderWidth: 1,
+    borderColor: '#ffffffff',
+  },
+  modalCloseText: {
+    color: '#ffffffff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
+  // Estilos para cores de raridade
 comum: { color: '#FFFFFF' },
 raro: { color: '#0070DD' },
-épico: { color: '#A335EE' },
+epico: { color: '#A335EE' },
 lendario: { color: '#FF8000' },
+
+  
 descriptionContainer: {
   marginTop: 20,
   padding: 12,
-  backgroundColor: '#333',
+  backgroundColor: '#6e6e6eff',
   borderRadius: 8,
   borderLeftWidth: 4,
-  borderLeftColor: '#8B4513',
+  borderLeftColor: '#092534',
 },
-modalDescription: {
-  color: '#CCC',
-  fontSize: 14,
-  lineHeight: 20,
-  fontStyle: 'italic',
-  marginTop: 8,
-},
-modalCloseButton: {
-  backgroundColor: '#8B4513',
-  padding: 15,
-  borderRadius: 8,
-  alignItems: 'center',
-  marginTop: 25,
-  borderWidth: 1,
-  borderColor: '#FFD700',
-},
-modalCloseText: {
-  color: '#FFD700',
-  fontWeight: 'bold',
-  fontSize: 16,
-},
+
 
   ///
 
