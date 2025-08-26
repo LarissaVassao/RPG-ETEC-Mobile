@@ -81,13 +81,14 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
     backgroundColor: '#2295D1',  
-    paddingVertical: 20,
+    paddingVertical: 15,
     borderRadius: 16,
     elevation: 6,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
+    top: -30
   },
   buttonContent: {
     flexDirection: 'row',

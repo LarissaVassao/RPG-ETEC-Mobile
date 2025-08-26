@@ -13,18 +13,19 @@ export default function App({ navigation }) {
     >
       <StatusBar backgroundColor="#ffffffff" barStyle="dark-content" />
       
+      {/* Botão de voltar no canto superior esquerdo */}
+      <TouchableOpacity 
+        style={styles.backButton}
+        onPress={() => navigation.navigate("Home")}
+      >
+        <Ionicons name="arrow-back-outline" size={30} color="#2295D1" />
+      </TouchableOpacity>
+      
       <ScrollView 
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Ionicons name="arrow-back-outline" size={30} color="#2295D1" />
-          </TouchableOpacity>
-          
           <View style={styles.formContainer}>
             <Text style={styles.title}>Criar uma Campanha</Text>
             
@@ -139,19 +140,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 1,
   },
-   backButton: {
+  backButton: {
     position: 'absolute',
-    bottom: 30,   
-    left: 20,    
+    left: 20,      
     width: 50,
     height: 50,
     borderRadius: 25,
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#092534',
+    borderColor: '#1c485fff',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
- 
+    zIndex: 10,    // Z-index alto para garantir que fique acima de outros elementos
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
   },
 });
