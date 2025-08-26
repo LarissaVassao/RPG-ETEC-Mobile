@@ -5,32 +5,29 @@ import {Picker} from '@react-native-picker/picker';
 
 export default function Home({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
+  const [rpgEquipments, setRpgEquipments] = useState([
+    {
+      id: 1,
+      name: "Espada Longa",
+      type: "arma",
+      price: 150,
+      rarity: "comum", 
+      weight: 2.5,
+      bonus: 5,
+      description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo."
+    },
+  ]);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handleButtonPress = (color) => {
     setActiveView(color);
   };
-
-  // Estado corrigido com item completo incluindo rarity
-const [rpgEquipments, setRpgEquipments] = useState([
-  {
-    id: 1,
-    name: "Espada Longa",
-    type: "arma",
-    price: 150,
-    rarity: "comum", 
-    bonus: 5,
-    description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo."
-  },
-]);
-
-  const [selectedItem, setSelectedItem] = useState(null);
 
   const handleTypeChange = (itemId, newType) => {
     setRpgEquipments(prev => prev.map(item => 
       item.id === itemId ? { ...item, type: newType } : item
     ));
   };
-
 
   return (
     <View style={styles.container}>
@@ -110,553 +107,791 @@ const [rpgEquipments, setRpgEquipments] = useState([
         ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
       </View>
 
+      <View style={styles.mainContent}>
 
- <View style={styles.mainContent}>
+        {activeView === 'red' && 
+        <View style={styles.redView}>
+          <Text style={styles.viewTitle}>Atributos do Personagem</Text>  
+            <ScrollView contentContainerStyle={styles.redScrollContent}>
+              {/* Barra de Recursos (Vida, Mental, Energia) com Inputs */}
+              <View style={styles.resourcesContainer}>
+                <View style={styles.resourceRow}>
+                  <Text style={styles.resourceLabel}>Vida:</Text>
+                  <View style={styles.resourceControl}>
+                    <TouchableOpacity style={styles.resourceButton}>
+                      <Ionicons name="remove-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                    <TextInput
+                      style={styles.resourceInput}
+                      placeholder="100/100"
+                      placeholderTextColor="#FFD700"
+                      defaultValue="100/100"
+                    />
+                    <TouchableOpacity style={styles.resourceButton}>
+                      <Ionicons name="add-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
+                <View style={styles.resourceRow}>
+                  <Text style={styles.resourceLabel}>Mental:</Text>
+                  <View style={styles.resourceControl}>
+                    <TouchableOpacity style={styles.resourceButton}>
+                      <Ionicons name="remove-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                    <TextInput
+                      style={styles.resourceInput}
+                      placeholder="50/50"
+                      placeholderTextColor="#FFD700"
+                      defaultValue="50/50"
+                    />
+                    <TouchableOpacity style={styles.resourceButton}>
+                      <Ionicons name="add-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-      {activeView === 'red' && <View style={styles.redView}> 
+                <View style={styles.resourceRow}>
+                  <Text style={styles.resourceLabel}>Energia:</Text>
+                  <View style={styles.resourceControl}>
+                    <TouchableOpacity style={styles.resourceButton}>
+                      <Ionicons name="remove-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                    <TextInput
+                      style={styles.resourceInput}
+                      placeholder="80/80"
+                      placeholderTextColor="#FFD700"
+                      defaultValue="80/80"
+                    />
+                    <TouchableOpacity style={styles.resourceButton}>
+                      <Ionicons name="add-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
 
-          <View style={{flexDirection: 'row', width: '90%', top: 10}}>
-            <View style={{justifyContent: 'space-around', marginRight: 10, marginLeft: 10}}>
-              <Text>Vida:</Text>
-              <Text>Mental:</Text>
-              <Text>Energia:</Text>
+              {/* CA, Carga e Movimento */}
+              <View style={styles.statsRow}>
+                <View style={styles.statContainer}>
+                  <TextInput
+                    style={styles.statInput}
+                    placeholder="10"
+                    placeholderTextColor="#FFD700"
+                    keyboardType="numeric"
+                  />
+                  <Text style={styles.statLabel}>CA</Text>
+                </View>
+
+                <View style={styles.statContainer}>
+                  <TextInput
+                    style={styles.statInput}
+                    placeholder="50"
+                    placeholderTextColor="#FFD700"
+                    keyboardType="numeric"
+                  />
+                  <Text style={styles.statLabel}>Carga</Text>
+                </View>
+
+                <View style={styles.statContainer}>
+                  <TextInput
+                    style={styles.statInput}
+                    placeholder="9m"
+                    placeholderTextColor="#FFD700"
+                  />
+                  <Text style={styles.statLabel}>Movimento</Text>
+                </View>
+              </View>
+
+              {/* Créditos */}
+              <View style={styles.creditContainer}>
+                <Text style={styles.creditLabel}>Créditos:</Text>
+                <TextInput
+                  style={styles.creditInput}
+                  placeholder="1000"
+                  placeholderTextColor="#FFD700"
+                  keyboardType="numeric"
+                />
+              </View>
+
+              {/* Atributos */}
+              <View style={styles.attributesGrid}>
+                {/* Primeira linha: Força, Agilidade, Constituição */}
+                <View style={styles.attributeRow}>
+                  <View style={styles.attributeItem}>
+                    <TextInput
+                      style={styles.attributeInput}
+                      placeholder="10"
+                      placeholderTextColor="#FFD700"
+                      keyboardType="numeric"
+                    />
+                    <Text style={styles.attributeLabel}>Força</Text>
+                  </View>
+
+                  <View style={styles.attributeItem}>
+                    <TextInput
+                      style={styles.attributeInput}
+                      placeholder="12"
+                      placeholderTextColor="#FFD700"
+                      keyboardType="numeric"
+                    />
+                    <Text style={styles.attributeLabel}>Agilidade</Text>
+                  </View>
+
+                  <View style={styles.attributeItem}>
+                    <TextInput
+                      style={styles.attributeInput}
+                      placeholder="14"
+                      placeholderTextColor="#FFD700"
+                      keyboardType="numeric"
+                    />
+                    <Text style={styles.attributeLabel}>Constituição</Text>
+                  </View>
+                </View>
+
+                {/* Segunda linha: Vontade, Inteligência, Percepção */}
+          <View style={styles.attributeRow}>
+            <View style={styles.attributeItem}>
+              <TextInput
+                style={styles.attributeInput}
+                placeholder="8"
+                placeholderTextColor="#FFD700"
+                keyboardType="numeric"
+              />
+              <Text style={styles.attributeLabel}>Vontade</Text>
             </View>
-            
-            <View style={{flex: 1, paddingHorizontal: -7}}>
-              <View style={styles.containerBackground}>
-                <View style={styles.subtractAndAdditionbox}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </View>   
-                <View style={styles.lifeBackground}>  
-                  <View style={styles.boxT}></View>
-                  <View style={styles.boxT}></View>     
-                </View>
-                <View style={styles.subtractAndAdditionbox}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </View>
-              </View>
-              
-              <View style={styles.containerBackground}>
-                <View style={styles.subtractAndAdditionbox}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </View>   
-                <View style={styles.lifeBackground}>  
-                  <View style={styles.boxT}></View>
-                  <View style={styles.boxT}></View>     
-                </View>
-                <View style={styles.subtractAndAdditionbox}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </View>
-              </View>
-              
-              <View style={styles.containerBackground}>
-                <View style={styles.subtractAndAdditionbox}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </View>   
-                <View style={styles.lifeBackground}>  
-                  <View style={styles.boxT}></View>
-                  <View style={styles.boxT}></View>     
-                </View>
-                <View style={styles.subtractAndAdditionbox}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </View>
-              </View>
+
+            <View style={styles.attributeItem}>
+              <TextInput
+                style={styles.attributeInput}
+                placeholder="16"
+                placeholderTextColor="#FFD700"
+                keyboardType="numeric"
+              />
+              <Text style={styles.attributeLabel}>Inteligência</Text>
             </View>
 
+            <View style={styles.attributeItem}>
+              <TextInput
+                style={styles.attributeInput}
+                placeholder="14"
+                placeholderTextColor="#FFD700"
+                keyboardType="numeric"
+              />
+              <Text style={styles.attributeLabel}>Percepção</Text>
+            </View>
           </View>
 
-          <View style={styles.three}> 
-            <View> 
-              
-              <Text>CA</Text>
-
-             </View>
-
-            <View> <Text>|</Text> </View>
-
-            <View>  <Text>Carga</Text> </View>
-
-            <View> <Text>|</Text> </View>
-
-            <View>  <Text>Movimento</Text> </View>
-
+          {/* Terceira linha: Sorte centralizada */}
+          <View style={styles.luckRow}>
+            <View style={styles.luckContainer}>
+              <TextInput
+                style={styles.luckInput}
+                placeholder="18"
+                placeholderTextColor="#FFD700"
+                keyboardType="numeric"
+              />
+              <Text style={styles.luckLabel}>Sorte</Text>
+            </View>
           </View>
-               {/* CA | Carga | Movimento */}
 
-          <View style={styles.creditBackground}>       <Text>Crédito</Text> </View>
-
-          {/* Credito centralizado com text imput do lado */}
-
-          {/* <View>
-            <View style={styles.attributeContainer}> 
-              <View style={styles.attributesBackgroundTop}>  </View>
-              <View style={styles.attributesBackgroundTop}>  </View>
-              <View style={styles.attributesBackgroundTop}>  </View>
-            </View>
-            
-            <View style={[styles.attributeContainer, {marginTop: 120}]}> 
-              <View style={styles.attributesBackgroundBottom}>  </View>
-              <View style={styles.attributesBackgroundBottom}>  </View>
-              <View style={styles.attributesBackgroundBottom}>  </View>
-            </View>
-            
-            <View style={[styles.attributeContainerLuck]}> 
-              <View style={styles.attributeBackgroundLuck}> <Text>Colcocar sorte </Text> </View> 
-            </View>
-          </View> */}
-
-
+              </View>
+            </ScrollView>
         </View>}
 
-      {activeView === 'green' && <ScrollView 
-            style={styles.greenView}
-            contentContainerStyle={styles.scrollContent}
+        {activeView === 'green' && (
+            <View style={styles.greenView}>
+              {/* Título fixo */}
+              <Text style={styles.viewTitle}>Habilidades</Text>
+              {/* Lista rolável */}
+              <ScrollView contentContainerStyle={styles.scrollContent}>
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Acalmar</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Acrobacia</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Atletismo</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Atualidades</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Análise</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Charme</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Eletronicos</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Enganar</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Furtividade</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Informática</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Iniciativa</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Intimidação</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Intuição</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Medicina</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Mecânica</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Persuasão</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Primeiros-Socorros</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+                      <View style={styles.skillContainer}>
+                        <View style={styles.skillBackground}>
+                          <Text style={styles.skillText}>Procurar</Text>
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="remove-outline" size={40} color="#fff" />
+                          </TouchableOpacity> 
+                          <TextInput 
+                            style={styles.skillInput}
+                            placeholderTextColor="#ccc"
+                          />
+                          <TouchableOpacity style={styles.skillTouchable}>
+                            <Ionicons name="add-outline" size={40} color="#fff" />
+                          </TouchableOpacity>  
+                        </View>
+                      </View>
+
+
+                      
+            </ScrollView>
+            </View>
+        )}
+          
+        {activeView === 'blue' && 
+          <View style={styles.blueView}>
+                {/* Título da Seção */}
+            <Text style={styles.viewTitle}>Inventário de Equipamentos</Text>              
+              {/* Tabela de Equipamentos */}
+              <View style={styles.tableContainer}>
+                {/* Cabeçalho da Tabela */}
+                <View style={styles.tableHeader}>
+                  <Text style={[styles.headerText, styles.headerName]}>Nome do Item</Text>
+                  <Text style={[styles.headerText, styles.headerPrice]}>Valor</Text>
+                  <Text style={[styles.headerText, styles.headerWeight]}>Peso</Text>
+                  <View style={[styles.headerText, styles.headerActions]} />
+                </View>
+
+                {/* Linhas da Tabela */}
+                <ScrollView style={styles.tableBody}>
+                  {rpgEquipments.map((item) => (
+                    <TouchableOpacity 
+                      key={item.id} 
+                      style={styles.tableRow}
+                      onPress={() => setSelectedItem(item)}
+                    >
+                      {/* Nome do Item */}
+                      <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
+
+                      {/* Preço em Créditos */}
+                      <Text style={[styles.cellText, styles.cellPrice]}>
+                        {item.price} <Text style={styles.credit}>cr</Text>
+                      </Text>
+
+                      {/* Peso do Item */}
+                      <Text style={[styles.cellText, styles.cellWeight]}>
+                        {item.weight || 0} <Text style={styles.credit}>kg</Text>
+                      </Text>
+
+                      {/* Ícone de Informações */}
+                      <View style={styles.cellActions}>
+                        <TouchableOpacity onPress={() => setSelectedItem(item)}>
+                          <Ionicons name="information-circle-outline" size={24} color="#FFD700" />
+                        </TouchableOpacity>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+
+          <Modal
+            visible={!!selectedItem}
+            animationType="fade"
+            transparent={true}
+            onRequestClose={() => setSelectedItem(null)}
           >
-            <Text style={styles.skillTitle}>Habilidades</Text>
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Acalmar</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                {selectedItem && (
+                  <>
+                    {/* Cabeçalho do Modal */}
+                    <View style={styles.modalHeader}>
+                      <Text style={styles.modalTitle}>{selectedItem.name}</Text>
+                      <Text style={styles.modalType}>{selectedItem.type}</Text>
+                    </View>
+
+                    {/* Informações do Item - AGORA DENTRO DE SCROLLVIEW */}
+                    <ScrollView 
+                      style={styles.modalContentScroll}
+                      contentContainerStyle={styles.modalContentContainer}
+                    >
+                      <View style={styles.modalInfoRow}>
+                        <Text style={styles.modalLabel}>Valor:</Text>
+                        <Text style={styles.modalValue}>
+                          {selectedItem.price} <Text style={styles.credit}>céditos</Text>
+                        </Text>
+                      </View>
+
+                      <View style={styles.modalInfoRow}>
+                        <Text style={styles.modalLabel}>Raridade:</Text>
+                        <Text style={[styles.modalValue, styles[selectedItem.rarity]]}>
+                          {selectedItem.rarity}
+                        </Text>
+                      </View>
+
+                      {selectedItem.bonus && (
+                        <View style={styles.modalInfoRow}>
+                          <Text style={styles.modalLabel}>Bônus:</Text>
+                          <Text style={styles.modalBonus}>+{selectedItem.bonus}</Text>
+                        </View>
+                      )}
+
+                      {/* Descrição */}
+                      <View style={styles.descriptionContainer}>
+                        <Text style={styles.modalLabel}>Descrição:</Text>
+                        <Text style={styles.modalDescription}>
+                          {selectedItem.description}
+                        </Text>
+                      </View>
+                    </ScrollView>
+
+                    {/* Botão de Fechar */}
+                    <TouchableOpacity 
+                      style={styles.modalCloseButton}
+                      onPress={() => setSelectedItem(null)}
+                    >
+                      <Text style={styles.modalCloseText}>Fechar</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
               </View>
             </View>
+          </Modal>
+          </View>}
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Acrobacia</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  
-                  placeholderTextColor="#ccc"
+
+        {activeView === 'pink' && 
+          <View style={styles.pinkView}>
+            <Text style={styles.viewTitle}>Aparência do Personagem</Text>            
+            <ScrollView contentContainerStyle={styles.appearanceContainer}>
+              {/* Olhos */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Cor dos Olhos:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: Azuis, Verdes, Castanhos..."
+                  placeholderTextColor="#CCC"
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Atletismo</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+
+              {/* Cabelo */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Estilo e Cor do Cabelo:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: Loiro longo, Negro curto..."
+                  placeholderTextColor="#CCC"
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Atualidades</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Aparência */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Características Físicas:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: Cicatriz no rosto, Tatuagens..."
+                  placeholderTextColor="#CCC"
+                  multiline={true}
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Análise</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Tamanho */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Altura:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: 1,80m."
+                  placeholderTextColor="#CCC"
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Charme</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Idade */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Idade:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: 25 anos"
+                  placeholderTextColor="#CCC"
+                  keyboardType="numeric"
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Eletronicos</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Pele */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Tom de Pele:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: Bronzeada, Pálida, Morena..."
+                  placeholderTextColor="#CCC"
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Enganar</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Vestimentas */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Vestimentas e Acessórios:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: Armadura de couro, Capa vermelha..."
+                  placeholderTextColor="#CCC"
+                  multiline={true}
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Furtividade</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Marcas Distinctivas */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Marcas Distinctivas:</Text>
+                <TextInput
+                  style={styles.appearanceInput}
+                  placeholder="Ex: Mancha de nascença, Olhos heterocrômicos..."
+                  placeholderTextColor="#CCC"
+                  multiline={true}
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Informática</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Biografia */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Biografia e História:</Text>
+                <TextInput
+                  style={[styles.appearanceInput, styles.bioInput]}
+                  placeholder="Conte a história do seu personagem, sua origem, motivações e objetivos..."
+                  placeholderTextColor="#CCC"
+                  multiline={true}
+                  numberOfLines={6}
+                  textAlignVertical="top"
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
 
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Iniciativa</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
+              {/* Personalidade */}
+              <View style={styles.appearanceItem}>
+                <Text style={styles.appearanceLabel}>Personalidade:</Text>
+                <TextInput
+                  style={[styles.appearanceInput, styles.bioInput]}
+                  placeholder="Descreva a personalidade, maneirismos e traços característicos..."
+                  placeholderTextColor="#CCC"
+                  multiline={true}
+                  numberOfLines={4}
+                  textAlignVertical="top"
                 />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
               </View>
-            </View>
-
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Intimidação</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
-              </View>
-            </View>
-
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Intuição</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
-              </View>
-            </View>
-
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Medicina</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
-              </View>
-            </View>
-
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Mecânica</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
-              </View>
-            </View>
-
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Persuasão</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
-              </View>
-            </View>
-
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Primeiros-Socorros</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
-              </View>
-            </View>
-
-            <View style={styles.skillContainer}>
-              <View style={styles.skillBackground}>
-                <Text style={styles.skillText}>Procurar</Text>
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="remove-outline" size={40} color="#fff" />
-                </TouchableOpacity> 
-                <TextInput 
-                  style={styles.skillInput}
-                  placeholderTextColor="#ccc"
-                />
-                <TouchableOpacity style={styles.skillTouchable}>
-                  <Ionicons name="add-outline" size={40} color="#fff" />
-                </TouchableOpacity>  
-              </View>
-            </View>
-
-
-            
-          </ScrollView>}
-
-
- 
-  {activeView === 'blue' && <View style={styles.blueView}>
-    {/* Título da Seção */}
-    <Text style={styles.sectionTitle}>Inventário de Equipamentos</Text>
-    
-    {/* Tabela de Equipamentos */}
-    <View style={styles.tableContainer}>
-      {/* Cabeçalho da Tabela */}
-      <View style={styles.tableHeader}>
-        <Text style={[styles.headerText, styles.headerName]}>Nome do Item</Text>
-        <Text style={[styles.headerText, styles.headerType]}>Tipo</Text>
-        <Text style={[styles.headerText, styles.headerPrice]}>Valor</Text>
-        <View style={[styles.headerText, styles.headerActions]} />
+            </ScrollView>
+          </View>}
       </View>
-
-      {/* Linhas da Tabela */}
-      <ScrollView style={styles.tableBody}>
-        {rpgEquipments.map((item) => (
-          <TouchableOpacity 
-            key={item.id} 
-            style={styles.tableRow}
-            onPress={() => setSelectedItem(item)}
-          >
-            {/* Nome do Item */}
-            <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
-            
-            {/* Combobox de Tipo */}
-            <View style={styles.cellType}>
-              <Picker
-                selectedValue={item.type}
-                style={styles.picker}
-                onValueChange={(itemValue) => handleTypeChange(item.id, itemValue)}
-                dropdownIconColor="#092534"
-              >
-                <Picker.Item label="Arma" value="arma" />
-                <Picker.Item label="Armadura" value="armadura" />
-                <Picker.Item label="Escudo" value="escudo" />
-                <Picker.Item label="Tesouro" value="tesouro" />
-                <Picker.Item label="Poção" value="pocao" />
-                <Picker.Item label="Amuleto" value="amuleto" />
-                <Picker.Item label="Anel" value="anel" />
-                <Picker.Item label="Consumível" value="consumivel" />
-              </Picker>
-            </View>
-
-            {/* Preço em Ouro */}
-            <Text style={[styles.cellText, styles.cellPrice]}>
-              {item.price} <Text style={styles.credit}></Text>
-            </Text>
-
-            {/* Ícone de Informações */}
-            <View style={styles.cellActions}>
-              <TouchableOpacity onPress={() => setSelectedItem(item)}>
-                <Ionicons name="information-circle-outline" size={24} color="#092534" />
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
-
-    // Substitua o Modal atual por este código corrigido:
-<Modal
-  visible={!!selectedItem}
-  animationType="fade"
-  transparent={true}
-  onRequestClose={() => setSelectedItem(null)}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContainer}>
-      {selectedItem && (
-        <>
-          {/* Cabeçalho do Modal */}
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>{selectedItem.name}</Text>
-            <Text style={styles.modalType}>{selectedItem.type}</Text>
-          </View>
-
-          {/* Informações do Item - AGORA DENTRO DE SCROLLVIEW */}
-          <ScrollView 
-            style={styles.modalContentScroll}
-            contentContainerStyle={styles.modalContentContainer}
-          >
-            <View style={styles.modalInfoRow}>
-              <Text style={styles.modalLabel}>Valor:</Text>
-              <Text style={styles.modalValue}>
-                {selectedItem.price} <Text style={styles.credit}>céditos</Text>
-              </Text>
-            </View>
-
-            <View style={styles.modalInfoRow}>
-              <Text style={styles.modalLabel}>Raridade:</Text>
-              <Text style={[styles.modalValue, styles[selectedItem.rarity]]}>
-                {selectedItem.rarity}
-              </Text>
-            </View>
-
-            {selectedItem.bonus && (
-              <View style={styles.modalInfoRow}>
-                <Text style={styles.modalLabel}>Bônus:</Text>
-                <Text style={styles.modalBonus}>+{selectedItem.bonus}</Text>
-              </View>
-            )}
-
-            {/* Descrição */}
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.modalLabel}>Descrição:</Text>
-              <Text style={styles.modalDescription}>
-                {selectedItem.description}
-              </Text>
-            </View>
-          </ScrollView>
-
-          {/* Botão de Fechar */}
-          <TouchableOpacity 
-            style={styles.modalCloseButton}
-            onPress={() => setSelectedItem(null)}
-          >
-            <Text style={styles.modalCloseText}>Fechar</Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
-  </View>
-</Modal>
-  </View>}
-
-
-      {activeView === 'pink' && <View style={styles.pinkView} >
-          <Text>Olho</Text>
-          <Text>Cabelo</Text>        
-          <Text>Aparencia</Text> 
-          <Text>Tamanho</Text> 
-          <Text>Biografia</Text>
-        </View>}
-        </View>
     </View>
   );
 }
 
 
 const styles = StyleSheet.create({
+  colors: {
+    primaryBlue: '#092534',
+    secondaryBlue: '#1E3A53',
+    lightBlue: '#0A2D42',
+    darkBlue: '#124A69',
+    gold: '#FFD700',
+    white: '#FFFFFF',
+    lightGray: '#CCCCCC',
+    darkGray: '#333333'
+  },
+
+  // ESTILOS GERAIS
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-   mainContent: {
+  mainContent: {
     flex: 1,
-    marginTop: 290, // Ajuste esta altura conforme necessário
-    },
+    marginTop: 290,
+  },
+  viewTitle: {
+    fontSize: 27,
+    fontWeight: 'bold',
+    color: '#FFD700',
+    textAlign: 'center',
+    marginVertical: 10,
+    marginTop: 5,
+    textShadowColor: '#092534',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  scrollContent: {
+    paddingBottom: 30,
+    paddingHorizontal: 10,
+  },
+
+  // HEADER ESTILOS
+  bar: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: 40,
+    backgroundColor: '#5683B9',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    zIndex: 2,
+    padding: 10,
+    backgroundColor: 'rgba(86,131,185, 0.1)',
+    borderRadius: 100,
+  },
+  columnStyle: {
+    position: 'absolute',
+    top: 40,
+    width: 5,
+    height: '100%',
+    backgroundColor: '#E0F4FF',
+  },
   namePlayer: {
     position: 'absolute',
     top: 40,
@@ -665,13 +900,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#E0F4FF',
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  columnStyle: {
-    position: 'absolute',
-    top: 40,
-    width: 5,
-    height: '100%',
-    backgroundColor: '#E0F4FF',
   },
   playerText: {
     fontSize: 16,
@@ -686,34 +914,8 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 16,
   },
-  backButton: {
-  position: 'absolute',
-  top: 40,
-  left: 0,
-  zIndex: 2,
-  padding: 10,
-  backgroundColor: 'rgba(86,131,185, 0.1)',
-  borderRadius: 100,
-},
-  bar: {
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    height: 40,
-    backgroundColor: '#5683B9',
-  },
-  imageStyle: {
-    position: 'absolute',
-    top: 40,
-    left: 0,
-    width: 130,
-    height: 150,
-    borderBottomRightRadius: 100,
-    zIndex: 1,
-    borderBottomColor: '#E0F4FF',
-    borderWidth: 5,
-    borderColor: '#E0F4FF',
-  },
+
+  // CHARACTER INFO
   characterBase: {
     position: 'absolute',
     top: 90,
@@ -729,7 +931,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold'
   },
- ocupationCharacter: {
+  ocupationCharacter: {
     marginLeft: 132,
     flexDirection: 'row',
     alignItems: 'center',
@@ -750,6 +952,20 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#ccc',
   },
+  imageStyle: {
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    width: 130,
+    height: 150,
+    borderBottomRightRadius: 100,
+    zIndex: 1,
+    borderBottomColor: '#E0F4FF',
+    borderWidth: 5,
+    borderColor: '#E0F4FF',
+  },
+
+  // BOTÕES DE NAVEGAÇÃO
   buttonsContainer: {
     position: 'absolute',
     top: 210, 
@@ -767,7 +983,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center', 
   },
-   redView: {
+
+  // VIEWS BACKGROUNDS
+  redView: {
     flex: 1,
     backgroundColor: '#dceff9',
     padding: 10,
@@ -776,7 +994,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#96CFEE',
   },
- blueView: {
+  blueView: {
     flex: 1,
     backgroundColor: '#2295D1',
     padding: 10,
@@ -785,6 +1003,31 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#124A69',
     padding: 10,
+  },
+
+  // COMPONENTES COMUNS
+  containerWithBorder: {
+    backgroundColor: '#1E3A53',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    marginBottom: 15,
+  },
+  label: {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: '#0A2D42',
+    color: '#FFD700',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    fontSize: 14,
   },
 
   //azul
@@ -812,58 +1055,58 @@ tableContainer: {
   borderWidth: 2,
   borderColor: '#09253494',
 },
-tableHeader: {
-  flexDirection: 'row',
-  backgroundColor: '#092534',
-  padding: 15,
-  borderBottomWidth: 2,
-  borderBottomColor: '#FFD700',
-},
-headerText: {
-  color: '#FFD700',
-  fontWeight: 'bold',
-  fontSize: 14,
-  textAlign: 'center',
-},
-headerName: { flex: 3 },
-headerType: { flex: 2 },
-headerPrice: { flex: 1 },
-headerActions: { flex: 0.5 },
-tableBody: {
-  flex: 1,
-},
-tableRow: {
-  flexDirection: 'row',
-  padding: 12,
-  borderBottomWidth: 1,
-  borderBottomColor: '#444',
-  alignItems: 'center',
-  backgroundColor: '#333',
-},
-cellText: {
-  fontSize: 14,
-  color: '#FFF',
-  textAlign: 'center',
-},
-cellName: { 
-  flex: 3, 
-  fontWeight: 'bold',
-  color: '#FFD700',
-},
-cellType: { 
-  flex: 2,
-  justifyContent: 'center',
-},
-cellPrice: { 
-  flex: 1, 
-  fontWeight: 'bold',
-  color: '#FFD700',
-},
-cellActions: {
-  flex: 0.5,
-  alignItems: 'center',
-  justifyContent: 'center',
-},
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#092534',
+    padding: 15,
+    borderBottomWidth: 2,
+    borderBottomColor: '#FFD700',
+  },
+  headerText: {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  headerName: { flex: 3 },
+  headerPrice: { flex: 1.5 },
+  headerWeight: { flex: 1.5 },
+  headerActions: { flex: 0.5 },
+  
+  tableRow: {
+    flexDirection: 'row',
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#444',
+    alignItems: 'center',
+    backgroundColor: '#333',
+  },
+  cellText: {
+    fontSize: 14,
+    color: '#FFF',
+    textAlign: 'center',
+  },
+  cellName: { 
+    flex: 3, 
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+  cellPrice: { 
+    flex: 1.5, 
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+  cellWeight: { 
+    flex: 1.5, 
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+  cellActions: {
+    flex: 0.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
 picker: {
   height: 30,
   width: '100%',
@@ -1041,58 +1284,59 @@ descriptionContainer: {
 
   //skill
   
-  skillTitle: {
+ skillTitle: {
+  fontSize: 27,
+  fontWeight: 'bold',
+  color: '#FFD700',
   textAlign: 'center',
-  fontSize:30,
-  top: 2,
-  fontWeight: 'bold'
-  },
-  skillContainer: {
-    width: '95%',
-    alignSelf: 'center',
-    marginTop: 10,
-    marginBottom: 15,
-  },
-  skillBackground: {
-    width: '100%',
-    backgroundColor: '#f8f8f8',
-    borderColor: '#e0e0e0',
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 10, 
-  },
-  skillText: {
-    color: '#333',
-    fontWeight: 'bold',
-    fontSize: 18,
-    flex:5,
-    textAlign: 'center'
-  },
-  skillTouchable: {
-    backgroundColor: '#9c9c9cff',
-    height: 40,
-    width: 40,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  skillInput: {
-    backgroundColor: '#9c9c9cff',
-    height: 40,
-    flex: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    width: 10,
-    color: '#ffffffff',
-    fontSize: 18,
-    textAlign: 'center',
-    fontWeight: 'bold'
-  },
+  marginTop: 10,
+  marginBottom: 15,
+  textShadowColor: '#251083ff',
+  textShadowOffset: { width: 1, height: 1 },
+  textShadowRadius: 2,
+},
 
+skillContainer: {
+  marginBottom: 12,
+  width: '95%',
+  alignSelf: 'center'
+},
+
+skillBackground: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  backgroundColor: '#1F4E79',
+  paddingVertical: 10,
+  paddingHorizontal: 10,
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: '#FFD700',
+},
+
+skillText: {
+  flex: 1,
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: '#FFD700',
+},
+
+skillTouchable: {
+  padding: 2,
+  backgroundColor: '#092534',
+  borderRadius: 6,
+  marginHorizontal: 5,
+},
+
+skillInput: {
+  width: 50,
+  height: 35,
+  backgroundColor: '#FFF',
+  borderRadius: 5,
+  textAlign: 'center',
+  fontWeight: 'bold',
+  color: '#092534',
+},
   attributeContainer:{
     position: 'absolute',
     top: 1, 
@@ -1130,13 +1374,239 @@ descriptionContainer: {
     backgroundColor: '#124A69',
     borderRadius: 10
   },
-  attributesName: {
-
+  appearanceTitle: {
+    fontSize: 27,
+    fontWeight: 'bold',
+    color: '#FFD700',
+    textAlign: 'center',
+    marginBottom: 20,
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
-  attributesValue: {
-
+  appearanceContainer: {
+    paddingBottom: 30,
   },
-
-
+  appearanceItem: {
+    marginBottom: 15,
+    backgroundColor: '#0A2D42',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#FFD700',
+  },
+  appearanceLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFD700',
+    marginBottom: 8,
+  },
+  appearanceInput: {
+    backgroundColor: '#1E3A53',
+    color: '#FFF',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    fontSize: 14,
+  },
+  bioInput: {
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+///
+///
+///
+  redScrollContent: {
+    paddingBottom: 30, // Espaço extra no final para scroll
+  },
+  redViewTitle: {
+    fontSize: 27,
+    fontWeight: 'bold',
+    color: '#092534',
+    textAlign: 'center',
+    marginBottom: 20,
+    textShadowColor: '#FFD700',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  resourcesContainer: {
+    backgroundColor: '#1E3A53',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  resourceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  resourceLabel: {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    width: 80,
+    fontSize: 16,
+  },
+  resourceControl: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  resourceButton: {
+    backgroundColor: '#092534',
+    padding: 8,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 40,
+  },
+  resourceInput: {
+    flex: 1,
+    color: '#FFD700',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    marginHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    minWidth: 100,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  statContainer: {
+    backgroundColor: '#1E3A53',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    flex: 1,
+    marginHorizontal: 5,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  statInput: {
+    color: '#FFD700',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 5,
+    minWidth: 60,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+  },
+  statLabel: {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    marginTop: 5,
+    fontSize: 14,
+  },
+  creditContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1E3A53',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  creditLabel: {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginRight: 10,
+  },
+  creditInput: {
+    flex: 1,
+    color: '#FFD700',
+    fontSize: 18,
+    fontWeight: 'bold',
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    textAlign: 'center',
+  },
+  attributesGrid: {
+    marginBottom: 20,
+  },
+  attributeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  attributeItem: {
+    backgroundColor: '#1E3A53',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    flex: 1,
+    marginHorizontal: 5,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  attributeInput: {
+    color: '#FFD700',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    minWidth: 70,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+  },
+  attributeLabel: {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    marginTop: 8,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+ luckRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  luckContainer: {
+    backgroundColor: '#1E3A53',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: '50%', // Menor que os outros atributos
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  luckInput: {
+    color: '#FFD700',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    minWidth: 70,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+  },
+  luckLabel: {
+    color: '#FFD700',
+    fontWeight: 'bold',
+    marginTop: 8,
+    fontSize: 14,
+    textAlign: 'center',
+  },
 
 });
