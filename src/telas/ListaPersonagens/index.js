@@ -1,41 +1,89 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar } from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 
 export default function ListaPersonagens({ navigation }) {
     return(
         <View style={styles.container}>
-          <TouchableOpacity 
-                                   style={styles.backButton}
-                                   onPress={() => navigation.navigate("Home")}
-                               >
-                                   <Ionicons name="arrow-back-outline" size={30} color="#3B004F" />
-                     </TouchableOpacity>
-            <TouchableOpacity 
-                style={styles.botaoCriar}
-                onPress={() => navigation.navigate("CadastrarPersonagem")}
-            >
-                <View style={styles.conteudoBotao}>
-                    <Text style={styles.textoBotao}>CRIAR PERSONAGEM</Text>
-                    <Ionicons name="add-outline" size={30} color="#fff" /> 
-                </View>
-            </TouchableOpacity>
+            <StatusBar backgroundColor="#124A69" barStyle="light-content" />
             
-            <Text style={styles.title}>Lista de personagens:</Text>
+            {/* Header */}
+            <View style={styles.header}>
+                <TouchableOpacity 
+                    style={styles.backButton}
+                    onPress={() => navigation.navigate("Home")}
+                >
+                    <Ionicons name="arrow-back-outline" size={20} color="#fff" />
+                </TouchableOpacity>
+                
+                <Text style={styles.headerTitle}>Lista de Personagens</Text>
+                
+                <TouchableOpacity 
+                    style={styles.createButton}
+                    onPress={() => navigation.navigate("CadastrarPersonagem")}
+                >
+                    <Ionicons name="add-outline" size={22} color="#fff" />
+                </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity 
-            style={styles.botaoPersonagem} 
-            onPress={() => navigation.navigate("Personagem")}
+            <ScrollView 
+                style={styles.scrollView}
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
             >
-                <View style={styles.conteudoBotaoPersonagem}>
-                    <Image 
-                        style={styles.imagemBotao} 
-                        resizeMode="contain" 
-                        source={require('../../../assets/img/logo.png')} 
-                    />
-                    <Text style={styles.textoBotaoPersonagem}>NomePersonagem</Text>         
+                <Text style={styles.title}>Personagens</Text>
+                
+                {/* Lista de Personagens */}
+                <View style={styles.charactersList}>
+                    <TouchableOpacity 
+                        style={styles.characterCard}
+                        onPress={() => navigation.navigate("Personagem")}
+                    >
+                        <Image 
+                            style={styles.characterImage} 
+                            resizeMode="cover" 
+                            source={require('../../../assets/img/logo.png')} 
+                        />
+                        <View style={styles.characterInfo}>
+                            <Text style={styles.characterName}>Nome do Personagem</Text>
+                        </View>
+                        <Ionicons name="chevron-forward" size={20} color="#9ebccc" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        style={styles.characterCard}
+                        onPress={() => navigation.navigate("Personagem")}
+                    >
+                        <Image 
+                            style={styles.characterImage} 
+                            resizeMode="cover" 
+                            source={require('../../../assets/img/logo.png')} 
+                        />
+                        <View style={styles.characterInfo}>
+                            <Text style={styles.characterName}>Outro Personagem</Text>
+                        </View>
+                        <Ionicons name="chevron-forward" size={20} color="#9ebccc" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        style={styles.characterCard}
+                        onPress={() => navigation.navigate("Personagem")}
+                    >
+                        <Image 
+                            style={styles.characterImage} 
+                            resizeMode="cover" 
+                            source={require('../../../assets/img/logo.png')} 
+                        />
+                        <View style={styles.characterInfo}>
+                            <Text style={styles.characterName}>Personagem Exemplo</Text>
+                        </View>
+                        <Ionicons name="chevron-forward" size={20} color="#9ebccc" />
+                    </TouchableOpacity>
                 </View>
-            </TouchableOpacity>
+
+            </ScrollView>
+
+            
         </View>
     )
 }
@@ -43,74 +91,92 @@ export default function ListaPersonagens({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8fafc',
+  },
+  header: {
+    backgroundColor: '#124A69',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    height: 60,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   backButton: {
-    position: 'absolute',
-    top: 60,
-    left: 15,
-    zIndex: 1,
-},
-  title: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#623372',
-    marginBottom: 30,
-    marginTop: 70,
-    textAlign: 'center',
-  },
-  botaoCriar: {
-    width: '100%',
-    borderBottomEndRadius: 20,
-    borderBottomStartRadius: 20,
-    alignItems: 'center',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
-    backgroundColor: '#623372',
-    height: 50,
-    position: 'absolute',
-    top: 0,
-    zIndex: 1,
-  },
-  conteudoBotao: {
-    flexDirection: 'row',
     alignItems: 'center',
+  },
+  createButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
-  },
-  textoBotao: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 1,
-    marginRight: 10,
-  },
-  botaoPersonagem: {
-    width: '95%',
-    height: 60,
-    borderTopWidth: 1.5,
-    borderBottomWidth: 1.5,
-    borderColor: '#623372',
-    borderRadius: 0,
-  },
-  conteudoBotaoPersonagem: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 10,
-    height: '100%',
   },
-  imagemBotao: {
-    height: 40,
-    width: 40,
-    resizeMode: 'contain',
-  },
-  textoBotaoPersonagem: {
-    fontSize: 20,
-    fontWeight: '400',
-    color: '#3B004F',
-    marginLeft: 10,
+  scrollView: {
     flex: 1,
-    textAlignVertical: 'center', 
-    
   },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#124A69',
+    marginBottom: 20,
+    textAlign: 'center',
+    marginTop: 5,
+  },
+  charactersList: {
+    marginBottom: 20,
+  },
+  characterCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    borderLeftWidth: 3,
+    borderLeftColor: '#2295D1',
+  },
+  characterImage: {
+    width: 45,
+    height: 45,
+    borderRadius: 22,
+    backgroundColor: '#e3f2fd',
+  },
+  characterInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  characterName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#124A69',
+    marginBottom: 3,
+  },
+  
 });

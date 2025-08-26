@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, StatusBar, Animated, TouchableOpacity, TextInput } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Cadastro({ navigation }) {
     const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
@@ -13,17 +14,19 @@ export default function Cadastro({ navigation }) {
             Animated.spring(offset.y, {
                 toValue: 0,
                 speed: 4,
-                bounciness: 20
+                bounciness: 20,
+                useNativeDriver: true
             }),
             Animated.timing(opac, {
                 toValue: 1,
                 duration: 2000,
+                useNativeDriver: true
             })
         ]).start();
     }, []);
 
     return (
-        <KeyboardAvoidingView style={styles.background}>
+        <KeyboardAvoidingView style={styles.background} behavior="padding">
             <Animated.View
                 style={[
                     styles.container,
@@ -33,6 +36,9 @@ export default function Cadastro({ navigation }) {
                     }
                 ]}
             >
+                    <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
+                
+                {/* Logo */}
                 <View style={styles.logoContainer}>
                     <Image
                         style={styles.logo}
@@ -41,37 +47,53 @@ export default function Cadastro({ navigation }) {
                     />
                 </View>
 
-                <View style={styles.formulario}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder='Digite o seu usuário aqui'
-                        onChangeText={setUsuario}
-                    />
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder='Digite o seu email aqui'
-                        onChangeText={setEmail}
-                    />
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder='Digite a sua senha aqui'
-                        onChangeText={setSenha}
-                    />
-
-                    <View style={styles.viewBotao}>
-                        <TouchableOpacity
-                            style={styles.botao}
-                            onPress={() => navigation.navigate("Login")}
-                        >
-                            <Text style={styles.textoBotao}>Criar conta</Text>
-                        </TouchableOpacity>
+                {/* Formulário */}
+                <View style={styles.form}>
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="person-outline" size={20} color="#124A69" style={styles.icon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Digite o seu usuário'
+                            placeholderTextColor="#666"
+                            onChangeText={setUsuario}
+                        />
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                        <Text style={styles.texto}>Já possui uma conta?</Text>
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="mail-outline" size={20} color="#124A69" style={styles.icon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Digite o seu email'
+                            placeholderTextColor="#666"
+                            keyboardType="email-address"
+                            onChangeText={setEmail}
+                        />
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <Ionicons name="lock-closed-outline" size={20} color="#124A69" style={styles.icon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder='Digite a sua senha'
+                            placeholderTextColor="#666"
+                            secureTextEntry
+                            onChangeText={setSenha}
+                        />
+                    </View>
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.navigate("Home")}
+                    >
+                        <Text style={styles.textButton}>CRIAR CONTA</Text>
                     </TouchableOpacity>
+
+                    <View style={styles.loginContainer}>
+                        <Text style={styles.loginText}>Já possui uma conta? </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                            <Text style={styles.loginLink}>Entrar agora</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </Animated.View>
         </KeyboardAvoidingView>
@@ -83,59 +105,84 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff'
+        backgroundColor: '#F5F7FA',
+        paddingHorizontal: 20,
     },
     container: {
         width: '100%',
         alignItems: 'center',
     },
+   
     logoContainer: {
-        marginBottom: 20, 
+        marginBottom: 30,
         width: '100%',
         alignItems: 'center',
     },
     logo: {
-        width: 600,
-        height: 150, 
+        width: 200,
+        height: 120,
     },
-    formulario: {
-        width: '90%',
+    form: {
+        width: '100%',
         alignItems: 'center',
-        paddingBottom: 40,
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#eaf6fb',
+        borderWidth: 1,
+        borderColor: '#9ebccc',
+        borderRadius: 10,
+        marginBottom: 15,
+        paddingHorizontal: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+    },
+    icon: {
+        marginRight: 8,
     },
     input: {
-        backgroundColor: '#f5edff',
-        marginBottom: 15,
-        color: '#222',
-        fontSize: 17,
-        borderRadius: 7,
-        padding: 10,
-        width: '100%'
+        flex: 1,
+        fontSize: 16,
+        paddingVertical: 12,
+        color: '#161616',
     },
-    viewBotao: {
+    button: {
+        backgroundColor: '#2295D1',
         width: '100%',
-        borderRadius: 7,
-    },
-    botao: {
-        backgroundColor: '#623372',
-        height: 45,
+        borderRadius: 10,
+        paddingVertical: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 7,
-        padding: 10,
-        marginTop: 10
+        marginTop: 10,
+        shadowColor: '#2295D1',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        elevation: 5,
     },
-    textoBotao: {
-        color: '#FFF',
+    textButton: {
+        color: '#fff',
         fontSize: 18,
-        fontWeight: 'semibold'
+        fontWeight: '700',
+        letterSpacing: 1,
     },
-    texto: {
-        fontSize: 18,
+    loginContainer: {
+        flexDirection: 'row',
         alignItems: 'center',
-        fontWeight: '500',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    loginText: {
+        fontSize: 16,
+        color: '#666',
+    },
+    loginLink: {
+        fontSize: 16,
+        color: '#2295D1',
+        fontWeight: '600',
         textDecorationLine: 'underline',
-        marginTop: 15,
-        color: '#623372'
-    }
+    },
 });

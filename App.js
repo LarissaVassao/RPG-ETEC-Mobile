@@ -16,8 +16,6 @@ import Personagem from './src/telas/Personagem';
 import ListaPersonagens from './src/telas/ListaPersonagens';
 import TelaCampanha from './src/telas/TelaCampanha';
 import Mapa from './src/telas/Mapa';
-import Teste from './src/telas/Teste';
-
 
 import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
@@ -28,7 +26,7 @@ function Tabs(){
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-        color= '#3B004F'
+        color= '#124A69'
         size = 30
         if (route.name === 'TelaCampanha') {
           iconName = focused
@@ -71,7 +69,7 @@ export default function App() {
   return (
     
  <NavigationContainer>
- <Stack.Navigator initialRouteName='Teste'>
+ <Stack.Navigator initialRouteName='Login'>
 
    {/* <Stack.Screen 
        name="Usuario" 
@@ -87,6 +85,7 @@ export default function App() {
        >
 
    </Stack.Screen> */}
+
    <Stack.Screen name="Login" component={Login} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Cadastro" component={Cadastro} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Home" component={Home} options={{headerShown: false}}></Stack.Screen>      
@@ -98,7 +97,6 @@ export default function App() {
    <Stack.Screen name="Personagem" component={Personagem} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="TelaCampanha" component={Tabs} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Mapa" component={Mapa} options={{headerShown: false}}></Stack.Screen>
-   <Stack.Screen name="Teste" component={Teste} options={{headerShown: false}}></Stack.Screen>
 
  </Stack.Navigator>
 </NavigationContainer>

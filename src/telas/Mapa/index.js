@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   button: {
-    backgroundColor: '#800080',
+    backgroundColor: '#124A69',
     width: 120,
     height: 40,
     justifyContent: 'center',
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonPermanent:{
-    backgroundColor: '#800080',
+    backgroundColor: '#124A69',
     width: 120,
     height: 40,
     marginLeft: 20,
