@@ -11,7 +11,7 @@ export default function App({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <StatusBar backgroundColor="#ffffffff" barStyle="dark-content" />
+      <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
       
       {/* Botão de voltar no canto superior esquerdo */}
       <TouchableOpacity 
@@ -68,7 +68,7 @@ export default function App({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F7FA',
   },
   scrollContainer: {
     flexGrow: 1,
