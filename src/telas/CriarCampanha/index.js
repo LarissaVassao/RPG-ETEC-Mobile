@@ -13,7 +13,6 @@ export default function App({ navigation }) {
     >
       <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
       
-      {/* Botão de voltar no canto superior esquerdo */}
       <TouchableOpacity 
         style={styles.backButton}
         onPress={() => navigation.navigate("Home")}
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
     borderColor: '#1c485fff',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10,    // Z-index alto para garantir que fique acima de outros elementos
+    zIndex: 10,    
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

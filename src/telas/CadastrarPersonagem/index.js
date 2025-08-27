@@ -185,24 +185,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         justifyContent: 'center',
-        // Aumentar a altura para evitar corte
         minHeight: 50,
     },
     input: {
         fontSize: 15,
         color: '#333',
         paddingVertical: 8,
-        // Garantir que o texto não seja cortado
         minHeight: 40,
     },
     picker: {
-        // Ajustes para garantir que o texto fique visível
         height: 50,
         color: '#333',
-        // Remover padding negativo que pode estar cortando o texto
         margin: 0,
         padding: 0,
-        // Garantir que o Picker ocupe todo o espaço disponível
         width: '100%',
     },
     button: {

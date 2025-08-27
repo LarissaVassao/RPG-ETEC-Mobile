@@ -108,7 +108,6 @@ const updateTokenPosition = (id, newX, newY) => {
   );
 }
 
-// Grid component
 const Grid = ({ gridWidth, gridHeight, cellSize }) => {
   return (
   
@@ -132,7 +131,6 @@ const Grid = ({ gridWidth, gridHeight, cellSize }) => {
   );
 };
 
-// Form component
 const Form = ({
   gridWidth,
   setGridWidth,
@@ -178,7 +176,6 @@ const Form = ({
   );
 };
 
-// Draggable token component
 const DraggableToken = ({id, initialX, initialY, cellSize, gridWidth, gridHeight, onDrop }) => {
   const pan = useRef(
     new Animated.ValueXY({

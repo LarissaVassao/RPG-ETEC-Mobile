@@ -7,7 +7,6 @@ export default function ListaPersonagens({ navigation }) {
         <View style={styles.container}>
             <StatusBar backgroundColor="#124A69" barStyle="light-content" />
             
-            {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity 
                     style={styles.backButton}
@@ -33,7 +32,6 @@ export default function ListaPersonagens({ navigation }) {
             >
                 <Text style={styles.title}>Personagens</Text>
                 
-                {/* Lista de Personagens */}
                 <View style={styles.charactersList}>
                     <TouchableOpacity 
                         style={styles.characterCard}

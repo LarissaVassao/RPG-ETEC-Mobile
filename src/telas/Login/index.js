@@ -38,7 +38,6 @@ export default function Login({ navigation }) {
                     <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
                 
 
-                {/* Logo */}
                 <View style={styles.logoContainer}>
                     <Image
                         style={styles.logo}
@@ -47,7 +46,6 @@ export default function Login({ navigation }) {
                     />
                 </View>
 
-                {/* Formulário */}
                 <View style={styles.form}>
                     <View style={styles.inputContainer}>
                         <Ionicons name="mail-outline" size={20} color="#124A69" style={styles.icon} />

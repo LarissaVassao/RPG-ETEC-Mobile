@@ -7,7 +7,6 @@ export default function Home({ navigation }) {
     <View style={styles.container}>
     <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
       
-      {/* Cabeçalho */}
       <View style={styles.header}>
         <Image
           style={styles.logo}
@@ -16,7 +15,6 @@ export default function Home({ navigation }) {
         <Text style={styles.welcomeText}>Bem-Vindo(a)!</Text>
       </View>
 
-      {/* Botões principais */}
       <View style={styles.buttonsContainer}>
         <TouchableOpacity 
           style={styles.actionButton}
@@ -41,7 +39,6 @@ export default function Home({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Botão de ajuda flutuante */}
       <TouchableOpacity style={styles.helpButton}>
         <Ionicons name="help-outline" size={28} color="#2295D1" />
       </TouchableOpacity>
