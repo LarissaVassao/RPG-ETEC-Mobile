@@ -17,6 +17,8 @@ import ListaPersonagens from './src/telas/ListaPersonagens';
 import TelaCampanha from './src/telas/TelaCampanha';
 import Mapa from './src/telas/Mapa';
 
+import Teste from './src/telas/Teste';
+
 import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
 
@@ -97,6 +99,9 @@ export default function App() {
    <Stack.Screen name="Personagem" component={Personagem} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="TelaCampanha" component={Tabs} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Mapa" component={Mapa} options={{headerShown: false}}></Stack.Screen>
+
+      <Stack.Screen name="Teste" component={Teste} options={{headerShown: false}}></Stack.Screen>
+
 
  </Stack.Navigator>
 </NavigationContainer>

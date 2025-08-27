@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import {Picker} from '@react-native-picker/picker';
 
 export default function Personagem({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
@@ -14,7 +13,7 @@ export default function Personagem({ navigation }) {
       rarity: "comum", 
       weight: 2.5,
       bonus: 5,
-      description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo."
+      description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo.",
     },
   ]);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -34,7 +33,7 @@ export default function Personagem({ navigation }) {
       <StatusBar backgroundColor="#E0F4FF" barStyle="dark-content" />      
       <TouchableOpacity 
         style={styles.backButton}
-        onPress={() => navigation.navigate("ListaPersonagens")}
+        onPress={() => navigation.navigate("TelaCampanha")}
       >
         <Ionicons name="arrow-back-outline" size={30} color="#00283D" />
       </TouchableOpacity>
@@ -90,11 +89,11 @@ export default function Personagem({ navigation }) {
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#dceff9'}]} 
           onPress={() => handleButtonPress('red')}
-        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/> </TouchableOpacity>
+        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#96CFEE'}]} 
           onPress={() => handleButtonPress('green')}
-        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/> </TouchableOpacity>
+        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#2295D1'}]} 
           onPress={() => handleButtonPress('blue')}
@@ -111,7 +110,7 @@ export default function Personagem({ navigation }) {
         <View style={styles.redView}>
           <Text style={styles.viewTitle}>Atributos do Personagem</Text>  
             <ScrollView contentContainerStyle={styles.redScrollContent}>
-              {/* Barra de Recursos (Vida, Mental, Energia) com Inputs */}
+
               <View style={styles.resourcesContainer}>
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Vida:</Text>
@@ -168,7 +167,6 @@ export default function Personagem({ navigation }) {
                 </View>
               </View>
 
-              {/* CA, Carga e Movimento */}
               <View style={styles.statsRow}>
                 <View style={styles.statContainer}>
                   <TextInput
@@ -200,7 +198,6 @@ export default function Personagem({ navigation }) {
                 </View>
               </View>
 
-              {/* Créditos */}
               <View style={styles.creditContainer}>
                 <Text style={styles.creditLabel}>Créditos:</Text>
                 <TextInput
@@ -211,9 +208,7 @@ export default function Personagem({ navigation }) {
                 />
               </View>
 
-              {/* Atributos */}
               <View style={styles.attributesGrid}>
-                {/* Primeira linha: Força, Agilidade, Constituição */}
                 <View style={styles.attributeRow}>
                   <View style={styles.attributeItem}>
                     <TextInput
@@ -278,7 +273,6 @@ export default function Personagem({ navigation }) {
             </View>
           </View>
 
-          {/* Terceira linha: Sorte centralizada */}
           <View style={styles.luckRow}>
             <View style={styles.luckContainer}>
               <TextInput
@@ -698,7 +692,6 @@ export default function Personagem({ navigation }) {
           <View style={styles.pinkView}>
             <Text style={styles.viewTitle}>Aparência do Personagem</Text>            
             <ScrollView contentContainerStyle={styles.appearanceContainer}>
-              {/* Olhos */}
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Cor dos Olhos:</Text>
                 <TextInput
@@ -809,7 +802,6 @@ const styles = StyleSheet.create({
     darkGray: '#333333'
   },
 
-  // ESTILOS GERAIS
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -834,7 +826,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 
-  // HEADER ESTILOS
  
   backButton: {
     position: 'absolute',
@@ -875,7 +866,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  // CHARACTER INFO
   characterBase: {
     position: 'absolute',
     top: 50,
@@ -925,7 +915,6 @@ const styles = StyleSheet.create({
     borderColor: '#E0F4FF',
   },
 
-  // BOTÕES DE NAVEGAÇÃO
   buttonsContainer: {
     position: 'absolute',
     top: 170, 
@@ -944,7 +933,6 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
   },
 
-  // VIEWS BACKGROUNDS
   redView: {
     flex: 1,
     backgroundColor: '#dceff9',
@@ -965,7 +953,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
-  // COMPONENTES COMUNS
   containerWithBorder: {
     backgroundColor: '#1E3A53',
     padding: 15,
@@ -989,12 +976,6 @@ const styles = StyleSheet.create({
     borderColor: '#5683B9',
     fontSize: 14,
   },
-
-  //azul
-
-  //
-
-  // Estilos
 
 sectionTitle: {
   fontSize: 27,
@@ -1067,15 +1048,6 @@ tableContainer: {
     justifyContent: 'center',
   },
 
-picker: {
-  height: 30,
-  width: '100%',
-  backgroundColor: '#444',
-  color: '#ffffffff',
-  borderRadius: 6,
-  borderWidth: 1,
-  borderColor: '#092534',
-},
 credit: {
   color: '#FFD700',
   fontWeight: 'bold',
@@ -1174,7 +1146,6 @@ credit: {
     fontSize: 16,
   },
 
-  // Estilos para cores de raridade
 comum: { color: '#FFFFFF' },
 raro: { color: '#0070DD' },
 epico: { color: '#A335EE' },
@@ -1189,13 +1160,6 @@ descriptionContainer: {
   borderLeftWidth: 4,
   borderLeftColor: '#092534',
 },
-
-
-  ///
-
-  ///
-
-
 
   containerBackground: {
     flexDirection: 'row',
@@ -1241,8 +1205,6 @@ descriptionContainer: {
   scrollContent: {
     paddingBottom: 20,
   },
-
-  //skill
   
  skillTitle: {
   fontSize: 27,
@@ -1374,9 +1336,7 @@ skillInput: {
     minHeight: 100,
     textAlignVertical: 'top',
   },
-///
-///
-///
+
   redScrollContent: {
     paddingBottom: 30, 
   },
