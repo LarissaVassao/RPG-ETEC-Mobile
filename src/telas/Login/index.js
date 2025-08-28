@@ -12,11 +12,13 @@ export default function Login({ navigation }) {
       Animated.spring(offset.y, {
         toValue: 0,
         speed: 4,
-        bounciness: 20
+        bounciness: 20,
+        useNativeDriver: true
       }),
       Animated.timing(opac, {
         toValue: 1,
         duration: 2000,
+        useNativeDriver: true
       })
     ]).start();
   }, []);

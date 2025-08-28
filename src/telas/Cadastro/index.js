@@ -27,33 +27,29 @@ export default function Cadastro({ navigation }) {
         ]).start();
     }, []);
 
-    async function saveData() {            
+    async function saveData() {     
+            console.log("saveData start");       ;
            if (usuario == "" || email == "" || senha == "") {
-            showMessage({
-                message: "Erro ao Salvar",
-                description: 'Preencha os Campos Obrigatórios!',
-                type: "warning",
-            });
+            console.log("saveData error empty");  
+            Alert.alert("Erro!", "Preencha todos os campos!");
             return;
         }
         else{
-            
-            const res = await  api.get('rpgetec/checarUsuarios.php', {params: { user: usuario, email: email}});
+            console.log("saveData non-empty, proceding");  
+            try{
+                const res = await  api.get('rpgetec/checarUsuarios.php', {params: { user: usuario, email: email}});
             if (res.data.unique){
+            console.log("saveData unique confirmed, proceding");  
                 try {
             const obj = {
                 nome: usuario, 
                 email: email,               
                 senha: senha,       
             }
-            const res = await api.post('rpgetec/salvar.php', obj);
+            try{const res = await api.post('rpgetec/salvar.php',{ user: usuario, email: email, senha: senha});}
+            catch(error){console.log(error)}
             if (res.data.sucesso === false) {
-                showMessage({
-                    message: "Erro ao Salvar",
-                    description: res.data.mensagem,
-                    type: "warning",
-                    duration: 3000,                    
-                });              
+                Alert.alert("Erro ao salvar", res.data.mensagem);              
                 return;
             }
             showMessage({
@@ -69,8 +65,10 @@ export default function Cadastro({ navigation }) {
             
         }
         else{
+            console.log("saveData non-unique, showing alert"); 
             Alert.alert("Email ou Usuario ja cadastrado!");
         }
+        } catch (error){console.log("error on api.get"); console.log(error);}
     }     
 }     
     return (
