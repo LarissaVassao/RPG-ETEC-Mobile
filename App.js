@@ -11,11 +11,11 @@ import CriarCampanha from './src/telas/CriarCampanha';
 import Login from './src/telas/Login';
 import Cadastro from './src/telas/Cadastro';
 //import Tutorial from './src/telas/Tutorial';
-import CadastrarPersonagem from './src/telas/CadastrarPersonagem';
-import Personagem from './src/telas/Personagem';
-import ListaPersonagens from './src/telas/ListaPersonagens';
+import CadastrarPersonagem from './src/telas/Jogador/CadastrarPersonagem';
+import Personagem from './src/telas/Jogador/Personagem';
+import ListaPersonagens from './src/telas/Jogador/ListaPersonagens';
 import TelaCampanha from './src/telas/TelaCampanha';
-import Mapa from './src/telas/Mapa';
+import Mapa from './src/telas/Jogador/Mapa';
 
 import Teste from './src/telas/Teste';
 
@@ -71,7 +71,7 @@ export default function App() {
   return (
     
  <NavigationContainer>
- <Stack.Navigator initialRouteName='Login'>
+ <Stack.Navigator initialRouteName='Personagem'>
 
    {/* <Stack.Screen 
        name="Usuario" 

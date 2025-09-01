@@ -28,7 +28,7 @@ export default function CadastrarPersonagem({ navigation }) {
                 <Image 
                     style={styles.logo} 
                     resizeMode="contain" 
-                    source={require('../../../assets/img/logo.png')}
+                    source={require('../../../../assets/img/logo.png')}
                 />
             </View>
 

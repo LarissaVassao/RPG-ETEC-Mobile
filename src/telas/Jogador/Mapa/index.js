@@ -13,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons'; 
 
 
-const TOKEN_IMAGE = require('../../../assets/img/logo.png');
+const TOKEN_IMAGE = require('../../../../assets/img/logo.png');
 
 export default function Mapa({ navigation }) {
   const [tokens, setTokens] = useState([]);

@@ -40,7 +40,7 @@ export default function ListaPersonagens({ navigation }) {
                         <Image 
                             style={styles.characterImage} 
                             resizeMode="cover" 
-                            source={require('../../../assets/img/logo.png')} 
+                            source={require('../../../../assets/img/logo.png')} 
                         />
                         <View style={styles.characterInfo}>
                             <Text style={styles.characterName}>Nome do Personagem</Text>
@@ -55,7 +55,7 @@ export default function ListaPersonagens({ navigation }) {
                         <Image 
                             style={styles.characterImage} 
                             resizeMode="cover" 
-                            source={require('../../../assets/img/logo.png')} 
+                            source={require('../../../../assets/img/logo.png')} 
                         />
                         <View style={styles.characterInfo}>
                             <Text style={styles.characterName}>Outro Personagem</Text>
@@ -70,7 +70,7 @@ export default function ListaPersonagens({ navigation }) {
                         <Image 
                             style={styles.characterImage} 
                             resizeMode="cover" 
-                            source={require('../../../assets/img/logo.png')} 
+                            source={require('../../../../assets/img/logo.png')} 
                         />
                         <View style={styles.characterInfo}>
                             <Text style={styles.characterName}>Personagem Exemplo</Text>

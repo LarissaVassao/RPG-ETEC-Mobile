@@ -30,7 +30,7 @@ export default function Personagem({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#E0F4FF" barStyle="dark-content" />      
+      <StatusBar backgroundColor="#124A69" barStyle="dark-content" />      
       <TouchableOpacity 
         style={styles.backButton}
         onPress={() => navigation.navigate("TelaCampanha")}
@@ -81,7 +81,7 @@ export default function Personagem({ navigation }) {
       </View>
       
       <Image 
-        source={require('../../../assets/img/pessoa.png')}
+        source={require('../../../../assets/img/pessoa.png')}
         style={styles.imageStyle}
       />
 
@@ -89,19 +89,19 @@ export default function Personagem({ navigation }) {
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#dceff9'}]} 
           onPress={() => handleButtonPress('red')}
-        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="cube" size={60} color="#00283D"/></TouchableOpacity>
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#96CFEE'}]} 
           onPress={() => handleButtonPress('green')}
-        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="construct" size={60} color="#00283D"/></TouchableOpacity>
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#2295D1'}]} 
           onPress={() => handleButtonPress('blue')}
-        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="bag" size={60} color="#00283D"/></TouchableOpacity>
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#124A69'}]} 
           onPress={() => handleButtonPress('pink')}
-        ><Ionicons name="person-circle-outline" size={80} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="accessibility" size={60} color="#00283D"/></TouchableOpacity>
       </View>
 
       <View style={styles.mainContent}>
@@ -840,15 +840,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     width: 5,
-    height: '100%',
-    backgroundColor: '#E0F4FF',
+    height: '10%',
+    backgroundColor: '#124A69',
   },
   namePlayer: {
     position: 'absolute',
     top: 0,
     width: '100%',
     height: 50,
-    backgroundColor: '#E0F4FF',
+    backgroundColor: '#124A69',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -862,7 +862,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'transparent',
     paddingHorizontal: 10,
-    color: '#333',
+    color: '#dfdfdfff',
     fontSize: 16,
   },
 
@@ -907,12 +907,13 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: 130,
-    height: 150,
-    borderBottomRightRadius: 100,
+    height: 130,
+    //borderBottomRightRadius: 100,
     zIndex: 1,
-    borderBottomColor: '#E0F4FF',
+    //borderBottomColor: '#124A69',
+    borderRadius: 100,
     borderWidth: 5,
-    borderColor: '#E0F4FF',
+    borderColor: '#124A69',
   },
 
   buttonsContainer: {
