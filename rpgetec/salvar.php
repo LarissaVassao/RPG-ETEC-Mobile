@@ -6,8 +6,9 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 $nome = $input['user'] ?? '';
 $email = $input['email'] ?? '';
-$senha = $input['senha'] ?? '';
+$senhaBase = $input['senha'] ?? '';
 
+$senha = password_hash($senhaBase, PASSWORD_DEFAULT);
 
 $res = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, email = :email, senha = :senha");	
 

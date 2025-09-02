@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
   const [opac] = useState(new Animated.Value(0));
   const [senha, setSenha] = useState('');
   const [email, setEmail] = useState('');
+
+
 
   useEffect(() => {
     Animated.parallel([
