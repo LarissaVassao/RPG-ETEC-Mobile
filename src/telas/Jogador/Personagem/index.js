@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Picker } from "@react-native-picker/picker";
 
 export default function Personagem({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
@@ -10,14 +11,20 @@ export default function Personagem({ navigation }) {
       name: "Espada Longa",
       type: "arma",
       price: 150,
-      rarity: "comum", 
       weight: 2.5,
-      bonus: 5,
       description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo.",
     },
   ]);
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const [createModalVisible, setCreateModalVisible] = useState(false);
+  const [newEquipment, setNewEquipment] = useState({
+    name: '',
+    type: 'item',
+    description: '',
+    requirement: '',
+    damage: '',
+    critical: ''
+  });
   const handleButtonPress = (color) => {
     setActiveView(color);
   };
@@ -27,6 +34,37 @@ export default function Personagem({ navigation }) {
       item.id === itemId ? { ...item, type: newType } : item
     ));
   };
+
+ const handleCreateEquipment = () => {
+  if (!newEquipment.name.trim()) {
+    alert('Por favor, digite um nome para o equipamento');
+    return;
+  }
+
+  const newItem = {
+    id: Math.max(...rpgEquipments.map(item => item.id), 0) + 1,
+    name: newEquipment.name,
+    type: newEquipment.type,
+    price: 0,
+    weight: 0,
+    description: newEquipment.description,
+    requirement: newEquipment.requirement,
+    damage: newEquipment.damage,
+    critical: newEquipment.critical,
+  };
+
+  setRpgEquipments(prev => [...prev, newItem]);
+  setNewEquipment({
+    name: '',
+    type: 'item',
+    description: '',
+    requirement: '',
+    damage: '',
+    critical: ''
+  });
+  setCreateModalVisible(false);
+};
+
 
   return (
     <View style={styles.container}>
@@ -137,7 +175,7 @@ export default function Personagem({ navigation }) {
                     <TextInput
                       style={styles.resourceInput}
                       placeholder="100/100"
-                      placeholderTextColor="#FFD700"
+                      placeholderTextColor="#4cf3ffff"
                       defaultValue="100/100"
                     />
                     <TouchableOpacity style={styles.resourceButton}>
@@ -155,7 +193,7 @@ export default function Personagem({ navigation }) {
                     <TextInput
                       style={styles.resourceInput}
                       placeholder="50/50"
-                      placeholderTextColor="#FFD700"
+                      placeholderTextColor="#4cf3ffff"
                       defaultValue="50/50"
                     />
                     <TouchableOpacity style={styles.resourceButton}>
@@ -173,7 +211,7 @@ export default function Personagem({ navigation }) {
                     <TextInput
                       style={styles.resourceInput}
                       placeholder="80/80"
-                      placeholderTextColor="#FFD700"
+                      placeholderTextColor="#4cf3ffff"
                       defaultValue="80/80"
                     />
                     <TouchableOpacity style={styles.resourceButton}>
@@ -188,7 +226,7 @@ export default function Personagem({ navigation }) {
                   <TextInput
                     style={styles.statInput}
                     placeholder="10"
-                    placeholderTextColor="#FFD700"
+                    placeholderTextColor="#4cf3ffff"
                     keyboardType="numeric"
                   />
                   <Text style={styles.statLabel}>CA</Text>
@@ -198,7 +236,7 @@ export default function Personagem({ navigation }) {
                   <TextInput
                     style={styles.statInput}
                     placeholder="50"
-                    placeholderTextColor="#FFD700"
+                    placeholderTextColor="#4cf3ffff"
                     keyboardType="numeric"
                   />
                   <Text style={styles.statLabel}>Carga</Text>
@@ -208,7 +246,7 @@ export default function Personagem({ navigation }) {
                   <TextInput
                     style={styles.statInput}
                     placeholder="9m"
-                    placeholderTextColor="#FFD700"
+                    placeholderTextColor="#4cf3ffff"
                   />
                   <Text style={styles.statLabel}>Movimento</Text>
                 </View>
@@ -219,7 +257,7 @@ export default function Personagem({ navigation }) {
                 <TextInput
                   style={styles.creditInput}
                   placeholder="1000"
-                  placeholderTextColor="#FFD700"
+                  placeholderTextColor="#4cf3ffff"
                   keyboardType="numeric"
                 />
               </View>
@@ -230,7 +268,7 @@ export default function Personagem({ navigation }) {
                     <TextInput
                       style={styles.attributeInput}
                       placeholder="10"
-                      placeholderTextColor="#FFD700"
+                      placeholderTextColor="#4cf3ffff"
                       keyboardType="numeric"
                     />
                     <Text style={styles.attributeLabel}>Força</Text>
@@ -240,7 +278,7 @@ export default function Personagem({ navigation }) {
                     <TextInput
                       style={styles.attributeInput}
                       placeholder="12"
-                      placeholderTextColor="#FFD700"
+                      placeholderTextColor="#4cf3ffff"
                       keyboardType="numeric"
                     />
                     <Text style={styles.attributeLabel}>Agilidade</Text>
@@ -250,7 +288,7 @@ export default function Personagem({ navigation }) {
                     <TextInput
                       style={styles.attributeInput}
                       placeholder="14"
-                      placeholderTextColor="#FFD700"
+                      placeholderTextColor="#4cf3ffff"
                       keyboardType="numeric"
                     />
                     <Text style={styles.attributeLabel}>Constituição</Text>
@@ -262,7 +300,7 @@ export default function Personagem({ navigation }) {
               <TextInput
                 style={styles.attributeInput}
                 placeholder="8"
-                placeholderTextColor="#FFD700"
+                placeholderTextColor="#4cf3ffff"
                 keyboardType="numeric"
               />
               <Text style={styles.attributeLabel}>Vontade</Text>
@@ -272,17 +310,17 @@ export default function Personagem({ navigation }) {
               <TextInput
                 style={styles.attributeInput}
                 placeholder="16"
-                placeholderTextColor="#FFD700"
+                placeholderTextColor="#4cf3ffff"
                 keyboardType="numeric"
               />
               <Text style={styles.attributeLabel}>Inteligência</Text>
             </View>
-
+{/*  */}
             <View style={styles.attributeItem}>
               <TextInput
                 style={styles.attributeInput}
                 placeholder="14"
-                placeholderTextColor="#FFD700"
+                placeholderTextColor="#4cf3ffff"
                 keyboardType="numeric"
               />
               <Text style={styles.attributeLabel}>Percepção</Text>
@@ -294,7 +332,7 @@ export default function Personagem({ navigation }) {
               <TextInput
                 style={styles.luckInput}
                 placeholder="18"
-                placeholderTextColor="#FFD700"
+                placeholderTextColor="#4cf3ffff"
                 keyboardType="numeric"
               />
               <Text style={styles.luckLabel}>Sorte</Text>
@@ -602,57 +640,169 @@ export default function Personagem({ navigation }) {
             </ScrollView>
             </View>
         )}
+          {/*  */}
+           
+      {activeView === 'blue' && 
+        <View style={styles.blueView}>
+          <Text style={styles.viewTitle}>Inventário de Equipamentos</Text>    
+
+          <TouchableOpacity 
+            style={styles.createItemButton}
+            onPress={() => setCreateModalVisible(true)}
+          >
+            <Ionicons name="add-outline" size={20} color="#4cf3ffff" style={styles.createItemIcon} />
+            <Text style={styles.createItemText}>Criar Item</Text>
+          </TouchableOpacity>          
           
-        {activeView === 'blue' && 
-          <View style={styles.blueView}>
-            <Text style={styles.viewTitle}>Inventário de Equipamentos</Text>    
+          <View style={styles.tableContainer}>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.headerText, styles.headerName]}>Nome do Item</Text>
+              <Text style={[styles.headerText, styles.headerPrice]}>Crédito</Text>
+              <Text style={[styles.headerText, styles.headerWeight]}>Volume</Text>
+              <View style={[styles.headerText, styles.headerActions]} />
+            </View>
 
-             <TouchableOpacity style={styles.createItemButton}>
-              <Ionicons name="add-outline" size={20} color="#FFD700" style={styles.createItemIcon} />
-              <Text style={styles.createItemText}>Criar Item</Text>
-            </TouchableOpacity>          
-              <View style={styles.tableContainer}>
-                <View style={styles.tableHeader}>
-                  <Text style={[styles.headerText, styles.headerName]}>Nome do Item</Text>
-                  <Text style={[styles.headerText, styles.headerPrice]}>Valor</Text>
-                  <Text style={[styles.headerText, styles.headerWeight]}>Peso</Text>
-                  <View style={[styles.headerText, styles.headerActions]} />
-                </View>
-
-                <ScrollView style={styles.tableBody}>
-                  {rpgEquipments.map((item) => (
-                    <TouchableOpacity 
-                      key={item.id} 
-                      style={styles.tableRow}
-                      onPress={() => setSelectedItem(item)}
-                    >
-                      <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
-
-                      <Text style={[styles.cellText, styles.cellPrice]}>
-                        {item.price} <Text style={styles.credit}>cr</Text>
-                      </Text>
-
-                      <Text style={[styles.cellText, styles.cellWeight]}>
-                        {item.weight || 0} <Text style={styles.credit}>kg</Text>
-                      </Text>
-
-                      <View style={styles.cellActions}>
-                        <TouchableOpacity onPress={() => setSelectedItem(item)}>
-                          <Ionicons name="information-circle-outline" size={24} color="#FFD700" />
-                        </TouchableOpacity>
-                      </View>
+            <ScrollView style={styles.tableBody}>
+              {rpgEquipments.map((item) => (
+                <TouchableOpacity 
+                  key={item.id} 
+                  style={styles.tableRow}
+                  onPress={() => setSelectedItem(item)}
+                >
+                  <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
+                  <Text style={[styles.cellText, styles.cellPrice]}>
+                    {item.price}
+                  </Text>
+                  <Text style={[styles.cellText, styles.cellWeight]}>
+                    {item.weight || 0}
+                  </Text>
+                  <View style={styles.cellActions}>
+                    <TouchableOpacity onPress={() => setSelectedItem(item)}>
+                      <Ionicons name="information-circle-outline" size={24} color="#4cf3ffff" />
                     </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
 
+          {/* Modal de Criação de Equipamento */}
+          <Modal
+            visible={createModalVisible}
+            animationType="slide"
+            transparent={true}
+            onRequestClose={() => setCreateModalVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.createModalContainer}>
+                <Text style={styles.createModalTitle}>Criar Novo Equipamento</Text>
+
+                <ScrollView style={styles.createModalScroll}>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Nome do Equipamento*</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      value={newEquipment.name}
+                      onChangeText={(text) => setNewEquipment({...newEquipment, name: text})}
+                      placeholder="Digite o nome do equipamento"
+                      placeholderTextColor="#888"
+                    />
+                  </View>
+
+                  {/* Só aparece se for arma curta ou longa */}
+                  {(newEquipment.type === 'arma_curta' || newEquipment.type === 'arma_longa') && (
+                    <>
+                      <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>Requisição para uso</Text>
+                        <TextInput
+                          style={styles.textInput}
+                          value={newEquipment.requirement}
+                          onChangeText={(text) => setNewEquipment({ ...newEquipment, requirement: text })}
+                          placeholder="Ex: Força 12+"
+                          placeholderTextColor="#888"
+                        />
+                      </View>
+
+                      <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>Dano da Arma</Text>
+                        <TextInput
+                          style={styles.textInput}
+                          value={newEquipment.damage}
+                          onChangeText={(text) => setNewEquipment({ ...newEquipment, damage: text })}
+                          placeholder="Ex: 1d8"
+                          placeholderTextColor="#888"
+                        />
+                      </View>
+
+                      <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>Bônus de Crítico</Text>
+                        <TextInput
+                          style={styles.textInput}
+                          value={newEquipment.critical}
+                          onChangeText={(text) => setNewEquipment({ ...newEquipment, critical: text })}
+                          placeholder="Ex: +2"
+                          placeholderTextColor="#888"
+                        />
+                      </View>
+                    </>
+                  )}
+
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Tipo do Equipamento</Text>
+                    <View style={styles.pickerContainer}>
+                      <Picker
+                        selectedValue={newEquipment.type}
+                        style={styles.picker}
+                        onValueChange={(itemValue) => setNewEquipment({...newEquipment, type: itemValue})}
+                      >
+                        <Picker.Item label="Item" value="item" />
+                        <Picker.Item label="Arma de Curta Distância" value="arma_curta" />
+                        <Picker.Item label="Arma de Longa Distância" value="arma_longa" />
+                      </Picker>
+                    </View>
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Descrição</Text>
+                    <TextInput
+                      style={[styles.textInput, styles.descriptionInput]}
+                      value={newEquipment.description}
+                      onChangeText={(text) => setNewEquipment({...newEquipment, description: text})}
+                      placeholder="Digite a descrição do equipamento"
+                      placeholderTextColor="#888"
+                      multiline
+                      numberOfLines={4}
+                    />
+                  </View>
+                </ScrollView>
+
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity 
+                    style={[styles.modalButton, styles.cancelButton]}
+                    onPress={() => setCreateModalVisible(false)}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancelar</Text>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity 
+                    style={[styles.modalButton, styles.createButton]}
+                    onPress={handleCreateEquipment}
+                  >
+                    <Text style={styles.createButtonText}>Criar</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          {/* Modal de Visualização existente */}
           <Modal
             visible={!!selectedItem}
             animationType="fade"
             transparent={true}
             onRequestClose={() => setSelectedItem(null)}
           >
-            <View style={styles.modalOverlay}>
+           <View style={styles.modalOverlay}>
               <View style={styles.modalContainer}>
                 {selectedItem && (
                   <>
@@ -661,6 +811,28 @@ export default function Personagem({ navigation }) {
                       <Text style={styles.modalTitle}>{selectedItem.name}</Text>
                       <Text style={styles.modalType}>{selectedItem.type}</Text>
                     </View>
+
+                    
+                                {/* Só aparece se for arma */}
+                    {(selectedItem.type === 'arma_curta' || selectedItem.type === 'arma_longa') && (
+                      <>
+                        <View style={styles.modalInfoRow}>
+                          <Text style={styles.modalLabel}>Requisição:</Text>
+                          <Text style={styles.modalValue}>{selectedItem.requirement || '-'}</Text>
+                        </View>
+
+                        <View style={styles.modalInfoRow}>
+                          <Text style={styles.modalLabel}>Dano:</Text>
+                          <Text style={styles.modalValue}>{selectedItem.damage || '-'}</Text>
+                        </View>
+
+                        <View style={styles.modalInfoRow}>
+                          <Text style={styles.modalLabel}>Crítico:</Text>
+                          <Text style={styles.modalValue}>{selectedItem.critical || '-'}</Text>
+                        </View>
+                      </>
+                    )}
+
 
                     <ScrollView 
                       style={styles.modalContentScroll}
@@ -673,19 +845,9 @@ export default function Personagem({ navigation }) {
                         </Text>
                       </View>
 
-                      <View style={styles.modalInfoRow}>
-                        <Text style={styles.modalLabel}>Raridade:</Text>
-                        <Text style={[styles.modalValue, styles[selectedItem.rarity]]}>
-                          {selectedItem.rarity}
-                        </Text>
-                      </View>
+             
 
-                      {selectedItem.bonus && (
-                        <View style={styles.modalInfoRow}>
-                          <Text style={styles.modalLabel}>Bônus:</Text>
-                          <Text style={styles.modalBonus}>+{selectedItem.bonus}</Text>
-                        </View>
-                      )}
+                    
 
                       <View style={styles.descriptionContainer}>
                         <Text style={styles.modalLabel}>Descrição:</Text>
@@ -706,7 +868,8 @@ export default function Personagem({ navigation }) {
               </View>
             </View>
           </Modal>
-          </View>}
+        </View>
+      }
 
 
         {activeView === 'pink' && 
@@ -817,7 +980,7 @@ const styles = StyleSheet.create({
     secondaryBlue: '#1E3A53',
     lightBlue: '#0A2D42',
     darkBlue: '#124A69',
-    gold: '#FFD700',
+    gold: '#4cf3ffff',
     white: '#FFFFFF',
     lightGray: '#CCCCCC',
     darkGray: '#333333'
@@ -825,7 +988,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8fafc',
   },
 
 header: {
@@ -877,13 +1040,14 @@ backButton: {
   viewTitle: {
     fontSize: 27,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#4cf3ffff',
     textAlign: 'center',
     marginVertical: 10,
     marginTop: 5,
-    textShadowColor: '#092534',
+    textShadowColor: '#000000ff',
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
+    textShadowRadius: 10,
+
   },
   scrollContent: {
     paddingBottom: 30,
@@ -1019,22 +1183,22 @@ backButton: {
   },
 
   containerWithBorder: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#0A2D42',
     padding: 15,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
     marginBottom: 15,
   },
   label: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 8,
   },
   input: {
     backgroundColor: '#0A2D42',
-    color: '#FFD700',
+    color: '#4cf3ffff',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
@@ -1059,17 +1223,17 @@ tableContainer: {
   borderRadius: 12,
   overflow: 'hidden',
   borderWidth: 2,
-  borderColor: '#09253494',
+  borderColor: '#0A2D42',
 },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#092534',
+    backgroundColor: '#0A2D42',
     padding: 15,
     borderBottomWidth: 2,
-    borderBottomColor: '#FFD700',
+    borderBottomColor: '#4cf3ffff',
   },
   headerText: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
@@ -1095,17 +1259,17 @@ tableContainer: {
   cellName: { 
     flex: 3, 
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#4cf3ffff',
   },
   cellPrice: { 
     flex: 1.5, 
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#4cf3ffff',
   },
   cellWeight: { 
     flex: 1.5, 
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#4cf3ffff',
   },
   cellActions: {
     flex: 0.5,
@@ -1114,7 +1278,7 @@ tableContainer: {
   },
 
 credit: {
-  color: '#FFD700',
+  color: '#4cf3ffff',
   fontWeight: 'bold',
 },
 
@@ -1183,11 +1347,7 @@ credit: {
     flex: 1,
     textAlign: 'right',
   },
-  modalBonus: {
-    color: '#00f7ffff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
+
  
   modalDescription: {
     color: '#CCC',
@@ -1274,7 +1434,7 @@ descriptionContainer: {
  skillTitle: {
   fontSize: 27,
   fontWeight: 'bold',
-  color: '#FFD700',
+  color: '#4cf3ffff',
   textAlign: 'center',
   marginTop: 10,
   marginBottom: 15,
@@ -1293,19 +1453,19 @@ skillBackground: {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
-  backgroundColor: '#1F4E79',
+  backgroundColor: '#0A2D42',
   paddingVertical: 10,
   paddingHorizontal: 10,
   borderRadius: 8,
   borderWidth: 1,
-  borderColor: '#FFD700',
+  borderColor: '#4cf3ffff',
 },
 
 skillText: {
   flex: 1,
   fontSize: 20,
   fontWeight: 'bold',
-  color: '#FFD700',
+  color: '#4cf3ffff',
 },
 
 skillTouchable: {
@@ -1334,7 +1494,7 @@ skillInput: {
   attributesBackgroundTop:{
     width: '30%',
     height: 110,
-    backgroundColor: '#124A69',
+    backgroundColor: '#0A2D42',
     marginInline: 5,
     borderTopEndRadius: 10,
     borderTopStartRadius: 10,
@@ -1343,7 +1503,7 @@ skillInput: {
  attributesBackgroundBottom:{
     width: '30%',
     height: 110,
-    backgroundColor: '#124A69',
+    backgroundColor: '#0A2D42',
     marginInline: 5,
     borderBottomEndRadius: 10,
     borderBottomStartRadius: 10,
@@ -1358,13 +1518,13 @@ skillInput: {
     top: 250,
     width: '70%',
     height: 110,
-    backgroundColor: '#124A69',
+    backgroundColor: '#0A2D42',
     borderRadius: 10
   },
   appearanceTitle: {
     fontSize: 27,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#4cf3ffff',
     textAlign: 'center',
     marginBottom: 20,
     textShadowColor: '#000',
@@ -1380,12 +1540,12 @@ skillInput: {
     padding: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
   },
   appearanceLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#4cf3ffff',
     marginBottom: 8,
   },
   appearanceInput: {
@@ -1411,7 +1571,7 @@ skillInput: {
     color: '#092534',
     textAlign: 'center',
     marginBottom: 20,
-    textShadowColor: '#FFD700',
+    textShadowColor: '#4cf3ffff',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
@@ -1421,7 +1581,7 @@ skillInput: {
     borderRadius: 10,
     marginBottom: 20,
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
   },
   resourceRow: {
     flexDirection: 'row',
@@ -1429,7 +1589,7 @@ skillInput: {
     marginBottom: 15,
   },
   resourceLabel: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     width: 80,
     fontSize: 16,
@@ -1450,7 +1610,7 @@ skillInput: {
   },
   resourceInput: {
     flex: 1,
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -1475,10 +1635,10 @@ skillInput: {
     flex: 1,
     marginHorizontal: 5,
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
   },
   statInput: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -1490,7 +1650,7 @@ skillInput: {
     borderColor: '#5683B9',
   },
   statLabel: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     marginTop: 5,
     fontSize: 14,
@@ -1503,17 +1663,17 @@ skillInput: {
     borderRadius: 10,
     marginBottom: 20,
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
   },
   creditLabel: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     fontSize: 16,
     marginRight: 10,
   },
   creditInput: {
     flex: 1,
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontSize: 18,
     fontWeight: 'bold',
     backgroundColor: '#0A2D42',
@@ -1532,17 +1692,17 @@ skillInput: {
     marginBottom: 20,
   },
   attributeItem: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#0A2D42',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 5,
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
   },
   attributeInput: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -1554,7 +1714,7 @@ skillInput: {
     borderColor: '#5683B9',
   },
   attributeLabel: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     marginTop: 8,
     fontSize: 14,
@@ -1566,16 +1726,16 @@ skillInput: {
     marginBottom: 20,
   },
   luckContainer: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#0A2D42',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
-    width: '50%', 
+    width: '32%', 
     borderWidth: 2,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
   },
   luckInput: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -1587,7 +1747,7 @@ skillInput: {
     borderColor: '#5683B9',
   },
   luckLabel: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     marginTop: 8,
     fontSize: 14,
@@ -1598,12 +1758,12 @@ skillInput: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#092534',
+    backgroundColor: '#0A2D42',
     padding: 12,
     borderRadius: 8,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#FFD700',
+    borderColor: '#4cf3ffff',
     alignSelf: 'center',
     alignItems: 'center'
 
@@ -1612,10 +1772,95 @@ skillInput: {
     marginRight: 8,
   },
   createItemText: {
-    color: '#FFD700',
+    color: '#4cf3ffff',
     fontWeight: 'bold',
     fontSize: 16,
     width: '90%',
     textAlign: 'center',
+  },
+  createModalContainer: {
+    backgroundColor: '#2D3748',
+    padding: 25,
+    borderRadius: 15,
+    width: '90%',
+    maxHeight: '80%',
+    borderWidth: 3,
+    borderColor: '#4cf3ffff',
+  },
+  createModalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#4cf3ffff',
+    textAlign: 'center',
+    marginBottom: 20,
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  createModalScroll: {
+    maxHeight: 400,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    color: '#4cf3ffff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  textInput: {
+    backgroundColor: '#1E3A53',
+    color: '#FFF',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    fontSize: 14,
+  },
+  descriptionInput: {
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  pickerContainer: {
+    backgroundColor: '#1E3A53',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    overflow: 'hidden',
+  },
+  picker: {
+    color: '#FFF',
+    height: 50,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  modalButton: {
+    flex: 1,
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  cancelButton: {
+    backgroundColor: '#718096',
+    borderWidth: 1,
+    borderColor: '#4A5568',
+  },
+  createButton: {
+    backgroundColor: '#4cf3ffff',
+    borderWidth: 1,
+    borderColor: '#2C7A7B',
+  },
+  cancelButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+  createButtonText: {
+    color: '#092534',
+    fontWeight: 'bold',
   },
 });

@@ -42,6 +42,14 @@ export default function Home({ navigation }) {
       <TouchableOpacity style={styles.helpButton}>
         <Ionicons name="help-outline" size={28} color="#2295D1" />
       </TouchableOpacity>
+
+      <TouchableOpacity 
+        style={styles.deslogButton}
+        onPress={() => navigation.navigate("Login")}
+      > 
+        {/* Colocar um alert para perguntar se você deseja sair / Fazer estilo*/}
+        <Ionicons name="help-outline" size={28} color="#2295D1" />
+      </TouchableOpacity>
     </View>
   );
 }

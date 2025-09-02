@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#092534',
+    borderColor: '#2295D1',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,   
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
+    
     shadowColor: '#124A69',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,

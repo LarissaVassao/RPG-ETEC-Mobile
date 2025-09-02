@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 export default function App({ navigation }) { 
   const [nomeCampanha, setNomeCampanha] = useState('');
   const [descricao, setDescricao] = useState('');
+  const {senhaCampanha, setSenhaCampanha} = useState('');
 
   return (
     <KeyboardAvoidingView 
@@ -33,6 +34,16 @@ export default function App({ navigation }) {
               <TextInput
                 style={styles.input}
                 placeholder="Dê um nome para sua campanha"
+                placeholderTextColor="#999"
+                value={nomeCampanha}
+                onChangeText={setNomeCampanha}
+              />
+            </View>
+             <View style={styles.formGroup}>
+              <Text style={styles.label}>SENHA PARA A CAMPANHA</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Crie uma para sua campanha"
                 placeholderTextColor="#999"
                 value={nomeCampanha}
                 onChangeText={setNomeCampanha}
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#1c485fff',
+    borderColor: '#2295D1',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,    
