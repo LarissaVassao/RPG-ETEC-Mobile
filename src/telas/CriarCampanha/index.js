@@ -11,22 +11,27 @@ export default function App({ navigation }) {
   const [descricao, setDescricao] = useState('');
 
 async function saveData() {     
-            console.log("saveData start");       ;
-           if (nomeCampanha == "") {
-            console.log("saveData error empty");  
-            Alert.alert("Erro!", "Preencha o nome!");
-            return;
+        console.log("saveData start");       ;
+        if (nomeCampanha == "") {
+          console.log("saveData error empty");  
+          Alert.alert("Erro!", "Preencha o nome!");
+          return;
         }
         else{
-            console.log("saveData non-empty, proceding");  
-            try{const res = await api.post('rpgetec/salvarCampanha.php',{nome: nomeCampanha, descricao: descricao});}
-            catch(error){console.log(error)}
+          console.log("saveData non-empty, proceding");  
+          try{
+            const res = await api.post('rpgetec/salvarCampanha.php',{nome: nomeCampanha, descricao: descricao});
+            console.log(res.data);
             if (res.data.sucesso === false) {
-                Alert.alert("Erro ao salvar", res.data.mensagem);              
-                return;
+              Alert.alert("Erro ao salvar", res.data.mensagem);              
+              return;
             }
-            Alert.alert("Salvo com Sucesso", "Sua campanha foi registrada com o seguinte ID: " + res.data.id + ", anote esse número!")
-            navigation.navigate("EntrarCampanha");       
+            
+          Alert.alert("Salvo com Sucesso", "Sua campanha foi registrada com o seguinte ID: "+ res.data.id +", anote esse número!")
+          navigation.navigate("EntrarCampanha");       
+
+          }
+          catch(error){console.log("ERRO" + error)}
     }     
 }     
 

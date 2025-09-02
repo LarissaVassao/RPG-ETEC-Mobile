@@ -2,14 +2,14 @@
 require_once("conexao.php");
 $tabela = 'usuario';
 
-$postjson = json_decode(file_get_contents('php://input'), true);
+$input = json_decode(file_get_contents('php://input'), true);
 
-$nome = @$postjson['nome'];
-$email = @$postjson['email'];
-$senha = @$postjson['senha'];
+$nome = $input['user'] ?? '';
+$email = $input['email'] ?? '';
+$senha = $input['senha'] ?? '';
 
 
-$res = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, classe = :classe, raca = :raca, idade = :idade, nivel = :nivel");	
+$res = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, email = :email, senha = :senha");	
 
 
 $res->bindValue(":nome", "$nome");
