@@ -1,11 +1,26 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar } from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar, Modal, Pressable } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Home({ navigation }) {
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+  
+  const handleLogout = () => {
+    setLogoutModalVisible(true);
+  };
+
+  const confirmLogout = () => {
+    setLogoutModalVisible(false);
+    navigation.navigate("Login");
+  };
+
+  const cancelLogout = () => {
+    setLogoutModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
-    <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
+      <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
       
       <View style={styles.header}>
         <Image
@@ -45,11 +60,40 @@ export default function Home({ navigation }) {
 
       <TouchableOpacity 
         style={styles.deslogButton}
-        onPress={() => navigation.navigate("Login")}
+        onPress={handleLogout}
       > 
-        {/* Colocar um alert para perguntar se você deseja sair / Fazer estilo*/}
-        <Ionicons name="help-outline" size={28} color="#2295D1" />
+        <Ionicons name="log-out-outline" size={28} color="#2295D1" />
       </TouchableOpacity>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={logoutModalVisible}
+        onRequestClose={cancelLogout}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Sair do Aplicativo</Text>
+            <Text style={styles.modalMessage}>Tem certeza que deseja sair?</Text>
+            
+            <View style={styles.modalButtons}>
+              <Pressable 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={cancelLogout}
+              >
+                <Text style={[styles.buttonText, styles.cancelButtonText]}>Cancelar</Text>
+              </Pressable>
+              
+              <Pressable 
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={confirmLogout}
+              >
+                <Text style={[styles.buttonText, styles.confirmButtonText]}>Sair</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -76,7 +120,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 8,
   },
-
   buttonsContainer: {
     width: '100%',
     alignItems: 'center',
@@ -118,10 +161,82 @@ const styles = StyleSheet.create({
     borderColor: '#E3F2FD',
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 8,
+    borderWidth: 1,
+    borderColor: '#2295D1',
+
+  },
+  deslogButton: {
+    position: 'absolute',
+    right: 30,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#fff',
+    borderWidth: 1.5,
+    borderColor: '#E3F2FD',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderWidth: 1,
+    borderColor: '#2295D1',
+  },
+  // Estilos do Modal
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 25,
+    alignItems: 'center',
+    width: '80%',
+    maxWidth: 340,
+    elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#124A69',
+  },
+  modalMessage: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#555',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    gap: 15,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    elevation: 2,
+  },
+  cancelButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  confirmButton: {
+    backgroundColor: '#2295D1',
+  },
+  cancelButtonText: {
+    color: '#333',
+    fontWeight: '600',
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontWeight: '600',
   },
 });

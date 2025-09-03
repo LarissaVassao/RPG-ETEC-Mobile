@@ -162,7 +162,7 @@ export default function Personagem({ navigation }) {
 
         {activeView === 'red' && 
         <View style={styles.redView}>
-          <Text style={styles.viewTitle}>Atributos do Personagem</Text>  
+          <Text style={styles.viewTitle}>ATRIBUTOS DO PERSONAGEM</Text>  
             <ScrollView contentContainerStyle={styles.redScrollContent}>
 
               <View style={styles.resourcesContainer}>
@@ -345,7 +345,7 @@ export default function Personagem({ navigation }) {
 
         {activeView === 'green' && (
             <View style={styles.greenView}>
-              <Text style={styles.viewTitle}>Habilidades</Text>
+              <Text style={styles.viewTitle}>HABILIDADES</Text>
               <ScrollView contentContainerStyle={styles.scrollContent}>
                       <View style={styles.skillContainer}>
                         <View style={styles.skillBackground}>
@@ -644,7 +644,7 @@ export default function Personagem({ navigation }) {
            
       {activeView === 'blue' && 
         <View style={styles.blueView}>
-          <Text style={styles.viewTitle}>Inventário de Equipamentos</Text>    
+          <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
 
           <TouchableOpacity 
             style={styles.createItemButton}
@@ -874,7 +874,7 @@ export default function Personagem({ navigation }) {
 
         {activeView === 'pink' && 
           <View style={styles.pinkView}>
-            <Text style={styles.viewTitle}>Aparência do Personagem</Text>            
+            <Text style={styles.viewTitle}>APARÊNCIA DO PERSONAGEM</Text>            
             <ScrollView contentContainerStyle={styles.appearanceContainer}>
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Cor dos Olhos:</Text>
@@ -1038,9 +1038,9 @@ backButton: {
     marginTop: 205,
   },
   viewTitle: {
-    fontSize: 27,
+    fontSize: 25,
     fontWeight: 'bold',
-    color: '#4cf3ffff',
+    color: '#ffffffff',
     textAlign: 'center',
     marginVertical: 10,
     marginTop: 5,
@@ -1133,7 +1133,7 @@ backButton: {
   imageStyle: {
     position: 'absolute',
     top: 60,
-    left: 0,
+    left: 5,
     width: 100,
     height: 100,
     //borderBottomRightRadius: 100,

@@ -43,7 +43,7 @@ export default function App({ navigation }) {
               <Text style={styles.label}>SENHA PARA A CAMPANHA</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Crie uma para sua campanha"
+                placeholder="Crie uma senha para sua campanha"
                 placeholderTextColor="#999"
                 value={nomeCampanha}
                 onChangeText={setNomeCampanha}
@@ -153,9 +153,9 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     left: 20,      
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+   width: 60,
+    height: 60,
+    borderRadius: 50,
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#2295D1',
