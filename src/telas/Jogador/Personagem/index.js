@@ -25,6 +25,51 @@ export default function Personagem({ navigation }) {
     damage: '',
     critical: ''
   });
+  
+  // Estados para os modais de edição
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editingField, setEditingField] = useState('');
+  const [currentValue, setCurrentValue] = useState('');
+  const [tempValue, setTempValue] = useState('');
+  
+  // Estados para os valores dos atributos
+  const [vida, setVida] = useState('100/100');
+  const [mental, setMental] = useState('50/50');
+  const [energia, setEnergia] = useState('80/80');
+  const [ca, setCa] = useState('10');
+  const [carga, setCarga] = useState('50');
+  const [movimento, setMovimento] = useState('9m');
+  const [creditos, setCreditos] = useState('1000');
+  const [forca, setForca] = useState('10');
+  const [agilidade, setAgilidade] = useState('12');
+  const [constituicao, setConstituicao] = useState('14');
+  const [vontade, setVontade] = useState('8');
+  const [inteligencia, setInteligencia] = useState('16');
+  const [percepcao, setPercepcao] = useState('14');
+  const [sorte, setSorte] = useState('18');
+
+  // Estados para as habilidades
+  const [habilidades, setHabilidades] = useState({
+    acalmar: '',
+    acrobacia: '',
+    atletismo: '',
+    atualidades: '',
+    analise: '',
+    charme: '',
+    eletronicos: '',
+    enganar: '',
+    furtividade: '',
+    informatica: '',
+    iniciativa: '',
+    intimidacao: '',
+    intuicao: '',
+    medicina: '',
+    mecanica: '',
+    persuasao: '',
+    primeirosSocorros: '',
+    procurar: ''
+  });
+
   const handleButtonPress = (color) => {
     setActiveView(color);
   };
@@ -35,74 +80,137 @@ export default function Personagem({ navigation }) {
     ));
   };
 
- const handleCreateEquipment = () => {
-  if (!newEquipment.name.trim()) {
-    alert('Por favor, digite um nome para o equipamento');
-    return;
-  }
+  const handleCreateEquipment = () => {
+    if (!newEquipment.name.trim()) {
+      alert('Por favor, digite um nome para o equipamento');
+      return;
+    }
 
-  const newItem = {
-    id: Math.max(...rpgEquipments.map(item => item.id), 0) + 1,
-    name: newEquipment.name,
-    type: newEquipment.type,
-    price: 0,
-    weight: 0,
-    description: newEquipment.description,
-    requirement: newEquipment.requirement,
-    damage: newEquipment.damage,
-    critical: newEquipment.critical,
+    const newItem = {
+      id: Math.max(...rpgEquipments.map(item => item.id), 0) + 1,
+      name: newEquipment.name,
+      type: newEquipment.type,
+      price: 0,
+      weight: 0,
+      description: newEquipment.description,
+      requirement: newEquipment.requirement,
+      damage: newEquipment.damage,
+      critical: newEquipment.critical,
+    };
+
+    setRpgEquipments(prev => [...prev, newItem]);
+    setNewEquipment({
+      name: '',
+      type: 'item',
+      description: '',
+      requirement: '',
+      damage: '',
+      critical: ''
+    });
+    setCreateModalVisible(false);
   };
 
-  setRpgEquipments(prev => [...prev, newItem]);
-  setNewEquipment({
-    name: '',
-    type: 'item',
-    description: '',
-    requirement: '',
-    damage: '',
-    critical: ''
-  });
-  setCreateModalVisible(false);
-};
+  // Função para abrir o modal de edição
+  const openEditModal = (field, value) => {
+    setEditingField(field);
+    setCurrentValue(value);
+    setTempValue(value);
+    setEditModalVisible(true);
+  };
 
+  // Função para salvar a edição de habilidades
+  const saveHabilidadeEdit = () => {
+    setHabilidades(prev => ({
+      ...prev,
+      [editingField]: tempValue
+    }));
+    setEditModalVisible(false);
+  };
+
+  // Função para salvar a edição
+  const saveEdit = () => {
+    if (editingField in habilidades) {
+      saveHabilidadeEdit();
+    } else {
+      switch (editingField) {
+        case 'vida': setVida(tempValue); break;
+        case 'mental': setMental(tempValue); break;
+        case 'energia': setEnergia(tempValue); break;
+        case 'ca': setCa(tempValue); break;
+        case 'carga': setCarga(tempValue); break;
+        case 'movimento': setMovimento(tempValue); break;
+        case 'creditos': setCreditos(tempValue); break;
+        case 'forca': setForca(tempValue); break;
+        case 'agilidade': setAgilidade(tempValue); break;
+        case 'constituicao': setConstituicao(tempValue); break;
+        case 'vontade': setVontade(tempValue); break;
+        case 'inteligencia': setInteligencia(tempValue); break;
+        case 'percepcao': setPercepcao(tempValue); break;
+        case 'sorte': setSorte(tempValue); break;
+        default: break;
+      }
+      setEditModalVisible(false);
+    }
+  };
+
+  // Função para cancelar a edição
+  const cancelEdit = () => {
+    setTempValue(currentValue);
+    setEditModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#124A69" barStyle="dark-content" />      
 
-            <View style={styles.header}>
-                <TouchableOpacity 
-                    style={styles.backButton}
-                    onPress={() => navigation.navigate("TelaCampanha")}
-                >
-                    <Ionicons name="arrow-back-outline" size={20} color="#fff" />
-                </TouchableOpacity>
-                
-                <Text style={styles.headerTitle}>Nome do Personagem</Text>
-            
-            </View>
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.navigate("TelaCampanha")}
+        >
+          <Ionicons name="arrow-back-outline" size={20} color="#fff" />
+        </TouchableOpacity>
+        
+        <Text style={styles.headerTitle}>Nome do Personagem</Text>
+      </View>
 
-
-      {/* <TouchableOpacity 
-        style={styles.backButton}
-        onPress={() => navigation.navigate("TelaCampanha")}
+      <Modal
+        visible={editModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={cancelEdit}
       >
-        <Ionicons name="arrow-back-outline" size={30} color="#00283D" />
-      </TouchableOpacity> */}
-
-      {/* <View style={styles.columnStyle} /> */}
-
-
-      {/* <View style={styles.namePlayer}>
-        <Text style={styles.playerText}>Jogador(a):</Text>
-        <TextInput
-          style={styles.playerInput}
-          placeholder="Digite seu nome"
-          placeholderTextColor="#000"
-        />
-      </View> */}
-
-
+        <View style={styles.modalOverlay}>
+          <View style={styles.editModalContainer}>
+            <Text style={styles.editModalTitle}>Editar {editingField}</Text>
+            
+            <TextInput
+              style={styles.editModalInput}
+              value={tempValue}
+              onChangeText={setTempValue}
+              placeholder="Digite o novo valor"
+              placeholderTextColor="#CCC"
+            />
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={cancelEdit}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.createButton]}
+                onPress={saveEdit}
+              >
+                <Text style={styles.createButtonText}>Salvar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+{/* Outro código */}
       <View style={styles.characterBase}>
         <View style={styles.nameCharacter}>
           <TextInput 
@@ -161,10 +269,9 @@ export default function Personagem({ navigation }) {
       <View style={styles.mainContent}>
 
         {activeView === 'red' && 
-        <View style={styles.redView}>
-          <Text style={styles.viewTitle}>ATRIBUTOS DO PERSONAGEM</Text>  
+          <View style={styles.redView}>
+            <Text style={styles.viewTitle}>ATRIBUTOS DO PERSONAGEM</Text>  
             <ScrollView contentContainerStyle={styles.redScrollContent}>
-
               <View style={styles.resourcesContainer}>
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Vida:</Text>
@@ -172,12 +279,12 @@ export default function Personagem({ navigation }) {
                     <TouchableOpacity style={styles.resourceButton}>
                       <Ionicons name="remove-outline" size={24} color="#FFF" />
                     </TouchableOpacity>
-                    <TextInput
-                      style={styles.resourceInput}
-                      placeholder="100/100"
-                      placeholderTextColor="#4cf3ffff"
-                      defaultValue="100/100"
-                    />
+                    <TouchableOpacity 
+                      style={styles.resourceInputTouchable}
+                      onPress={() => openEditModal('vida', vida)}
+                    >
+                      <Text style={styles.resourceInputText}>{vida}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.resourceButton}>
                       <Ionicons name="add-outline" size={24} color="#FFF" />
                     </TouchableOpacity>
@@ -190,12 +297,12 @@ export default function Personagem({ navigation }) {
                     <TouchableOpacity style={styles.resourceButton}>
                       <Ionicons name="remove-outline" size={24} color="#FFF" />
                     </TouchableOpacity>
-                    <TextInput
-                      style={styles.resourceInput}
-                      placeholder="50/50"
-                      placeholderTextColor="#4cf3ffff"
-                      defaultValue="50/50"
-                    />
+                    <TouchableOpacity 
+                      style={styles.resourceInputTouchable}
+                      onPress={() => openEditModal('mental', mental)}
+                    >
+                      <Text style={styles.resourceInputText}>{mental}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.resourceButton}>
                       <Ionicons name="add-outline" size={24} color="#FFF" />
                     </TouchableOpacity>
@@ -208,12 +315,12 @@ export default function Personagem({ navigation }) {
                     <TouchableOpacity style={styles.resourceButton}>
                       <Ionicons name="remove-outline" size={24} color="#FFF" />
                     </TouchableOpacity>
-                    <TextInput
-                      style={styles.resourceInput}
-                      placeholder="80/80"
-                      placeholderTextColor="#4cf3ffff"
-                      defaultValue="80/80"
-                    />
+                    <TouchableOpacity 
+                      style={styles.resourceInputTouchable}
+                      onPress={() => openEditModal('energia', energia)}
+                    >
+                      <Text style={styles.resourceInputText}>{energia}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.resourceButton}>
                       <Ionicons name="add-outline" size={24} color="#FFF" />
                     </TouchableOpacity>
@@ -223,424 +330,348 @@ export default function Personagem({ navigation }) {
 
               <View style={styles.statsRow}>
                 <View style={styles.statContainer}>
-                  <TextInput
-                    style={styles.statInput}
-                    placeholder="10"
-                    placeholderTextColor="#4cf3ffff"
-                    keyboardType="numeric"
-                  />
+                  <TouchableOpacity 
+                    style={styles.statInputTouchable}
+                    onPress={() => openEditModal('ca', ca)}
+                  >
+                    <Text style={styles.statInputText}>{ca}</Text>
+                  </TouchableOpacity>
                   <Text style={styles.statLabel}>CA</Text>
                 </View>
 
                 <View style={styles.statContainer}>
-                  <TextInput
-                    style={styles.statInput}
-                    placeholder="50"
-                    placeholderTextColor="#4cf3ffff"
-                    keyboardType="numeric"
-                  />
+                  <TouchableOpacity 
+                    style={styles.statInputTouchable}
+                    onPress={() => openEditModal('carga', carga)}
+                  >
+                    <Text style={styles.statInputText}>{carga}</Text>
+                  </TouchableOpacity>
                   <Text style={styles.statLabel}>Carga</Text>
                 </View>
 
                 <View style={styles.statContainer}>
-                  <TextInput
-                    style={styles.statInput}
-                    placeholder="9m"
-                    placeholderTextColor="#4cf3ffff"
-                  />
+                  <TouchableOpacity 
+                    style={styles.statInputTouchable}
+                    onPress={() => openEditModal('movimento', movimento)}
+                  >
+                    <Text style={styles.statInputText}>{movimento}</Text>
+                  </TouchableOpacity>
                   <Text style={styles.statLabel}>Movimento</Text>
                 </View>
               </View>
 
               <View style={styles.creditContainer}>
                 <Text style={styles.creditLabel}>Créditos:</Text>
-                <TextInput
-                  style={styles.creditInput}
-                  placeholder="1000"
-                  placeholderTextColor="#4cf3ffff"
-                  keyboardType="numeric"
-                />
+                <TouchableOpacity 
+                  style={styles.creditInputTouchable}
+                  onPress={() => openEditModal('creditos', creditos)}
+                >
+                  <Text style={styles.creditInputText}>{creditos}</Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.attributesGrid}>
                 <View style={styles.attributeRow}>
                   <View style={styles.attributeItem}>
-                    <TextInput
-                      style={styles.attributeInput}
-                      placeholder="10"
-                      placeholderTextColor="#4cf3ffff"
-                      keyboardType="numeric"
-                    />
+                    <TouchableOpacity 
+                      style={styles.attributeInputTouchable}
+                      onPress={() => openEditModal('forca', forca)}
+                    >
+                      <Text style={styles.attributeInputText}>{forca}</Text>
+                    </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Força</Text>
                   </View>
 
                   <View style={styles.attributeItem}>
-                    <TextInput
-                      style={styles.attributeInput}
-                      placeholder="12"
-                      placeholderTextColor="#4cf3ffff"
-                      keyboardType="numeric"
-                    />
+                    <TouchableOpacity 
+                      style={styles.attributeInputTouchable}
+                      onPress={() => openEditModal('agilidade', agilidade)}
+                    >
+                      <Text style={styles.attributeInputText}>{agilidade}</Text>
+                    </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Agilidade</Text>
                   </View>
 
                   <View style={styles.attributeItem}>
-                    <TextInput
-                      style={styles.attributeInput}
-                      placeholder="14"
-                      placeholderTextColor="#4cf3ffff"
-                      keyboardType="numeric"
-                    />
+                    <TouchableOpacity 
+                      style={styles.attributeInputTouchable}
+                      onPress={() => openEditModal('constituicao', constituicao)}
+                    >
+                      <Text style={styles.attributeInputText}>{constituicao}</Text>
+                    </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Constituição</Text>
                   </View>
                 </View>
 
-          <View style={styles.attributeRow}>
-            <View style={styles.attributeItem}>
-              <TextInput
-                style={styles.attributeInput}
-                placeholder="8"
-                placeholderTextColor="#4cf3ffff"
-                keyboardType="numeric"
-              />
-              <Text style={styles.attributeLabel}>Vontade</Text>
-            </View>
+                <View style={styles.attributeRow}>
+                  <View style={styles.attributeItem}>
+                    <TouchableOpacity 
+                      style={styles.attributeInputTouchable}
+                      onPress={() => openEditModal('vontade', vontade)}
+                    >
+                      <Text style={styles.attributeInputText}>{vontade}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.attributeLabel}>Vontade</Text>
+                  </View>
 
-            <View style={styles.attributeItem}>
-              <TextInput
-                style={styles.attributeInput}
-                placeholder="16"
-                placeholderTextColor="#4cf3ffff"
-                keyboardType="numeric"
-              />
-              <Text style={styles.attributeLabel}>Inteligência</Text>
-            </View>
-{/*  */}
-            <View style={styles.attributeItem}>
-              <TextInput
-                style={styles.attributeInput}
-                placeholder="14"
-                placeholderTextColor="#4cf3ffff"
-                keyboardType="numeric"
-              />
-              <Text style={styles.attributeLabel}>Percepção</Text>
-            </View>
-          </View>
+                  <View style={styles.attributeItem}>
+                    <TouchableOpacity 
+                      style={styles.attributeInputTouchable}
+                      onPress={() => openEditModal('inteligencia', inteligencia)}
+                    >
+                      <Text style={styles.attributeInputText}>{inteligencia}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.attributeLabel}>Inteligência</Text>
+                  </View>
 
-          <View style={styles.luckRow}>
-            <View style={styles.luckContainer}>
-              <TextInput
-                style={styles.luckInput}
-                placeholder="18"
-                placeholderTextColor="#4cf3ffff"
-                keyboardType="numeric"
-              />
-              <Text style={styles.luckLabel}>Sorte</Text>
-            </View>
-          </View>
+                  <View style={styles.attributeItem}>
+                    <TouchableOpacity 
+                      style={styles.attributeInputTouchable}
+                      onPress={() => openEditModal('percepcao', percepcao)}
+                    >
+                      <Text style={styles.attributeInputText}>{percepcao}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.attributeLabel}>Percepção</Text>
+                  </View>
+                </View>
 
+                <View style={styles.luckRow}>
+                  <View style={styles.luckContainer}>
+                    <TouchableOpacity 
+                      style={styles.luckInputTouchable}
+                      onPress={() => openEditModal('sorte', sorte)}
+                    >
+                      <Text style={styles.luckInputText}>{sorte}</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.luckLabel}>Sorte</Text>
+                  </View>
+                </View>
               </View>
             </ScrollView>
-        </View>}
-
+          </View>
+        }
         {activeView === 'green' && (
-            <View style={styles.greenView}>
-              <Text style={styles.viewTitle}>HABILIDADES</Text>
-              <ScrollView contentContainerStyle={styles.scrollContent}>
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Acalmar</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+          <View style={styles.greenView}>
+            <Text style={styles.viewTitle}>HABILIDADES</Text>
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Acalmar</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('acalmar', habilidades.acalmar)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.acalmar || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Acrobacia</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Atletismo</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Acrobacia</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('acrobacia', habilidades.acrobacia)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.acrobacia || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Atualidades</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Atletismo</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('atletismo', habilidades.atletismo)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.atletismo || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Análise</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Atualidades</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('atualidades', habilidades.atualidades)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.atualidades || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Charme</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Análise</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('analise', habilidades.analise)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.analise || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Eletronicos</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Charme</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('charme', habilidades.charme)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.charme || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Enganar</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Eletronicos</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('eletronicos', habilidades.eletronicos)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.eletronicos || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Furtividade</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Enganar</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('enganar', habilidades.enganar)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.enganar || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Informática</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Furtividade</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('furtividade', habilidades.furtividade)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.furtividade || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Iniciativa</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Informática</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('informatica', habilidades.informatica)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.informatica || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Intimidação</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Iniciativa</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('iniciativa', habilidades.iniciativa)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.iniciativa || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Intuição</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Intimidação</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('intimidacao', habilidades.intimidacao)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.intimidacao || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Medicina</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Intuição</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('intuicao', habilidades.intuicao)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.intuicao || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Mecânica</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Medicina</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('medicina', habilidades.medicina)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.medicina || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Persuasão</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Mecânica</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('mecanica', habilidades.mecanica)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.mecanica || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Primeiros-Socorros</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Persuasão</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('persuasao', habilidades.persuasao)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.persuasao || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-                      <View style={styles.skillContainer}>
-                        <View style={styles.skillBackground}>
-                          <Text style={styles.skillText}>Procurar</Text>
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="remove-outline" size={40} color="#fff" />
-                          </TouchableOpacity> 
-                          <TextInput 
-                            style={styles.skillInput}
-                            placeholderTextColor="#ccc"
-                          />
-                          <TouchableOpacity style={styles.skillTouchable}>
-                            <Ionicons name="add-outline" size={40} color="#fff" />
-                          </TouchableOpacity>  
-                        </View>
-                      </View>
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Primeiros-Socorros</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('primeirosSocorros', habilidades.primeirosSocorros)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.primeirosSocorros || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
 
-
-                      
+              <View style={styles.skillContainer}>
+                <View style={styles.skillBackground}>
+                  <Text style={styles.skillText}>Procurar</Text>
+                  <TouchableOpacity 
+                    style={styles.skillInputTouchable}
+                    onPress={() => openEditModal('procurar', habilidades.procurar)}
+                  >
+                    <Text style={styles.skillInputText}>{habilidades.procurar || '0'}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </ScrollView>
-            </View>
+          </View>
         )}
-          {/*  */}
            
       {activeView === 'blue' && 
         <View style={styles.blueView}>
@@ -1467,13 +1498,22 @@ skillText: {
   fontWeight: 'bold',
   color: '#4cf3ffff',
 },
+  skillInputTouchable: {
+    width: 50,
+    height: 35,
+    backgroundColor: '#092534',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#4cf3ffff',
+  },
+  skillInputText: {
+    color: '#4cf3ffff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 
-skillTouchable: {
-  padding: 2,
-  backgroundColor: '#092534',
-  borderRadius: 6,
-  marginHorizontal: 5,
-},
 
 skillInput: {
   width: 50,
@@ -1861,6 +1901,110 @@ skillInput: {
   },
   createButtonText: {
     color: '#092534',
+    fontWeight: 'bold',
+  },
+    editModalContainer: {
+    backgroundColor: '#2D3748',
+    padding: 25,
+    borderRadius: 15,
+    width: '80%',
+    borderWidth: 3,
+    borderColor: '#4cf3ffff',
+  },
+  editModalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4cf3ffff',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  editModalInput: {
+    backgroundColor: '#1E3A53',
+    color: '#FFF',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  
+  // Estilos para os elementos touchable que substituem os TextInput
+  resourceInputTouchable: {
+    flex: 1,
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    marginHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    minWidth: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  resourceInputText: {
+    color: '#4cf3ffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  statInputTouchable: {
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 5,
+    minWidth: 60,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statInputText: {
+    color: '#4cf3ffff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  creditInputTouchable: {
+    flex: 1,
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  creditInputText: {
+    color: '#4cf3ffff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  attributeInputTouchable: {
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    minWidth: 70,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  attributeInputText: {
+    color: '#4cf3ffff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  luckInputTouchable: {
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    padding: 10,
+    minWidth: 70,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  luckInputText: {
+    color: '#4cf3ffff',
+    fontSize: 24,
     fontWeight: 'bold',
   },
 });
