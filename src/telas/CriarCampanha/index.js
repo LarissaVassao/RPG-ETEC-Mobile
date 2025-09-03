@@ -1,11 +1,40 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ScrollView, KeyboardAvoidingView, Platform, Alert} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
+
+import api from "../../../services/api.js";
+
+
 
 export default function App({ navigation }) { 
   const [nomeCampanha, setNomeCampanha] = useState('');
   const [descricao, setDescricao] = useState('');
   const {senhaCampanha, setSenhaCampanha} = useState('');
+
+async function saveData() {     
+        console.log("saveData start");       ;
+        if (nomeCampanha == "") {
+          console.log("saveData error empty");  
+          Alert.alert("Erro!", "Preencha o nome!");
+          return;
+        }
+        else{
+          console.log("saveData non-empty, proceding");  
+          try{
+            const res = await api.post('rpgetec/salvarCampanha.php',{nome: nomeCampanha, descricao: descricao});
+            console.log(res.data);
+            if (res.data.sucesso === false) {
+              Alert.alert("Erro ao salvar", res.data.mensagem);              
+              return;
+            }
+            
+          Alert.alert("Salvo com Sucesso", "Sua campanha foi registrada com o seguinte ID: "+ res.data.id +", anote esse número!")
+          navigation.navigate("EntrarCampanha");       
+
+          }
+          catch(error){console.log("ERRO" + error)}
+    }     
+}     
 
   return (
     <KeyboardAvoidingView 
@@ -64,7 +93,7 @@ export default function App({ navigation }) {
             </View>
 
             <TouchableOpacity style={styles.button}
-              onPress={() => navigation.navigate("TelaCampanha")}
+              onPress={() => saveData()}
             >
               <Text style={styles.buttonText}>CRIAR CAMPANHA</Text>
             </TouchableOpacity>
