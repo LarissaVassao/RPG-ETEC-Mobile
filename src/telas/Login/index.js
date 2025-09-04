@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated,StatusBar
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import api from "../../../services/api.js";
+
+
 export default function Login({ navigation }) {
     const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
     const [opac] = useState(new Animated.Value(0));
@@ -24,6 +27,23 @@ export default function Login({ navigation }) {
             })
         ]).start();
     }, []);
+
+async function login(){
+    console.log("iniciando login");
+    try{const res = await api.get('rpgetec/checarUsuarios.php', {params: {email: email, senha: senha}});
+    console.log("pós api.get");
+        console.log(res);
+    if (res.data.success)
+    {
+    navigation.navigate("Home", { email, senha });
+    }
+    else{
+      Alert.alert("Senha ou Email incorreto(s)!");
+    }
+    console.log(res);
+  }
+  catch(error){console.log(error)}
+  }
 
     return (
         <KeyboardAvoidingView style={styles.background} behavior="padding">
@@ -72,7 +92,7 @@ export default function Login({ navigation }) {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => navigation.navigate("Home", { email }, { senha })}
+                        onPress={() => login()}
                     >
                         <Text style={styles.textButton}>ENTRAR</Text>
                     </TouchableOpacity>

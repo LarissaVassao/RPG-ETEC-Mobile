@@ -73,8 +73,8 @@ export default function Home({ navigation }) {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Sair do Aplicativo</Text>
-            <Text style={styles.modalMessage}>Tem certeza que deseja sair?</Text>
+            <Text style={styles.modalTitle}>Sair da Conta</Text>
+            <Text style={styles.modalMessage}>Tem certeza que deseja sair da sua conta?</Text>
             
             <View style={styles.modalButtons}>
               <Pressable 

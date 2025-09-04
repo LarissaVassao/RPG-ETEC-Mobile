@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, StatusBar, Animated, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { showMessage } from "react-native-flash-message";
+import { Ionicons } from '@expo/vector-icons'; 
 
 import api from "../../../services/api.js";
 
