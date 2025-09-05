@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
   },
   deslogButton: {
     position: 'absolute',
+    top: 20,
     right: 30,
     width: 60,
     height: 60,

@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
+    top: 20,
     left: 20,      
    width: 60,
     height: 60,
@@ -162,9 +163,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,    
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 4,
+    // elevation: 4,
   },
 });

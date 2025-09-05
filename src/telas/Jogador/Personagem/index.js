@@ -33,13 +33,13 @@ export default function Personagem({ navigation }) {
   const [tempValue, setTempValue] = useState('');
   
   // Estados para os valores dos atributos
-  const [vida, setVida] = useState('100/100');
-  const [mental, setMental] = useState('50/50');
-  const [energia, setEnergia] = useState('80/80');
+  const [vida, setVida] = useState('10/10');
+  const [mental, setMental] = useState('10/10');
+  const [energia, setEnergia] = useState('10/10');
   const [ca, setCa] = useState('10');
   const [carga, setCarga] = useState('50');
   const [movimento, setMovimento] = useState('9m');
-  const [creditos, setCreditos] = useState('1000');
+  const [creditos, setCreditos] = useState('1');
   const [forca, setForca] = useState('10');
   const [agilidade, setAgilidade] = useState('12');
   const [constituicao, setConstituicao] = useState('14');
@@ -50,25 +50,33 @@ export default function Personagem({ navigation }) {
 
   // Estados para as habilidades
   const [habilidades, setHabilidades] = useState({
-    acalmar: '',
-    acrobacia: '',
-    atletismo: '',
-    atualidades: '',
-    analise: '',
-    charme: '',
-    eletronicos: '',
-    enganar: '',
-    furtividade: '',
-    informatica: '',
-    iniciativa: '',
-    intimidacao: '',
-    intuicao: '',
-    medicina: '',
-    mecanica: '',
-    persuasao: '',
-    primeirosSocorros: '',
-    procurar: ''
+    acalmar: '1',
+    acrobacia: '1',
+    atletismo: '1',
+    atualidades: '1',
+    analise: '1',
+    charme: '1',
+    eletronicos: '1',
+    enganar: '1',
+    furtividade: '1',
+    informatica: '1',
+    iniciativa: '1',
+    intimidacao: '1',
+    intuicao: '1',
+    medicina: '1',
+    mecanica: '1',
+    persuasao: '1',
+    primeirosSocorros: '1',
+    procurar: '1'
   });
+
+  // Estados para o nome do personagem e modal
+  const [characterName, setCharacterName] = useState('Nome do Personagem');
+  const [tempCharacterName, setTempCharacterName] = useState('');
+  const [editNameModalVisible, setEditNameModalVisible] = useState(false);
+
+  const [editingEquipment, setEditingEquipment] = useState(null);
+  const [editEquipmentModalVisible, setEditEquipmentModalVisible] = useState(false);
 
   const handleButtonPress = (color) => {
     setActiveView(color);
@@ -158,28 +166,73 @@ export default function Personagem({ navigation }) {
     setTempValue(currentValue);
     setEditModalVisible(false);
   };
+  const handleEditEquipment = (item) => {
+  setEditingEquipment(item);
+  setEditEquipmentModalVisible(true);
+};
+
+const handleDeleteEquipment = (itemId) => {
+  setRpgEquipments(prev => prev.filter(item => item.id !== itemId));
+};
+
+const handleUpdateEquipment = () => {
+  if (!editingEquipment.name.trim()) {
+    alert('Por favor, digite um nome para o equipamento');
+    return;
+  }
+
+  setRpgEquipments(prev => prev.map(item => 
+    item.id === editingEquipment.id ? editingEquipment : item
+  ));
+  
+  setEditEquipmentModalVisible(false);
+  setEditingEquipment(null);
+};
+// Função para abrir o modal de edição do nome
+const openNameEditModal = () => {
+  setTempCharacterName(characterName);
+  setEditNameModalVisible(true);
+};
+
+// Função para salvar o nome do personagem
+const saveCharacterName = () => {
+  if (tempCharacterName.trim()) {
+    setCharacterName(tempCharacterName);
+  }
+  setEditNameModalVisible(false);
+};
+
+// Função para cancelar a edição do nome
+const cancelNameEdit = () => {
+  setEditNameModalVisible(false);
+};
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#124A69" barStyle="dark-content" />      
+      <StatusBar backgroundColor="#124A69" barStyle="light-content" />      
 
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.navigate("TelaCampanha")}
-        >
-          <Ionicons name="arrow-back-outline" size={20} color="#fff" />
-        </TouchableOpacity>
-        
-        <Text style={styles.headerTitle}>Nome do Personagem</Text>
-      </View>
-
+   <View style={styles.header}>
+  <TouchableOpacity 
+    style={styles.backButton}
+    onPress={() => navigation.navigate("TelaCampanha")}
+  >
+    <Ionicons name="arrow-back" size={20} color="#fff" />
+  </TouchableOpacity>
+  
+  <TouchableOpacity onPress={openNameEditModal}>
+    <Text style={styles.headerTitle}>{characterName}</Text>
+  </TouchableOpacity>
+</View>
+{/*  */}
       <Modal
         visible={editModalVisible}
         transparent={true}
         animationType="slide"
         onRequestClose={cancelEdit}
       >
+
+       
+
         <View style={styles.modalOverlay}>
           <View style={styles.editModalContainer}>
             <Text style={styles.editModalTitle}>Editar {editingField}</Text>
@@ -188,7 +241,7 @@ export default function Personagem({ navigation }) {
               style={styles.editModalInput}
               value={tempValue}
               onChangeText={setTempValue}
-              placeholder="Digite o novo valor"
+              placeholder="Digite aqui..."
               placeholderTextColor="#CCC"
             />
             
@@ -210,7 +263,50 @@ export default function Personagem({ navigation }) {
           </View>
         </View>
       </Modal>
-{/* Outro código */}
+
+{/* Modal para editar nome do personagem */}
+      <Modal
+        visible={editNameModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={cancelNameEdit}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.editNameModalContainer}>
+            <Text style={styles.editModalTitle}>Editar Nome do Personagem</Text>
+            
+            <TextInput
+              style={styles.editNameInput}
+              value={tempCharacterName}
+              onChangeText={setTempCharacterName}
+              placeholder="Digite aqui..."
+              placeholderTextColor="#CCC"
+              maxLength={25}
+            />
+            
+            <Text style={styles.charCounter}>
+              {tempCharacterName.length}/25 caracteres
+            </Text>
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={cancelNameEdit}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.createButton]}
+                onPress={saveCharacterName}
+              >
+                <Text style={styles.createButtonText}>Salvar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal> 
+
       <View style={styles.characterBase}>
         <View style={styles.nameCharacter}>
           <TextInput 
@@ -225,7 +321,7 @@ export default function Personagem({ navigation }) {
             <Text style={styles.occupationLabel}>Classe:</Text>
             <TextInput 
               style={styles.occupationInput}
-              placeholder="Ex: Guerreiro"
+              placeholder="Ex: Médico"
               placeholderTextColor="#666"
             />
           </View>
@@ -249,21 +345,21 @@ export default function Personagem({ navigation }) {
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity 
-          style={[styles.buttons, {backgroundColor: '#dceff9'}]} 
+          style={[styles.buttons, {backgroundColor: '#2188C0'}]} 
           onPress={() => handleButtonPress('red')}
-        ><Ionicons name="cube" size={60} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="cube" size={60} color="#e8ffff"/></TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.buttons, {backgroundColor: '#96CFEE'}]} 
+          style={[styles.buttons, {backgroundColor: '#1E7CAE'}]} 
           onPress={() => handleButtonPress('green')}
-        ><Ionicons name="construct" size={60} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="construct" size={60} color='#e8ffff'/></TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.buttons, {backgroundColor: '#2295D1'}]} 
+          style={[styles.buttons, {backgroundColor: '#18638C'}]} 
           onPress={() => handleButtonPress('blue')}
-        ><Ionicons name="bag" size={60} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="bag" size={60} color="#e8ffff"/></TouchableOpacity>
         <TouchableOpacity 
           style={[styles.buttons, {backgroundColor: '#124A69'}]} 
           onPress={() => handleButtonPress('pink')}
-        ><Ionicons name="accessibility" size={60} color="#00283D"/></TouchableOpacity>
+        ><Ionicons name="accessibility" size={60} color='#e8ffff'/></TouchableOpacity>
       </View>
 
       <View style={styles.mainContent}>
@@ -275,56 +371,37 @@ export default function Personagem({ navigation }) {
               <View style={styles.resourcesContainer}>
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Vida:</Text>
-                  <View style={styles.resourceControl}>
-                    <TouchableOpacity style={styles.resourceButton}>
-                      <Ionicons name="remove-outline" size={24} color="#FFF" />
-                    </TouchableOpacity>
+
                     <TouchableOpacity 
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('vida', vida)}
                     >
                       <Text style={styles.resourceInputText}>{vida}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.resourceButton}>
-                      <Ionicons name="add-outline" size={24} color="#FFF" />
-                    </TouchableOpacity>
-                  </View>
+ 
                 </View>
 
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Mental:</Text>
-                  <View style={styles.resourceControl}>
-                    <TouchableOpacity style={styles.resourceButton}>
-                      <Ionicons name="remove-outline" size={24} color="#FFF" />
-                    </TouchableOpacity>
                     <TouchableOpacity 
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('mental', mental)}
                     >
                       <Text style={styles.resourceInputText}>{mental}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.resourceButton}>
-                      <Ionicons name="add-outline" size={24} color="#FFF" />
-                    </TouchableOpacity>
-                  </View>
+
+                
                 </View>
 
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Energia:</Text>
-                  <View style={styles.resourceControl}>
-                    <TouchableOpacity style={styles.resourceButton}>
-                      <Ionicons name="remove-outline" size={24} color="#FFF" />
-                    </TouchableOpacity>
-                    <TouchableOpacity 
+                  <TouchableOpacity 
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('energia', energia)}
                     >
                       <Text style={styles.resourceInputText}>{energia}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.resourceButton}>
-                      <Ionicons name="add-outline" size={24} color="#FFF" />
-                    </TouchableOpacity>
-                  </View>
+                 
                 </View>
               </View>
 
@@ -690,34 +767,47 @@ export default function Personagem({ navigation }) {
               <Text style={[styles.headerText, styles.headerName]}>Nome do Item</Text>
               <Text style={[styles.headerText, styles.headerPrice]}>Crédito</Text>
               <Text style={[styles.headerText, styles.headerWeight]}>Volume</Text>
-              <View style={[styles.headerText, styles.headerActions]} />
+              <Text style={[styles.headerText, styles.headerActions]}>Ações</Text>
             </View>
 
             <ScrollView style={styles.tableBody}>
               {rpgEquipments.map((item) => (
-                <TouchableOpacity 
-                  key={item.id} 
-                  style={styles.tableRow}
-                  onPress={() => setSelectedItem(item)}
-                >
-                  <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
+                <View key={item.id} style={styles.tableRow}>
+                  <TouchableOpacity 
+                    style={styles.cellTouchable}
+                    onPress={() => setSelectedItem(item)}
+                  >
+                    <Text style={[styles.cellText, styles.cellName]}>{item.name}</Text>
+                  </TouchableOpacity>
+                  
                   <Text style={[styles.cellText, styles.cellPrice]}>
                     {item.price}
                   </Text>
+                  
                   <Text style={[styles.cellText, styles.cellWeight]}>
                     {item.weight || 0}
                   </Text>
+                  
                   <View style={styles.cellActions}>
-                    <TouchableOpacity onPress={() => setSelectedItem(item)}>
-                      <Ionicons name="information-circle-outline" size={24} color="#4cf3ffff" />
+                    <TouchableOpacity 
+                      style={styles.actionButton}
+                      onPress={() => handleEditEquipment(item)}
+                    >
+                      <Ionicons name="pencil-outline" size={20} color="#4cf3ffff" />
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={styles.actionButton}
+                      onPress={() => handleDeleteEquipment(item.id)}
+                    >
+                      <Ionicons name="trash-outline" size={20} color="#ff6b6b" />
                     </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
+                </View>
               ))}
             </ScrollView>
           </View>
 
-          {/* Modal de Criação de Equipamento */}
           <Modal
             visible={createModalVisible}
             animationType="slide"
@@ -730,7 +820,7 @@ export default function Personagem({ navigation }) {
 
                 <ScrollView style={styles.createModalScroll}>
                   <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Nome do Equipamento*</Text>
+                    <Text style={styles.inputLabel}>Nome do Equipamento</Text>
                     <TextInput
                       style={styles.textInput}
                       value={newEquipment.name}
@@ -826,7 +916,138 @@ export default function Personagem({ navigation }) {
             </View>
           </Modal>
 
-          {/* Modal de Visualização existente */}
+                      {/* Modal de Edição de Equipamento */}
+            <Modal
+              visible={editEquipmentModalVisible}
+              animationType="slide"
+              transparent={true}
+              onRequestClose={() => setEditEquipmentModalVisible(false)}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.createModalContainer}>
+                  <Text style={styles.createModalTitle}>Editar Equipamento</Text>
+
+                  <ScrollView style={styles.createModalScroll}>
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Nome do Equipamento</Text>
+                      <TextInput
+                        style={styles.textInput}
+                        value={editingEquipment?.name || ''}
+                        onChangeText={(text) => setEditingEquipment({...editingEquipment, name: text})}
+                        placeholder="Digite o nome do equipamento"
+                        placeholderTextColor="#888"
+                      />
+                    </View>
+
+                    {(editingEquipment?.type === 'arma_curta' || editingEquipment?.type === 'arma_longa') && (
+                      <>
+                        <View style={styles.inputGroup}>
+                          <Text style={styles.inputLabel}>Requisição para uso</Text>
+                          <TextInput
+                            style={styles.textInput}
+                            value={editingEquipment?.requirement || ''}
+                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, requirement: text })}
+                            placeholder="Ex: Força 12+"
+                            placeholderTextColor="#888"
+                          />
+                        </View>
+
+                        <View style={styles.inputGroup}>
+                          <Text style={styles.inputLabel}>Dano da Arma</Text>
+                          <TextInput
+                            style={styles.textInput}
+                            value={editingEquipment?.damage || ''}
+                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, damage: text })}
+                            placeholder="Ex: 1d8"
+                            placeholderTextColor="#888"
+                          />
+                        </View>
+
+                        <View style={styles.inputGroup}>
+                          <Text style={styles.inputLabel}>Bônus de Crítico</Text>
+                          <TextInput
+                            style={styles.textInput}
+                            value={editingEquipment?.critical || ''}
+                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, critical: text })}
+                            placeholder="Ex: +2"
+                            placeholderTextColor="#888"
+                          />
+                        </View>
+                      </>
+                    )}
+
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Tipo do Equipamento</Text>
+                      <View style={styles.pickerContainer}>
+                        <Picker
+                          selectedValue={editingEquipment?.type || 'item'}
+                          style={styles.picker}
+                          onValueChange={(itemValue) => setEditingEquipment({...editingEquipment, type: itemValue})}
+                        >
+                          <Picker.Item label="Item" value="item"/>
+                          <Picker.Item label="Arma de Curta Distância" value="arma_curta"/>
+                          <Picker.Item label="Arma de Longa Distância" value="arma_longa"/>
+                        </Picker>
+                      </View>
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Preço (Créditos)</Text>
+                      <TextInput
+                        style={styles.textInput}
+                        value={editingEquipment?.price?.toString() || ''}
+                        onChangeText={(text) => setEditingEquipment({...editingEquipment, price: parseInt(text) || 0})}
+                        placeholder="Digite o preço"
+                        placeholderTextColor="#888"
+                        keyboardType="numeric"
+                      />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Peso (Volume)</Text>
+                      <TextInput
+                        style={styles.textInput}
+                        value={editingEquipment?.weight?.toString() || ''}
+                        onChangeText={(text) => setEditingEquipment({...editingEquipment, weight: parseFloat(text) || 0})}
+                        placeholder="Digite o peso"
+                        placeholderTextColor="#888"
+                        keyboardType="numeric"
+                      />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.inputLabel}>Descrição</Text>
+                      <TextInput
+                        style={[styles.textInput, styles.descriptionInput]}
+                        value={editingEquipment?.description || ''}
+                        onChangeText={(text) => setEditingEquipment({...editingEquipment, description: text})}
+                        placeholder="Digite a descrição do equipamento"
+                        placeholderTextColor="#888"
+                        multiline
+                        numberOfLines={4}
+                      />
+                    </View>
+                  </ScrollView>
+
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity 
+                      style={[styles.modalButton, styles.cancelButton]}
+                      onPress={() => setEditEquipmentModalVisible(false)}
+                    >
+                      <Text style={styles.cancelButtonText}>Cancelar</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={[styles.modalButton, styles.createButton]}
+                      onPress={handleUpdateEquipment}
+                    >
+                      <Text style={styles.createButtonText}>Salvar</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+
           <Modal
             visible={!!selectedItem}
             animationType="fade"
@@ -844,7 +1065,6 @@ export default function Personagem({ navigation }) {
                     </View>
 
                     
-                                {/* Só aparece se for arma */}
                     {(selectedItem.type === 'arma_curta' || selectedItem.type === 'arma_longa') && (
                       <>
                         <View style={styles.modalInfoRow}>
@@ -1022,13 +1242,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8fafc',
   },
 
+
+  //Header quase completa
 header: {
   backgroundColor: '#124A69',
   flexDirection: 'row',
   alignItems: 'center',
-  paddingHorizontal: 16,
+  justifyContent: 'center',
+  paddingHorizontal: 10,
   paddingVertical: 12,
-  height: 50,
+  height: 60,
   elevation: 3,
   shadowColor: '#000',
   shadowOffset: { width: 0, height: 1 },
@@ -1037,24 +1260,27 @@ header: {
 },
 headerTitle: {
   color: '#fff',
-  fontSize: 27,
+  fontSize: 20,
   fontWeight: '600',
   letterSpacing: 0.3,
-  position: 'absolute',
-  left: 0,
-  right: 0,
   textAlign: 'center',
-  zIndex: 1,
+  flex: 1, 
+  marginHorizontal: 10,
+  top: 5
 },
 backButton: {
   width: 36,
   height: 36,
-  borderRadius: 18,
-  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  zIndex: 1,
+  position: 'absolute',
+  left: 10,
   justifyContent: 'center',
   alignItems: 'center',
-  zIndex: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 100,
 },
+
+//é da modal
   createButton: {
     width: 36,
     height: 36,
@@ -1083,17 +1309,6 @@ backButton: {
   scrollContent: {
     paddingBottom: 30,
     paddingHorizontal: 10,
-  },
-
- 
-  backButton: {
-    position: 'absolute',
-    top: 5,
-    left: 0,
-    zIndex: 2,
-    padding: 10,
-    backgroundColor: 'rgba(86,131,185, 0.1)',
-    borderRadius: 100,
   },
   columnStyle: {
     position: 'absolute',
@@ -1127,7 +1342,7 @@ backButton: {
 
   characterBase: {
     position: 'absolute',
-    top: 55,
+    top: 75,
     width: '100%',
     height: 50,
     //backgroundColor: '#cde1ffff'
@@ -1149,7 +1364,7 @@ backButton: {
   occupationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: '15',
+    marginRight: '10',
   },
   occupationLabel: {
     fontSize: 15,
@@ -1163,7 +1378,7 @@ backButton: {
   },
   imageStyle: {
     position: 'absolute',
-    top: 60,
+    top: 70,
     left: 5,
     width: 100,
     height: 100,
@@ -1177,7 +1392,7 @@ backButton: {
 
   buttonsContainer: {
     position: 'absolute',
-    top: 175, 
+    top: 185, 
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: 0,
@@ -1195,16 +1410,17 @@ backButton: {
 
   redView: {
     flex: 1,
-    backgroundColor: '#dceff9',
+    backgroundColor: '#2188C0',
     padding: 10,
   },
   greenView: {
     flex: 1,
-    backgroundColor: '#96CFEE',
+    backgroundColor: '#1E7CAE',
+    padding: 10,
   },
   blueView: {
     flex: 1,
-    backgroundColor: '#2295D1',
+    backgroundColor: '#18638C',
     padding: 10,
   },
   pinkView: {
@@ -1212,7 +1428,6 @@ backButton: {
     backgroundColor: '#124A69',
     padding: 10,
   },
-
   containerWithBorder: {
     backgroundColor: '#0A2D42',
     padding: 15,
@@ -1236,7 +1451,6 @@ backButton: {
     borderColor: '#5683B9',
     fontSize: 14,
   },
-
 sectionTitle: {
   fontSize: 27,
   fontWeight: 'bold',
@@ -1255,6 +1469,7 @@ tableContainer: {
   overflow: 'hidden',
   borderWidth: 2,
   borderColor: '#0A2D42',
+  marginHorizontal: 2, // Adicione margens laterais menores
 },
   tableHeader: {
     flexDirection: 'row',
@@ -1269,50 +1484,60 @@ tableContainer: {
     fontSize: 14,
     textAlign: 'center',
   },
-  headerName: { flex: 3 },
-  headerPrice: { flex: 1.5 },
-  headerWeight: { flex: 1.5 },
-  headerActions: { flex: 0.5 },
-  
-  tableRow: {
-    flexDirection: 'row',
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#444',
-    alignItems: 'center',
-    backgroundColor: '#333',
-  },
-  cellText: {
-    fontSize: 14,
-    color: '#FFF',
-    textAlign: 'center',
-  },
-  cellName: { 
-    flex: 3, 
-    fontWeight: 'bold',
-    color: '#4cf3ffff',
-  },
-  cellPrice: { 
-    flex: 1.5, 
-    fontWeight: 'bold',
-    color: '#4cf3ffff',
-  },
-  cellWeight: { 
-    flex: 1.5, 
-    fontWeight: 'bold',
-    color: '#4cf3ffff',
-  },
-  cellActions: {
-    flex: 0.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+headerName: { flex: 2, textAlign: 'center' }, // Adicionei textAlign: 'left'
+headerPrice: { flex: 1, textAlign: 'center' },
+headerWeight: { flex: 1, textAlign: 'center' },
+headerActions: { flex: 0.8, textAlign: 'center' },
+      
+ tableRow: {
+  flexDirection: 'row',
+  padding: 8,
+  borderBottomWidth: 1,
+  borderBottomColor: '#444',
+  alignItems: 'center', // Centraliza verticalmente
+  backgroundColor: '#333',
+  minHeight: 50, // Altura mínima para melhor visualização
+},
+cellText: {
+  fontSize: 14,
+  color: '#FFF',
+  textAlign: 'center', // Centraliza horizontalmente
+  textAlignVertical: 'center', // Centraliza verticalmente (funciona melhor em alguns casos)
+},
+cellName: { 
+  flex: 2,
+  fontWeight: 'bold',
+  color: '#4cf3ffff',
+  textAlign: 'center', // Centralizado
+  paddingHorizontal: 5, // Pequeno padding lateral
+},
+cellPrice: { 
+  flex: 1,
+  fontWeight: 'bold',
+  color: '#4cf3ffff',
+  textAlign: 'center', // Centralizado
+  paddingHorizontal: 5,
+},
+cellWeight: { 
+  flex: 1,
+  fontWeight: 'bold',
+  color: '#4cf3ffff',
+  textAlign: 'center', // Centralizado
+  paddingHorizontal: 5,
+},
+cellActions: {
+  flex: 0.8,
+  flexDirection: 'row',
+  justifyContent: 'center', // Centraliza os ícones
+  alignItems: 'center',
+  paddingHorizontal: 5,
+},
+
 
 credit: {
   color: '#4cf3ffff',
   fontWeight: 'bold',
 },
-
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -1378,8 +1603,6 @@ credit: {
     flex: 1,
     textAlign: 'right',
   },
-
- 
   modalDescription: {
     color: '#CCC',
     fontSize: 14,
@@ -1401,13 +1624,10 @@ credit: {
     fontWeight: 'bold',
     fontSize: 16,
   },
-
-comum: { color: '#FFFFFF' },
-raro: { color: '#0070DD' },
-epico: { color: '#A335EE' },
-lendario: { color: '#FF8000' },
-
-  
+// comum: { color: '#FFFFFF' },
+// raro: { color: '#0070DD' },
+// epico: { color: '#A335EE' },
+// lendario: { color: '#FF8000' },
 descriptionContainer: {
   marginTop: 20,
   padding: 12,
@@ -1458,9 +1678,7 @@ descriptionContainer: {
   scrollView: {
     flex: 1,
   },
-  scrollContent: {
-    paddingBottom: 20,
-  },
+
   
  skillTitle: {
   fontSize: 27,
@@ -1476,7 +1694,7 @@ descriptionContainer: {
 
 skillContainer: {
   marginBottom: 12,
-  width: '95%',
+  width: '100%',
   alignSelf: 'center'
 },
 
@@ -1488,33 +1706,32 @@ skillBackground: {
   paddingVertical: 10,
   paddingHorizontal: 10,
   borderRadius: 8,
-  borderWidth: 1,
+  borderWidth: 2,
   borderColor: '#4cf3ffff',
 },
-
 skillText: {
   flex: 1,
-  fontSize: 20,
+  fontSize: 16,
+    textTransform: 'uppercase',
   fontWeight: 'bold',
   color: '#4cf3ffff',
+  
 },
   skillInputTouchable: {
-    width: 50,
+    width: 100,
     height: 35,
-    backgroundColor: '#092534',
+    backgroundColor: '#1E3A53',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#4cf3ffff',
+    borderColor: '#5683B9',
   },
   skillInputText: {
     color: '#4cf3ffff',
     fontWeight: 'bold',
     fontSize: 16,
   },
-
-
 skillInput: {
   width: 50,
   height: 35,
@@ -1605,41 +1822,29 @@ skillInput: {
   redScrollContent: {
     paddingBottom: 30, 
   },
-  redViewTitle: {
-    fontSize: 27,
-    fontWeight: 'bold',
-    color: '#092534',
-    textAlign: 'center',
-    marginBottom: 20,
-    textShadowColor: '#4cf3ffff',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-  },
   resourcesContainer: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#0A2D42',
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
     borderWidth: 2,
     borderColor: '#4cf3ffff',
+    width: '95%',
+    alignSelf: 'center',
   },
   resourceRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   resourceLabel: {
     color: '#4cf3ffff',
     fontWeight: 'bold',
     width: 80,
     fontSize: 16,
+    left: 5
   },
-  resourceControl: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+
   resourceButton: {
     backgroundColor: '#092534',
     padding: 8,
@@ -1668,7 +1873,7 @@ skillInput: {
     marginBottom: 20,
   },
   statContainer: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#0A2D42',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -1682,7 +1887,7 @@ skillInput: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#1E3A53',
     borderRadius: 8,
     padding: 5,
     minWidth: 60,
@@ -1698,7 +1903,7 @@ skillInput: {
   creditContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#0A2D42',
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
@@ -1716,7 +1921,7 @@ skillInput: {
     color: '#4cf3ffff',
     fontSize: 18,
     fontWeight: 'bold',
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#1E3A53',
     borderRadius: 8,
     padding: 10,
     borderWidth: 1,
@@ -1757,7 +1962,7 @@ skillInput: {
     color: '#4cf3ffff',
     fontWeight: 'bold',
     marginTop: 8,
-    fontSize: 14,
+    fontSize: 13.3,
     textAlign: 'center',
   },
  luckRow: {
@@ -1793,7 +1998,6 @@ skillInput: {
     fontSize: 14,
     textAlign: 'center',
   },
-
     createItemButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1802,7 +2006,7 @@ skillInput: {
     padding: 12,
     borderRadius: 8,
     marginBottom: 15,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#4cf3ffff',
     alignSelf: 'center',
     alignItems: 'center'
@@ -1927,6 +2131,7 @@ skillInput: {
     borderColor: '#5683B9',
     fontSize: 16,
     marginBottom: 20,
+    textAlign: 'center'
   },
   
   // Estilos para os elementos touchable que substituem os TextInput
@@ -2007,4 +2212,49 @@ skillInput: {
     fontSize: 24,
     fontWeight: 'bold',
   },
+  cellTouchable: {
+    flex: 2,
+    justifyContent: 'center', // Centraliza verticalmente
+    alignItems: 'center', // Centraliza horizontalmente
+    paddingHorizontal: 5,
+  },
+actionButton: {
+  padding: 5,
+  marginHorizontal: 2,
+},
+headerActions: { 
+  flex: 1,
+  textAlign: 'center'
+},
+cellActions: {
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'space-around',
+  alignItems: 'center',
+},
+editNameModalContainer: {
+  backgroundColor: '#2D3748',
+  padding: 25,
+  borderRadius: 15,
+  width: '90%',
+  borderWidth: 3,
+  borderColor: '#4cf3ffff',
+},
+editNameInput: {
+  backgroundColor: '#1E3A53',
+  color: '#FFF',
+  padding: 12,
+  borderRadius: 8,
+  borderWidth: 1,
+  borderColor: '#5683B9',
+  fontSize: 16,
+  marginBottom: 10,
+  textAlign: 'center'
+},
+charCounter: {
+  color: '#4cf3ffff',
+  textAlign: 'center',
+  marginBottom: 20,
+  fontSize: 12,
+},
 });

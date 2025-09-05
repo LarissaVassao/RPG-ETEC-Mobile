@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,      
    width: 60,
+   top: 20,
     height: 60,
     borderRadius: 50,
     backgroundColor: '#fff',
@@ -95,11 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 10,   
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+   
   },
   title: {
     fontSize: 40,

@@ -46,57 +46,59 @@ export default function CadastrarPersonagem({ navigation }) {
                 <View style={styles.content}>
                     <Text style={styles.title}>Ficha de Criação de Personagem</Text>
                     
-                    <View style={styles.formRow}>
-                        <Text style={styles.label}>Nome:</Text>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Nome do personagem"
-                                placeholderTextColor="#999"
-                                value={nomePersonagem}
-                                onChangeText={setNomePersonagem}
-                            />
+                    <View style={styles.formContainer}>
+                        <View style={styles.formRow}>
+                            <Text style={styles.label}>Nome:</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Nome do personagem"
+                                    placeholderTextColor="#999"
+                                    value={nomePersonagem}
+                                    onChangeText={setNomePersonagem}
+                                />
+                            </View>
                         </View>
-                    </View>
-                    
-                    <View style={styles.formRow}>
-                        <Text style={styles.label}>Jogador:</Text>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Seu nome"
-                                placeholderTextColor="#999"
-                                value={jogador}
-                                onChangeText={setJogador}
-                            />
+                        
+                        <View style={styles.formRow}>
+                            <Text style={styles.label}>Jogador:</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Seu nome"
+                                    placeholderTextColor="#999"
+                                    value={jogador}
+                                    onChangeText={setJogador}
+                                />
+                            </View>
                         </View>
-                    </View>
-                    
-                    <View style={styles.formRow}>
-                        <Text style={styles.label}>Nível:</Text>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Nível"
-                                placeholderTextColor="#999"
-                                value={nivelPersonagem}
-                                onChangeText={setNivelPersonagem}
-                                keyboardType="numeric"
-                            />
+                        
+                        <View style={styles.formRow}>
+                            <Text style={styles.label}>Nível:</Text>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Nível"
+                                    placeholderTextColor="#999"
+                                    value={nivelPersonagem}
+                                    onChangeText={setNivelPersonagem}
+                                    keyboardType="numeric"
+                                />
+                            </View>
                         </View>
-                    </View>
-                    
-                    <View style={styles.formRow}>
-                        <Text style={styles.label}>Antepassado:</Text>
-                        <View style={styles.pickerContainer}>
-                            <Picker
-                                style={styles.picker}
-                                selectedValue={antepassado}
-                                onValueChange={(itemValue) => setAntepassado(itemValue)}
-                                dropdownIconColor="#623372"
-                            >
-                                {antepassadosItems}
-                            </Picker>
+                        
+                        <View style={styles.formRow}>
+                            <Text style={styles.label}>Antepassado:</Text>
+                            <View style={styles.pickerContainer}>
+                                <Picker
+                                    style={styles.picker}
+                                    selectedValue={antepassado}
+                                    onValueChange={(itemValue) => setAntepassado(itemValue)}
+                                    dropdownIconColor="#623372"
+                                >
+                                    {antepassadosItems}
+                                </Picker>
+                            </View>
                         </View>
                     </View>
                     
@@ -120,24 +122,42 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 75,
-        height: 60,
+        height: 100,
     },
     logo: {
-        width: 75,
-        height: 75,
+        top:25,
+        width: 125,
+        height: 125,
     },
     backButton: {
         position: 'absolute',
-        top: 15,
-        left: 15,
-        zIndex: 1,
+        left: 20,      
+    width: 60,
+    top: 20,
+        height: 60,
+        borderRadius: 50,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#2295D1',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,   
+    
     },
     scrollContainer: {
         flexGrow: 1,
+        justifyContent: 'center',
         paddingTop: 10,
+        paddingBottom: 20,
     },
     content: {
         padding: 20,
+        justifyContent: 'center',
+        flex: 1,
+    },
+    formContainer: {
+        justifyContent: 'center',
+        marginBottom: 20,
     },
     title: {
         fontSize: 22,
