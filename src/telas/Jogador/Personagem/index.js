@@ -206,6 +206,49 @@ const saveCharacterName = () => {
 const cancelNameEdit = () => {
   setEditNameModalVisible(false);
 };
+const [aparencia, setAparencia] = useState({
+    corOlhos: '',
+    estiloCabelo: '',
+    caracteristicas: '',
+    altura: '',
+    idade: '',
+    tomPele: '',
+    vestimentas: '',
+    personalidade: '',
+    biografia: ''
+  });
+
+  // Estado para o modal de edição de aparência
+  const [editAppearanceModalVisible, setEditAppearanceModalVisible] = useState(false);
+  const [editingAppearanceField, setEditingAppearanceField] = useState('');
+  const [tempAppearanceValue, setTempAppearanceValue] = useState('');
+
+  // Função para abrir o modal de edição de aparência
+  const openEditAppearanceModal = (field, value) => {
+    setEditingAppearanceField(field);
+    setTempAppearanceValue(value);
+    setEditAppearanceModalVisible(true);
+  };
+
+  // Função para salvar a edição de aparência
+  const saveAppearanceEdit = () => {
+    setAparencia(prev => ({
+      ...prev,
+      [editingAppearanceField]: tempAppearanceValue
+    }));
+    setEditAppearanceModalVisible(false);
+  };
+
+  // Função para cancelar a edição de aparência
+  const cancelAppearanceEdit = () => {
+    setEditAppearanceModalVisible(false);
+  };
+
+  // Função para salvar todas as alterações de aparência
+  const saveAllAppearanceChanges = () => {
+    // Aqui você pode adicionar lógica para salvar no banco de dados ou API
+    alert('Alterações de aparência salvas com sucesso!');
+  };
 
   return (
     <View style={styles.container}>
@@ -263,7 +306,70 @@ const cancelNameEdit = () => {
           </View>
         </View>
       </Modal>
-
+      <Modal
+        visible={editAppearanceModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={cancelAppearanceEdit}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.editModalContainer}>
+            <Text style={styles.editModalTitle}>
+              Editar {editingAppearanceField === 'corOlhos' ? 'Cor dos Olhos' :
+                     editingAppearanceField === 'estiloCabelo' ? 'Estilo e Cor do Cabelo' :
+                     editingAppearanceField === 'caracteristicas' ? 'Características Físicas' :
+                     editingAppearanceField === 'altura' ? 'Altura' :
+                     editingAppearanceField === 'idade' ? 'Idade' :
+                     editingAppearanceField === 'tomPele' ? 'Tom de Pele' :
+                     editingAppearanceField === 'vestimentas' ? 'Vestimentas e Acessórios' :
+                     editingAppearanceField === 'personalidade' ? 'Personalidade' :
+                     'Biografia e História'}
+            </Text>
+            
+            <TextInput
+        style={[
+          styles.editModalInput,
+          (editingAppearanceField === 'personalidade' || 
+          editingAppearanceField === 'vestimentas' || 
+          editingAppearanceField === 'caracteristicas' || 
+          editingAppearanceField === 'biografia') && 
+          styles.bioModalInput
+        ]}
+        value={tempAppearanceValue}
+        onChangeText={setTempAppearanceValue}
+        placeholder="Digite aqui..."
+        placeholderTextColor="#CCC"
+        multiline={editingAppearanceField === 'personalidade' || 
+                  editingAppearanceField === 'vestimentas' || 
+                  editingAppearanceField === 'caracteristicas' || 
+                  editingAppearanceField === 'biografia'}
+        numberOfLines={
+          editingAppearanceField === 'personalidade' ? 6 : 
+          editingAppearanceField === 'vestimentas' ? 5 : 
+          editingAppearanceField === 'caracteristicas' ? 5 : 
+          editingAppearanceField === 'biografia' ? 8 : 1
+        }
+        textAlignVertical="top"
+      />
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={cancelAppearanceEdit}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.createButton]}
+                onPress={saveAppearanceEdit}
+              >
+                <Text style={styles.createButtonText}>Salvar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 {/* Modal para editar nome do personagem */}
       <Modal
         visible={editNameModalVisible}
@@ -1123,102 +1229,124 @@ const cancelNameEdit = () => {
       }
 
 
-        {activeView === 'pink' && 
+      {activeView === 'pink' && 
           <View style={styles.pinkView}>
             <Text style={styles.viewTitle}>APARÊNCIA DO PERSONAGEM</Text>            
             <ScrollView contentContainerStyle={styles.appearanceContainer}>
+             
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Cor dos Olhos:</Text>
-                <TextInput
-                  style={styles.appearanceInput}
-                  placeholder="Ex: Azuis, Verdes, Castanhos..."
-                  placeholderTextColor="#CCC"
-                />
+                <TouchableOpacity 
+                  style={styles.appearanceInputTouchable}
+                  onPress={() => openEditAppearanceModal('corOlhos', aparencia.corOlhos)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.corOlhos || 'Ex: Azuis, Verdes, Castanhos...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Estilo e Cor do Cabelo:</Text>
-                <TextInput
-                  style={styles.appearanceInput}
-                  placeholder="Ex: Loiro longo, Negro curto..."
-                  placeholderTextColor="#CCC"
-                />
+                <TouchableOpacity 
+                  style={styles.appearanceInputTouchable}
+                  onPress={() => openEditAppearanceModal('estiloCabelo', aparencia.estiloCabelo)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.estiloCabelo || 'Ex: Loiro longo, Negro curto...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Características Físicas:</Text>
-                <TextInput
-                  style={styles.appearanceInput}
-                  placeholder="Ex: Cicatriz no rosto, Tatuagens..."
-                  placeholderTextColor="#CCC"
-                  multiline={true}
-                />
+                <TouchableOpacity 
+                  style={styles.appearanceInputTouchable}
+                  onPress={() => openEditAppearanceModal('caracteristicas', aparencia.caracteristicas)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.caracteristicas || 'Ex: Cicatriz no rosto, Tatuagens...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Altura:</Text>
-                <TextInput
-                  style={styles.appearanceInput}
-                  placeholder="Ex: 1,80m."
-                  placeholderTextColor="#CCC"
-                />
+                <TouchableOpacity 
+                  style={styles.appearanceInputTouchable}
+                  onPress={() => openEditAppearanceModal('altura', aparencia.altura)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.altura || 'Ex: 1,80m'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Idade:</Text>
-                <TextInput
-                  style={styles.appearanceInput}
-                  placeholder="Ex: 25 anos"
-                  placeholderTextColor="#CCC"
-                  keyboardType="numeric"
-                />
+                <TouchableOpacity 
+                  style={styles.appearanceInputTouchable}
+                  onPress={() => openEditAppearanceModal('idade', aparencia.idade)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.idade || 'Ex: 25 anos'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Tom de Pele:</Text>
-                <TextInput
-                  style={styles.appearanceInput}
-                  placeholder="Ex: Bronzeada, Pálida, Morena..."
-                  placeholderTextColor="#CCC"
-                />
+                <TouchableOpacity 
+                  style={styles.appearanceInputTouchable}
+                  onPress={() => openEditAppearanceModal('tomPele', aparencia.tomPele)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.tomPele || 'Ex: Bronzeada, Pálida, Morena...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Vestimentas e Acessórios:</Text>
-                <TextInput
-                  style={styles.appearanceInput}
-                  placeholder="Ex: Armadura de couro, Capa vermelha..."
-                  placeholderTextColor="#CCC"
-                  multiline={true}
-                />
+                <TouchableOpacity 
+                  style={styles.appearanceInputTouchable}
+                  onPress={() => openEditAppearanceModal('vestimentas', aparencia.vestimentas)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.vestimentas || 'Ex: Armadura de couro, Capa vermelha...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Personalidade:</Text>
-                <TextInput
-                  style={[styles.appearanceInput, styles.bioInput]}
-                  placeholder="Descreva a personalidade, maneirismos e traços característicos..."
-                  placeholderTextColor="#CCC"
-                  multiline={true}
-                  numberOfLines={4}
-                  textAlignVertical="top"
-                />
+                <TouchableOpacity 
+                  style={[styles.appearanceInputTouchable, styles.bioInputTouchable]}
+                  onPress={() => openEditAppearanceModal('personalidade', aparencia.personalidade)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.personalidade || 'Descreva a personalidade, maneirismos e traços característicos...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.appearanceItem}>
                 <Text style={styles.appearanceLabel}>Biografia e História:</Text>
-                <TextInput
-                  style={[styles.appearanceInput, styles.bioInput]}
-                  placeholder="Conte a história do seu personagem, sua origem, motivações e objetivos..."
-                  placeholderTextColor="#CCC"
-                  multiline={true}
-                  numberOfLines={6}
-                  textAlignVertical="top"
-                />
+                <TouchableOpacity 
+                  style={[styles.appearanceInputTouchable, styles.bioInputTouchable]}
+                  onPress={() => openEditAppearanceModal('biografia', aparencia.biografia)}
+                >
+                  <Text style={styles.appearanceInputText}>
+                    {aparencia.biografia || 'Conte a história do seu personagem, sua origem, motivações e objetivos...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
             </ScrollView>
-          </View>}
+          </View>
+        }
+  
+
       </View>
     </View>
   );
@@ -1814,6 +1942,34 @@ skillInput: {
     borderColor: '#5683B9',
     fontSize: 14,
   },
+   appearanceInputTouchable: {
+    backgroundColor: '#1E3A53',
+    color: '#FFF',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#5683B9',
+    fontSize: 14,
+    minHeight: 44,
+    justifyContent: 'center',
+  },
+  bioInputTouchable: {
+    minHeight: 100,
+  },
+  appearanceInputText: {
+    color: '#FFF',
+    fontSize: 14,
+  },
+
+  // Estilo para o input modal de biografia
+  bioModalInput: {
+    minHeight: 180,
+    height: 180,
+    textAlignVertical: 'top',
+    padding: 12,
+    fontSize: 16,
+  },
+
   bioInput: {
     minHeight: 100,
     textAlignVertical: 'top',
@@ -1823,6 +1979,7 @@ skillInput: {
     paddingBottom: 30, 
   },
   resourcesContainer: {
+    justifyContent: 'center', 
     backgroundColor: '#0A2D42',
     padding: 15,
     borderRadius: 10,
@@ -2137,7 +2294,7 @@ skillInput: {
   // Estilos para os elementos touchable que substituem os TextInput
   resourceInputTouchable: {
     flex: 1,
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#1E3A53',
     borderRadius: 8,
     padding: 10,
     marginHorizontal: 10,
@@ -2153,7 +2310,7 @@ skillInput: {
     fontWeight: 'bold',
   },
   statInputTouchable: {
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#1E3A53',
     borderRadius: 8,
     padding: 5,
     minWidth: 60,
@@ -2169,7 +2326,7 @@ skillInput: {
   },
   creditInputTouchable: {
     flex: 1,
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#1E3A53',
     borderRadius: 8,
     padding: 10,
     borderWidth: 1,
@@ -2183,7 +2340,7 @@ skillInput: {
     fontWeight: 'bold',
   },
   attributeInputTouchable: {
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#1E3A53',
     borderRadius: 8,
     padding: 10,
     minWidth: 70,
@@ -2198,7 +2355,7 @@ skillInput: {
     fontWeight: 'bold',
   },
   luckInputTouchable: {
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#1E3A53',
     borderRadius: 8,
     padding: 10,
     minWidth: 70,
@@ -2257,4 +2414,5 @@ charCounter: {
   marginBottom: 20,
   fontSize: 12,
 },
+
 });
