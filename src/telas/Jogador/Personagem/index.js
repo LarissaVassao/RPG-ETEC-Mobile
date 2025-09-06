@@ -23,7 +23,9 @@ export default function Personagem({ navigation }) {
     description: '',
     requirement: '',
     damage: '',
-    critical: ''
+    critical: '',
+    price: 0, // Adicione este campo
+    weight: 0  // Adicione este campo
   });
   
   // Estados para os modais de edição
@@ -98,8 +100,8 @@ export default function Personagem({ navigation }) {
       id: Math.max(...rpgEquipments.map(item => item.id), 0) + 1,
       name: newEquipment.name,
       type: newEquipment.type,
-      price: 0,
-      weight: 0,
+      price: newEquipment.price, // CORRIGIDO: estava 0
+      weight: newEquipment.weight, // CORRIGIDO: estava 0
       description: newEquipment.description,
       requirement: newEquipment.requirement,
       damage: newEquipment.damage,
@@ -113,7 +115,9 @@ export default function Personagem({ navigation }) {
       description: '',
       requirement: '',
       damage: '',
-      critical: ''
+      critical: '',
+      price: 0, // Mantém os valores padrão
+     weight: 0  // Mantém os valores padrão
     });
     setCreateModalVisible(false);
   };
@@ -924,7 +928,10 @@ const [aparencia, setAparencia] = useState({
               <View style={styles.createModalContainer}>
                 <Text style={styles.createModalTitle}>Criar Novo Equipamento</Text>
 
-                <ScrollView style={styles.createModalScroll}>
+                <ScrollView 
+                  style={styles.createModalScroll}
+                  contentContainerStyle={styles.createModalScrollContent}
+                >
                   <View style={styles.inputGroup}>
                     <Text style={styles.inputLabel}>Nome do Equipamento</Text>
                     <TextInput
@@ -936,7 +943,32 @@ const [aparencia, setAparencia] = useState({
                     />
                   </View>
 
-                  {/* Só aparece se for arma curta ou longa */}
+                  {/* Campos de preço e volume - PRIMEIRO, ANTES DOS CAMPOS ESPECÍFICOS */}
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Preço (Créditos)</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      value={newEquipment.price.toString()}
+                      onChangeText={(text) => setNewEquipment({...newEquipment, price: parseInt(text) || 0})}
+                      placeholder="Digite o preço em créditos"
+                      placeholderTextColor="#888"
+                      keyboardType="numeric"
+                    />
+                  </View>
+
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>Volume</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      value={newEquipment.weight.toString()}
+                      onChangeText={(text) => setNewEquipment({...newEquipment, weight: parseFloat(text) || 0})}
+                      placeholder="Digite o volume/peso"
+                      placeholderTextColor="#888"
+                      keyboardType="numeric"
+                    />
+                  </View>
+
+                  {/* Campos específicos para armas - DEPOIS DOS CAMPOS GERAIS */}
                   {(newEquipment.type === 'arma_curta' || newEquipment.type === 'arma_longa') && (
                     <>
                       <View style={styles.inputGroup}>
@@ -1021,7 +1053,6 @@ const [aparencia, setAparencia] = useState({
               </View>
             </View>
           </Modal>
-
                       {/* Modal de Edição de Equipamento */}
             <Modal
               visible={editEquipmentModalVisible}
@@ -2201,6 +2232,9 @@ skillInput: {
   createModalScroll: {
     maxHeight: 400,
   },
+  createModalScrollContent: {
+  paddingBottom: 20,
+},
   inputGroup: {
     marginBottom: 20,
   },
