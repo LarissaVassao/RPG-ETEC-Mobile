@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, StatusBar, Animated, TouchableOpacity, TextInput } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, StatusBar, Animated, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { showMessage } from "react-native-flash-message";
+import { Ionicons } from '@expo/vector-icons'; 
+
+import api from "../../../services/api.js";
 
 export default function Cadastro({ navigation }) {
     const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
@@ -25,6 +28,50 @@ export default function Cadastro({ navigation }) {
         ]).start();
     }, []);
 
+    async function saveData() {     
+            console.log("saveData start");       ;
+           if (usuario == "" || email == "" || senha == "") {
+            console.log("saveData error empty");  
+            Alert.alert("Erro!", "Preencha todos os campos!");
+            return;
+        }
+        else{
+            console.log("saveData non-empty, proceding");  
+            try{
+                const res = await  api.get('rpgetec/checarUsuarios.php', {params: { user: usuario, email: email}});
+            if (res.data.unique){
+            console.log("saveData unique confirmed, proceding");  
+                try {
+            const obj = {
+                nome: usuario, 
+                email: email,               
+                senha: senha,       
+            }
+            try{const res = await api.post('rpgetec/salvar.php',{ user: usuario, email: email, senha: senha});}
+            catch(error){console.log(error)}
+            if (res.data.sucesso === false) {
+                Alert.alert("Erro ao salvar", res.data.mensagem);              
+                return;
+            }
+            showMessage({
+                message: "Salvo com Sucesso",
+                description: "Registro Salvo",
+                type: "success",
+                duration: 800,             
+            });     
+            navigation.navigate("Login");     
+        } catch (error) {
+            Alert.alert("Ops", "Alguma coisa deu errado, tente novamente.");
+        }
+            
+        }
+        else{
+            console.log("saveData non-unique, showing alert"); 
+            Alert.alert("Email ou Usuario ja cadastrado!");
+        }
+        } catch (error){console.log("error on api.get"); console.log(error);}
+    }     
+}     
     return (
         <KeyboardAvoidingView style={styles.background} behavior="padding">
             <Animated.View
@@ -81,7 +128,7 @@ export default function Cadastro({ navigation }) {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => navigation.navigate("Home")}
+                        onPress={() => saveData()}
                     >
                         <Text style={styles.textButton}>CRIAR CONTA</Text>
                     </TouchableOpacity>

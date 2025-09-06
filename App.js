@@ -71,7 +71,7 @@ export default function App() {
   return (
     
  <NavigationContainer>
- <Stack.Navigator initialRouteName='CriarCampanha'>
+ <Stack.Navigator initialRouteName='Home'>
 
    {/* <Stack.Screen 
        name="Usuario" 
