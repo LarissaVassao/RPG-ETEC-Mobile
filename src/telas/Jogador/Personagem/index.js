@@ -547,15 +547,7 @@ const [aparencia, setAparencia] = useState({
                 </View>
               </View>
 
-              <View style={styles.creditContainer}>
-                <Text style={styles.creditLabel}>Créditos:</Text>
-                <TouchableOpacity 
-                  style={styles.creditInputTouchable}
-                  onPress={() => openEditModal('creditos', creditos)}
-                >
-                  <Text style={styles.creditInputText}>{creditos}</Text>
-                </TouchableOpacity>
-              </View>
+            
 
               <View style={styles.attributesGrid}>
                 <View style={styles.attributeRow}>
@@ -864,6 +856,15 @@ const [aparencia, setAparencia] = useState({
         <View style={styles.blueView}>
           <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
 
+          <View style={styles.creditContainer}>
+                <Text style={styles.creditLabel}>Créditos:</Text>
+                <TouchableOpacity 
+                  style={styles.creditInputTouchable}
+                  onPress={() => openEditModal('creditos', creditos)}
+                >
+                  <Text style={styles.creditInputText}>{creditos}</Text>
+                </TouchableOpacity>
+              </View>
           <TouchableOpacity 
             style={styles.createItemButton}
             onPress={() => setCreateModalVisible(true)}
@@ -2092,7 +2093,7 @@ skillInput: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#0A2D42',
-    padding: 15,
+    height: 60,
     borderRadius: 10,
     marginBottom: 20,
     borderWidth: 2,
@@ -2107,14 +2108,16 @@ skillInput: {
   creditInput: {
     flex: 1,
     color: '#4cf3ffff',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    backgroundColor: '#1E3A53',
+    textAlign: 'center',
+    backgroundColor: '#0A2D42',
     borderRadius: 8,
     padding: 10,
+    marginHorizontal: 10,
     borderWidth: 1,
     borderColor: '#5683B9',
-    textAlign: 'center',
+    minWidth: 100,
   },
   attributesGrid: {
     marginBottom: 20,
