@@ -428,7 +428,7 @@ const [aparencia, setAparencia] = useState({
 
         <View style={styles.ocupationCharacter}>
           <View style={styles.occupationItem}>
-            <Text style={styles.occupationLabel}>Classe:</Text>
+            <Text style={styles.occupationLabel}>Profissão:</Text>
             <TextInput 
               style={styles.occupationInput}
               placeholder="Ex: Médico"
@@ -857,14 +857,15 @@ const [aparencia, setAparencia] = useState({
           <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
 
           <View style={styles.creditContainer}>
-                <Text style={styles.creditLabel}>Créditos:</Text>
-                <TouchableOpacity 
-                  style={styles.creditInputTouchable}
-                  onPress={() => openEditModal('creditos', creditos)}
-                >
-                  <Text style={styles.creditInputText}>{creditos}</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.creditLabel}>Créditos:</Text>
+            <TouchableOpacity 
+              style={styles.creditInputTouchable}
+              onPress={() => openEditModal('creditos', creditos)}
+            >
+              <Text style={styles.creditInputText}>{creditos}</Text>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity 
             style={styles.createItemButton}
             onPress={() => setCreateModalVisible(true)}
@@ -2089,36 +2090,8 @@ skillInput: {
     marginTop: 5,
     fontSize: 14,
   },
-  creditContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#0A2D42',
-    height: 60,
-    borderRadius: 10,
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: '#4cf3ffff',
-  },
-  creditLabel: {
-    color: '#4cf3ffff',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginRight: 10,
-  },
-  creditInput: {
-    flex: 1,
-    color: '#4cf3ffff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#0A2D42',
-    borderRadius: 8,
-    padding: 10,
-    marginHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#5683B9',
-    minWidth: 100,
-  },
+
+
   attributesGrid: {
     marginBottom: 20,
   },
@@ -2361,21 +2334,44 @@ skillInput: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-  creditInputTouchable: {
-    flex: 1,
-    backgroundColor: '#1E3A53',
-    borderRadius: 8,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#5683B9',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  creditInputText: {
-    color: '#4cf3ffff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+  creditContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#0A2D42',
+  height: 60,
+  borderRadius: 10,
+  marginBottom: 20,
+  borderWidth: 2,
+  borderColor: '#4cf3ffff',
+  paddingHorizontal: 12, // equilíbrio nas laterais
+},
+
+creditLabel: {
+  color: '#4cf3ffff',
+  fontWeight: 'bold',
+  fontSize: 16,
+  flex: 0.4,             // ocupa 40% do espaço
+  textAlign: 'left',
+},
+
+creditInputTouchable: {
+  flex: 0.6,             // ocupa 60% do espaço
+  backgroundColor: '#1E3A53',
+  borderRadius: 8,
+  paddingVertical: 8,
+  paddingHorizontal: 10,
+  borderWidth: 1,
+  borderColor: '#5683B9',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+creditInputText: {
+  color: '#4cf3ffff',
+  fontSize: 18,
+  fontWeight: 'bold',
+},
+
   attributeInputTouchable: {
     backgroundColor: '#1E3A53',
     borderRadius: 8,
