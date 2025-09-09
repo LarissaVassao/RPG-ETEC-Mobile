@@ -6,11 +6,13 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 $nome = $input['nome'] ?? '';
 $descricao = $input['descricao'] ?? '';
+$senha = password_hash($input['senha']);
 
 try {
-    $res = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, descricao = :descricao");	
+    $res = $pdo->prepare("INSERT INTO $tabela SET nome = :nome, descricao = :descricao, senha = :senha");	
     $res->bindValue(":nome", $nome);
     $res->bindValue(":descricao", $descricao);
+    $res->bindValue(":senha", $senha);
     $res->execute();
 
     $lastId = $pdo->lastInsertId();

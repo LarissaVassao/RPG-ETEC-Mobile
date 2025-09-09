@@ -67,7 +67,7 @@ async function login(){
 
             <TouchableOpacity 
               style={styles.button}
-              onPress={() => navigation.navigate("TelaCampanha")}
+              onPress={() => login()}
             >
               <Text style={styles.buttonText}>ENTRAR CAMPANHA</Text>
             </TouchableOpacity>

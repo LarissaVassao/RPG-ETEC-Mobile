@@ -21,9 +21,9 @@ async function saveData() {
         else{
           console.log("saveData non-empty, proceding");  
           try{
-            const res = await api.post('rpgetec/salvarCampanha.php',{nome: nomeCampanha, descricao: descricao});
+            const res = await api.post('rpgetec/salvarCampanha.php',{nome: nomeCampanha, descricao: descricao, senha: senhaCampanha});
             console.log(res.data);
-            if (res.data.sucesso === false) {
+            if (!res.data.sucesso) {
               Alert.alert("Erro ao salvar", res.data.mensagem);              
               return;
             }
@@ -74,8 +74,9 @@ async function saveData() {
                 style={styles.input}
                 placeholder="Crie uma senha para sua campanha"
                 placeholderTextColor="#999"
-                value={nomeCampanha}
-                onChangeText={setNomeCampanha}
+                keyboardType='secure'
+                value={senhaCampanha}
+                onChangeText={setSenhaCampanha}
               />
             </View>
 

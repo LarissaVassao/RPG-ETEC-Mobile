@@ -30,7 +30,7 @@ else{
     $query->bindParam(':email', $email);
     $query->execute();
     $res = $query->fetch(PDO::FETCH_ASSOC);
-    if ($res && $res['senha'] === $senha) {
+    if ($res && password_verify($senha, PASSWORD_DEFAULT)) {
     echo json_encode(['success' => true]);
 } else {
     echo json_encode(['success' => false]);

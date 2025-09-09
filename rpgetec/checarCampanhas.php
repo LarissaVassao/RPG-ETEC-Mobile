@@ -2,8 +2,7 @@
 
 include_once('conexao.php');
 
-$user = $_GET['user'] ?? '';
-$email = $_GET['email'] ?? '';
+$user = $_GET['id'] ?? '';
 $senha = $_GET['senha'] ?? '';
 
 if ($user){
