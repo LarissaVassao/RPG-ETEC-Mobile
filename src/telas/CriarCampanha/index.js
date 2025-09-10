@@ -9,7 +9,7 @@ import api from "../../../services/api.js";
 export default function App({ navigation }) { 
   const [nomeCampanha, setNomeCampanha] = useState('');
   const [descricao, setDescricao] = useState('');
-  const {senhaCampanha, setSenhaCampanha} = useState('');
+  const [senhaCampanha, setSenhaCampanha] = useState('');
 
 async function saveData() {     
         console.log("saveData start");       ;

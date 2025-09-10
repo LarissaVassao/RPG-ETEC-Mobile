@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import api from "../../../services/api.js";
@@ -9,7 +9,9 @@ export default function App({ navigation }) {
   const [senha, setSenha] = useState('');
 
 async function login(){
-    const res = await  api.post('rpgetec/checarCampanhas.php', {params: {id: id, senha: senha}});
+  try{
+    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: id, senha: senha}});
+    console.log(res.data);
     if (res.data.success)
     {
     navigation.navigate("TelaCampanha", {id})
@@ -17,6 +19,7 @@ async function login(){
     else{
       Alert.alert("Senha ou ID incorreto(s)!")
     }
+  }catch(error){console.log(error);}
   }
 
 

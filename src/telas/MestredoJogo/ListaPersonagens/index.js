@@ -33,6 +33,7 @@ export default function ListaPersonagens({ navigation }) {
                 <Text style={styles.title}>Personagens</Text>
                 
                 <View style={styles.charactersList}>
+                {/* BLOCO DE PERSONAGEM */}
                     <TouchableOpacity 
                         style={styles.characterCard}
                         onPress={() => navigation.navigate("Personagem")}
@@ -47,8 +48,9 @@ export default function ListaPersonagens({ navigation }) {
                         </View>
                         <Ionicons name="chevron-forward" size={20} color="#9ebccc" />
                     </TouchableOpacity>
+                {/* BLOCO DE PERSONAGEM */}
 
-                    <TouchableOpacity 
+                    {/* <TouchableOpacity 
                         style={styles.characterCard}
                         onPress={() => navigation.navigate("Personagem")}
                     >
@@ -76,8 +78,8 @@ export default function ListaPersonagens({ navigation }) {
                             <Text style={styles.characterName}>Personagem Exemplo</Text>
                         </View>
                         <Ionicons name="chevron-forward" size={20} color="#9ebccc" />
-                    </TouchableOpacity>
-                </View>
+                    </TouchableOpacity> */}
+                </View> 
 
             </ScrollView>
 
