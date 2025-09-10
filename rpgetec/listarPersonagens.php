@@ -6,12 +6,13 @@ include_once('conexao.php');
 $id_campanha = $_GET['id_campanha'] ?? '';
 
 if ($id_campanha === '') {
-    echo json_encode(['error' => 'id_campanha not provided']);
+    echo json_encode(['success' => false,
+        'error' => 'id_campanha not provided']);
     exit;
 }
 
 try {
-	$queryStr = "SELECT * FROM personage WHERE id_campanha = :id_campanha";
+	$queryStr = "SELECT * FROM personagem WHERE id_campanha = :id_campanha";
     $query = $pdo->prepare($queryStr);
     $query->bindParam(':id_campanha', $id_campanha);
     $query->execute();
@@ -19,7 +20,7 @@ try {
 
     echo json_encode([
         'success' => true,
-        'data' => $result
+        'data' => $res
     ]);
 } catch (PDOException $e) {
     echo json_encode([

@@ -11,7 +11,6 @@ export default function App({ navigation }) {
 async function login(){
   try{
     const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: id, senha: senha}});
-    console.log(res.data);
     if (res.data.success)
     {
     navigation.navigate("TelaCampanha", {id})

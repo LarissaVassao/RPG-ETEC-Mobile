@@ -21,7 +21,6 @@ foreach ($res as $row) {
         break;
     }
 }
-
 echo json_encode(['unique' => $unique]);
 }
 else{
@@ -30,7 +29,7 @@ else{
     $query->bindParam(':email', $email);
     $query->execute();
     $res = $query->fetch(PDO::FETCH_ASSOC);
-    if ($res && password_verify($senha, PASSWORD_DEFAULT)) {
+    if ($res && password_verify($senha, $res['senha'])) {
     echo json_encode(['success' => true]);
 } else {
     echo json_encode(['success' => false]);

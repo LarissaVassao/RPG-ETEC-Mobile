@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Modal, Pressable } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Modal, Pressable} from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
+
+import api from "../../../../services/api.js";
 
 export default function ListaPersonagens({ navigation }) {
     // Estado para armazenar a lista de personagens
-    const [personagens, setPersonagens] = useState([
-        {
-            id: 1,
-            nome: 'Personagem Exemplo',
-            imagem: require('../../../../assets/img/logo.png')
-        },
-        {
-            id: 2,
-            nome: 'Segundo Personagem',
-            imagem: require('../../../../assets/img/logo.png')
-        },
-        // Adicione mais personagens aqui conforme necessário
-    ]);
+    const [personagens, setPersonagens] = useState([]);
 
+    useEffect(() => {
+        const listarPersonagens = async () => {
+            try {
+              
+                const res = api.get("rpgetec/listarPersonagens.php");
+                console.log(res);
+                if(res.data.success){}
+                // const personagensMapeados = res.map(p => ({
+                //     key: p.id,
+                //     nome: p.nome,
+                //     imagem: require('../../../../assets/img/logo.png') 
+                // }));
+                // setPersonagens(personagensMapeados);
+            } catch (error) {
+                console.error("Erro ao buscar personagens:", error);
+            }
+        };
+
+        listarPersonagens();
+    }, []);
     // Estados para controlar o modal
     const [modalVisible, setModalVisible] = useState(false);
     const [personagemParaDeletar, setPersonagemParaDeletar] = useState(null);
