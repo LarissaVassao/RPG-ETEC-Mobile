@@ -71,7 +71,7 @@ export default function App() {
   return (
     
  <NavigationContainer>
- <Stack.Navigator initialRouteName='Home'>
+ <Stack.Navigator initialRouteName='Personagem'>
 
    {/* <Stack.Screen 
        name="Usuario" 
