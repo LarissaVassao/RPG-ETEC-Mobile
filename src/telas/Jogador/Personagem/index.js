@@ -870,7 +870,7 @@ const [aparencia, setAparencia] = useState({
             style={styles.createItemButton}
             onPress={() => setCreateModalVisible(true)}
           >
-            <Ionicons name="add-outline" size={20} color="#4cf3ffff" style={styles.createItemIcon} />
+            <Ionicons name="add-outline" size={20} color="#FFF" style={styles.createItemIcon} />
             <Text style={styles.createItemText}>Criar Item</Text>
           </TouchableOpacity>          
           
@@ -905,7 +905,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.actionButton}
                       onPress={() => handleEditEquipment(item)}
                     >
-                      <Ionicons name="pencil-outline" size={20} color="#4cf3ffff" />
+                      <Ionicons name="pencil-outline" size={20} color="#FFF" />
                     </TouchableOpacity>
                     
                     <TouchableOpacity 
@@ -1389,10 +1389,10 @@ const [aparencia, setAparencia] = useState({
 const styles = StyleSheet.create({
   colors: {
     primaryBlue: '#092534',
-    secondaryBlue: '#1E3A53',
-    lightBlue: '#0A2D42',
+    secondaryBlue: '#1A709E',
+    lightBlue: '#2295D3',
     darkBlue: '#124A69',
-    gold: '#4cf3ffff',
+    gold: '#FFF',
     white: '#FFFFFF',
     lightGray: '#CCCCCC',
     darkGray: '#333333'
@@ -1525,7 +1525,6 @@ backButton: {
   occupationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: '10',
   },
   occupationLabel: {
     fontSize: 15,
@@ -1590,26 +1589,26 @@ backButton: {
     padding: 10,
   },
   containerWithBorder: {
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 15,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
     marginBottom: 15,
   },
   label: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#0A2D42',
-    color: '#4cf3ffff',
+    backgroundColor: '#2295D3',
+    color: '#FFF',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     fontSize: 14,
   },
 sectionTitle: {
@@ -1629,18 +1628,18 @@ tableContainer: {
   borderRadius: 12,
   overflow: 'hidden',
   borderWidth: 2,
-  borderColor: '#0A2D42',
+  borderColor: '#2295D3',
   marginHorizontal: 2, // Adicione margens laterais menores
 },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 15,
     borderBottomWidth: 2,
-    borderBottomColor: '#4cf3ffff',
+    borderBottomColor: '#FFF',
   },
   headerText: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
@@ -1668,21 +1667,21 @@ cellText: {
 cellName: { 
   flex: 2,
   fontWeight: 'bold',
-  color: '#4cf3ffff',
+  color: '#FFF',
   textAlign: 'center', // Centralizado
   paddingHorizontal: 5, // Pequeno padding lateral
 },
 cellPrice: { 
   flex: 1,
   fontWeight: 'bold',
-  color: '#4cf3ffff',
+  color: '#FFF',
   textAlign: 'center', // Centralizado
   paddingHorizontal: 5,
 },
 cellWeight: { 
   flex: 1,
   fontWeight: 'bold',
-  color: '#4cf3ffff',
+  color: '#FFF',
   textAlign: 'center', // Centralizado
   paddingHorizontal: 5,
 },
@@ -1696,7 +1695,7 @@ cellActions: {
 
 
 credit: {
-  color: '#4cf3ffff',
+  color: '#FFF',
   fontWeight: 'bold',
 },
   modalOverlay: {
@@ -1844,7 +1843,7 @@ descriptionContainer: {
  skillTitle: {
   fontSize: 27,
   fontWeight: 'bold',
-  color: '#4cf3ffff',
+  color: '#FFF',
   textAlign: 'center',
   marginTop: 10,
   marginBottom: 15,
@@ -1863,33 +1862,33 @@ skillBackground: {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
-  backgroundColor: '#0A2D42',
+  backgroundColor: '#2295D3',
   paddingVertical: 10,
   paddingHorizontal: 10,
   borderRadius: 8,
   borderWidth: 2,
-  borderColor: '#4cf3ffff',
+  borderColor: '#FFF',
 },
 skillText: {
   flex: 1,
   fontSize: 16,
     textTransform: 'uppercase',
   fontWeight: 'bold',
-  color: '#4cf3ffff',
+  color: '#FFF',
   
 },
   skillInputTouchable: {
     width: 100,
     height: 35,
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
   },
   skillInputText: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -1912,7 +1911,7 @@ skillInput: {
   attributesBackgroundTop:{
     width: '30%',
     height: 110,
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     marginInline: 5,
     borderTopEndRadius: 10,
     borderTopStartRadius: 10,
@@ -1921,7 +1920,7 @@ skillInput: {
  attributesBackgroundBottom:{
     width: '30%',
     height: 110,
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     marginInline: 5,
     borderBottomEndRadius: 10,
     borderBottomStartRadius: 10,
@@ -1936,13 +1935,13 @@ skillInput: {
     top: 250,
     width: '70%',
     height: 110,
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     borderRadius: 10
   },
   appearanceTitle: {
     fontSize: 27,
     fontWeight: 'bold',
-    color: '#4cf3ffff',
+    color: '#FFF',
     textAlign: 'center',
     marginBottom: 20,
     textShadowColor: '#000',
@@ -1954,37 +1953,36 @@ skillInput: {
   },
   appearanceItem: {
     marginBottom: 15,
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 15,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#4cf3ffff',
+    borderWidth: 2,
+    borderColor: '#FFF',
   },
   appearanceLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#4cf3ffff',
+    color: '#FFF',
     marginBottom: 8,
   },
   appearanceInput: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     color: '#FFF',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     fontSize: 14,
   },
    appearanceInputTouchable: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     color: '#FFF',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     fontSize: 14,
     minHeight: 44,
-    justifyContent: 'center',
   },
   bioInputTouchable: {
     minHeight: 100,
@@ -2013,12 +2011,12 @@ skillInput: {
   },
   resourcesContainer: {
     justifyContent: 'center', 
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
     borderWidth: 2,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
     width: '95%',
     alignSelf: 'center',
   },
@@ -2028,7 +2026,7 @@ skillInput: {
     marginBottom: 10,
   },
   resourceLabel: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     width: 80,
     fontSize: 16,
@@ -2045,16 +2043,16 @@ skillInput: {
   },
   resourceInput: {
     flex: 1,
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     borderRadius: 8,
     padding: 10,
     marginHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     minWidth: 100,
   },
   statsRow: {
@@ -2063,29 +2061,29 @@ skillInput: {
     marginBottom: 20,
   },
   statContainer: {
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 5,
     borderWidth: 2,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
   },
   statInput: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     borderRadius: 8,
     padding: 5,
     minWidth: 60,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
   },
   statLabel: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     marginTop: 5,
     fontSize: 14,
@@ -2101,29 +2099,29 @@ skillInput: {
     marginBottom: 20,
   },
   attributeItem: {
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 5,
     borderWidth: 2,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
   },
   attributeInput: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     borderRadius: 8,
     padding: 10,
     minWidth: 70,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
   },
   attributeLabel: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     marginTop: 8,
     fontSize: 13.3,
@@ -2135,28 +2133,28 @@ skillInput: {
     marginBottom: 20,
   },
   luckContainer: {
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     width: '32%', 
     borderWidth: 2,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
   },
   luckInput: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     borderRadius: 8,
     padding: 10,
     minWidth: 70,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
   },
   luckLabel: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     marginTop: 8,
     fontSize: 14,
@@ -2166,12 +2164,12 @@ skillInput: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0A2D42',
+    backgroundColor: '#2295D3',
     padding: 12,
     borderRadius: 8,
     marginBottom: 15,
     borderWidth: 2,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
     alignSelf: 'center',
     alignItems: 'center'
 
@@ -2180,7 +2178,7 @@ skillInput: {
     marginRight: 8,
   },
   createItemText: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     fontSize: 16,
     width: '90%',
@@ -2193,12 +2191,12 @@ skillInput: {
     width: '90%',
     maxHeight: '80%',
     borderWidth: 3,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
   },
   createModalTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#4cf3ffff',
+    color: '#FFF',
     textAlign: 'center',
     marginBottom: 20,
     textShadowColor: '#000',
@@ -2215,18 +2213,18 @@ skillInput: {
     marginBottom: 20,
   },
   inputLabel: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 8,
   },
   textInput: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     color: '#FFF',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     fontSize: 14,
   },
   descriptionInput: {
@@ -2234,10 +2232,10 @@ skillInput: {
     textAlignVertical: 'top',
   },
   pickerContainer: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     overflow: 'hidden',
   },
   picker: {
@@ -2262,7 +2260,7 @@ skillInput: {
     borderColor: '#4A5568',
   },
   createButton: {
-    backgroundColor: '#4cf3ffff',
+    backgroundColor: '#FFF',
     borderWidth: 1,
     borderColor: '#2C7A7B',
   },
@@ -2280,22 +2278,22 @@ skillInput: {
     borderRadius: 15,
     width: '80%',
     borderWidth: 3,
-    borderColor: '#4cf3ffff',
+    borderColor: '#FFF',
   },
   editModalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#4cf3ffff',
+    color: '#FFF',
     textAlign: 'center',
     marginBottom: 20,
   },
   editModalInput: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     color: '#FFF',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     fontSize: 16,
     marginBottom: 20,
     textAlign: 'center'
@@ -2304,101 +2302,101 @@ skillInput: {
   // Estilos para os elementos touchable que substituem os TextInput
   resourceInputTouchable: {
     flex: 1,
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     borderRadius: 8,
     padding: 10,
     marginHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     minWidth: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   resourceInputText: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 16,
     fontWeight: 'bold',
   },
   statInputTouchable: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     borderRadius: 8,
     padding: 5,
     minWidth: 60,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     justifyContent: 'center',
     alignItems: 'center',
   },
   statInputText: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 20,
     fontWeight: 'bold',
   },
-  creditContainer: {
+creditContainer: {
   flexDirection: 'row',
   alignItems: 'center',
-  backgroundColor: '#0A2D42',
-  height: 60,
+  backgroundColor: '#2295D3',
+  height: 'auto', // Alterado de 60 para 'auto'
   borderRadius: 10,
   marginBottom: 20,
   borderWidth: 2,
-  borderColor: '#4cf3ffff',
-  paddingHorizontal: 12, // equilíbrio nas laterais
+  borderColor: '#FFF',
+  paddingHorizontal: 12,
+  paddingVertical: 8, // 
 },
 
 creditLabel: {
-  color: '#4cf3ffff',
+  color: '#FFF',
   fontWeight: 'bold',
   fontSize: 16,
   flex: 0.4,             // ocupa 40% do espaço
   textAlign: 'left',
 },
-
 creditInputTouchable: {
-  flex: 0.6,             // ocupa 60% do espaço
-  backgroundColor: '#1E3A53',
+  flex: 0.6,
+  backgroundColor: '#1A709E',
   borderRadius: 8,
-  paddingVertical: 8,
   paddingHorizontal: 10,
   borderWidth: 1,
-  borderColor: '#5683B9',
+  borderColor: '#ADE2FF',
   justifyContent: 'center',
   alignItems: 'center',
+  height: 35,
 },
 
 creditInputText: {
-  color: '#4cf3ffff',
+  color: '#FFF',
   fontSize: 18,
   fontWeight: 'bold',
 },
 
   attributeInputTouchable: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     borderRadius: 8,
     padding: 10,
     minWidth: 70,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     justifyContent: 'center',
     alignItems: 'center',
   },
   attributeInputText: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 24,
     fontWeight: 'bold',
   },
   luckInputTouchable: {
-    backgroundColor: '#1E3A53',
+    backgroundColor: '#1A709E',
     borderRadius: 8,
     padding: 10,
     minWidth: 70,
     borderWidth: 1,
-    borderColor: '#5683B9',
+    borderColor: '#ADE2FF',
     justifyContent: 'center',
     alignItems: 'center',
   },
   luckInputText: {
-    color: '#4cf3ffff',
+    color: '#FFF',
     fontSize: 24,
     fontWeight: 'bold',
   },
@@ -2428,21 +2426,21 @@ editNameModalContainer: {
   borderRadius: 15,
   width: '90%',
   borderWidth: 3,
-  borderColor: '#4cf3ffff',
+  borderColor: '#FFF',
 },
 editNameInput: {
-  backgroundColor: '#1E3A53',
+  backgroundColor: '#1A709E',
   color: '#FFF',
   padding: 12,
   borderRadius: 8,
   borderWidth: 1,
-  borderColor: '#5683B9',
+  borderColor: '#ADE2FF',
   fontSize: 16,
   marginBottom: 10,
   textAlign: 'center'
 },
 charCounter: {
-  color: '#4cf3ffff',
+  color: '#FFF',
   textAlign: 'center',
   marginBottom: 20,
   fontSize: 12,
