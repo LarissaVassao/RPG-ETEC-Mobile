@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Modal, Pressable} from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 
@@ -12,15 +12,16 @@ export default function ListaPersonagens({ navigation }) {
         const listarPersonagens = async () => {
             try {
               
-                const res = api.get("rpgetec/listarPersonagens.php");
-                console.log(res);
-                if(res.data.success){}
-                // const personagensMapeados = res.map(p => ({
-                //     key: p.id,
-                //     nome: p.nome,
-                //     imagem: require('../../../../assets/img/logo.png') 
-                // }));
-                // setPersonagens(personagensMapeados);
+                const res = await api.get("rpgetec/listarPersonagens.php", {params: {id_campanha: 1}});
+                console.log(res.data);
+                if(res.data.success){
+                const personagensMapeados = res.data.personagens.map(p => ({
+                    key: p.id,
+                    nome: p.nome,
+                    imagem: require('../../../../assets/img/logo.png') 
+                })); 
+                setPersonagens(personagensMapeados);
+              }
             } catch (error) {
                 console.error("Erro ao buscar personagens:", error);
             }
@@ -92,7 +93,7 @@ export default function ListaPersonagens({ navigation }) {
                             <TouchableOpacity 
                                 key={personagem.id}
                                 style={styles.characterCard}
-                                onPress={() => navigation.navigate("Personagem", { personagemId: personagem.id })}
+                                onPress={() => navigation.navigate("Personagem", { id: personagem.id })}
                             >
                                 <Image 
                                     style={styles.characterImage} 

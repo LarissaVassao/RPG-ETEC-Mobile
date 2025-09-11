@@ -5,7 +5,7 @@ include_once('conexao.php');
 
 $id_campanha = $_GET['id_campanha'] ?? '';
 
-if ($id_campanha === '') {
+if ($id_campanha == '') {
     echo json_encode(['success' => false,
         'error' => 'id_campanha not provided']);
     exit;
@@ -20,7 +20,7 @@ try {
 
     echo json_encode([
         'success' => true,
-        'data' => $res
+        'personagens' => $res 
     ]);
 } catch (PDOException $e) {
     echo json_encode([
