@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
 import { styles, colors } from './styles';
 
+import api from "../../../../services/api.js";
+
 export default function Personagem({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
   const [rpgEquipments, setRpgEquipments] = useState([
-    {
-      id: 1,
-      name: "Espada Longa",
-      type: "arma",
-      price: 150,
-      weight: 2,
-      description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo.",
-    },
+    // {
+    //   id: 1,
+    //   name: "Espada Longa",
+    //   type: "arma",
+    //   price: 150,
+    //   weight: 2.5,
+    //   description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo.",
+    // },
   ]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -25,8 +27,8 @@ export default function Personagem({ navigation }) {
     requirement: '',
     damage: '',
     critical: '',
-    price: 0, 
-    weight: 0  
+    price: 0, // Adicione este campo
+    weight: 0  // Adicione este campo
   });
   
   // Estados para os modais de edição
@@ -36,44 +38,47 @@ export default function Personagem({ navigation }) {
   const [tempValue, setTempValue] = useState('');
   
   // Estados para os valores dos atributos
-  const [vida, setVida] = useState({current: 10, max: 10});
-  const [mental, setMental] = useState({current: 10, max: 10});
-  const [energia, setEnergia] = useState({current: 10, max: 10});
-  const [ca, setCa] = useState(10);
-  const [carga, setCarga] = useState(50);
-  const [movimento, setMovimento] = useState(9);
-  const [creditos, setCreditos] = useState(1);
-  const [forca, setForca] = useState(10);
-  const [agilidade, setAgilidade] = useState(12);
-  const [constituicao, setConstituicao] = useState(14);
-  const [vontade, setVontade] = useState(8);
-  const [inteligencia, setInteligencia] = useState(16);
-  const [percepcao, setPercepcao] = useState(14);
-  const [sorte, setSorte] = useState(18);
-  // Novo estado para a modal de seleção de profissao
-const [ocupationModalVisible, setocupationModalVisible] = useState(false);
-const [selectedocupation, setSelectedocupation] = useState('');
-    // Estados para as atributos
-const [atributos, setAtributos] = useState({
-  acalmar: 1,
-  acrobacia: 1,
-  atletismo: 1,
-  atualidades: 1,
-  analise: 1,
-  charme: 1,
-  eletronicos: 1,
-  enganar: 1,
-  furtividade: 1,
-  informatica: 1,
-  iniciativa: 1,
-  intimidacao: 1,
-  intuicao: 1,
-  medicina: 1,
-  mecanica: 1,
-  persuasao: 1,
-  primeirosSocorros: 1,
-  procurar: 1,
-});
+  const [vida, setVida] = useState();
+  const [vidaAtual, setVidaAtual] = useState(10);
+  const [mental, setMental] = useState(10);
+  const [mentalAtual, setMentalAtual] = useState(10);
+  const [energia, setEnergia] = useState(10);
+  const [energiaAtual, setEnergiaAtual] = useState(10);
+  const [ca, setCa] = useState(3);
+  const [carga, setCarga] = useState(0);
+  const [cargaAtual, setCargaAtual] = useState(50);
+  const [movimento, setMovimento] = useState(6);
+  const [credito, setCredito] = useState(0);
+  const [creditoMax, setCreditoMax] = useState(0);
+  const [forca, setForca] = useState(1);
+  const [agilidade, setAgilidade] = useState(1);
+  const [constituicao, setConstituicao] = useState(1);
+  const [vontade, setVontade] = useState(1);
+  const [inteligencia, setInteligencia] = useState(1);
+  const [percepcao, setPercepcao] = useState(1);
+  const [sorte, setSorte] = useState(1);
+
+  // Estados para as pericias
+  const [pericias, setPericias] = useState({
+    // acalmar: '1',
+    // acrobacia: '1',
+    // atletismo: '1',
+    // atualidades: '1',
+    // analise: '1',
+    // charme: '1',
+    // eletronicos: '1',
+    // enganar: '1',
+    // furtividade: '1',
+    // informatica: '1',
+    // iniciativa: '1',
+    // intimidacao: '1',
+    // intuicao: '1',
+    // medicina: '1',
+    // mecanica: '1',
+    // persuasao: '1',
+    // primeirosSocorros: '1',
+    // procurar: '1'
+  });
 
   // Estados para o nome do personagem e modal
   const [characterName, setCharacterName] = useState('Nome do Personagem');
@@ -86,25 +91,57 @@ const [atributos, setAtributos] = useState({
   const [editingEquipment, setEditingEquipment] = useState(null);
   const [editEquipmentModalVisible, setEditEquipmentModalVisible] = useState(false);
 
+    useEffect(() => {
+        const checarPersonagem = async () => {
+            try {
+              
+                const res = await api.get("rpgetec/checarPersonagem.php", {params: {id_personagem: 1}});
+                console.log(res.data);
+                if (res.data.success) {
+                  const p = res.data.personagem;
+                  console.log('success confirmed, proceding');
+                  console.log(p);
+                  setVida(p.vida);
+                  setVidaAtual(p.vidaAtual);
+                  setMental(p.mental);
+                  setMentalAtual(p.mentalAtual);
+                  setEnergia(p.energia);
+                  setEnergiaAtual(p.energiaAtual);
+                  setCa(p.ca);
+                  setCarga(p.carga);
+                  setCargaAtual(p.cargaAtual);
+                  setMovimento(p.movimento);
+                  setCredito(p.credito);
+                  setCreditoMax(p.creditoMax)
+                  setForca(p.forca);
+                  setAgilidade(p.agilidade);
+                  setConstituicao(p.constituicao);
+                  setVontade(p.vontade);
+                  setInteligencia(p.inteligencia);
+                  setPercepcao(p.percepcao);
+                  setSorte(p.sorte);
+                  //setPericias(res.data.pericias)
+                }
+            } catch (error) {
+                console.error("Erro ao buscar personagens:", error);
+            }
+        };
+
+        checarPersonagem();
+    }, [vida]);;
+        
+  
+
   const handleButtonPress = (color) => {
     setActiveView(color);
   };
 
   const handleTypeChange = (itemId, newType) => {
     setRpgEquipments(prev => prev.map(item => 
-      item.id === itemId ? {...item, type: newType} : item
+      item.id === itemId ? { ...item, type: newType } : item
     ));
   };
-// Função para abrir a modal de seleção de profissao
-const openocupationModal = () => {
-  setSelectedocupation(playerocupation);
-  setocupationModalVisible(true);
-};
-// Função para salvar a profissao selecionada
-const saveocupationSelection = () => {
-  setPlayerocupation(selectedocupation);
-  setocupationModalVisible(false);
-};
+
   const handleCreateEquipment = () => {
     if (!newEquipment.name.trim()) {
       alert('Por favor, digite um nome para o equipamento');
@@ -115,8 +152,8 @@ const saveocupationSelection = () => {
       id: Math.max(...rpgEquipments.map(item => item.id), 0) + 1,
       name: newEquipment.name,
       type: newEquipment.type,
-      price: newEquipment.price, 
-      weight: newEquipment.weight,
+      price: newEquipment.price, // CORRIGIDO: estava 0
+      weight: newEquipment.weight, // CORRIGIDO: estava 0
       description: newEquipment.description,
       requirement: newEquipment.requirement,
       damage: newEquipment.damage,
@@ -131,99 +168,61 @@ const saveocupationSelection = () => {
       requirement: '',
       damage: '',
       critical: '',
-      price: 0,
-      weight: 0,
+      price: 0, // Mantém os valores padrão
+     weight: 0  // Mantém os valores padrão
     });
     setCreateModalVisible(false);
   };
 
   // Função para abrir o modal de edição
-const openEditModal = (field, value) => {
-  setEditingField(field);
-  
-  // Define placeholder baseado no campo
-  let placeholder = "Digite aqui...";
-  if (field === 'playerName') placeholder = "Digite o nome do player";
-   if (field === 'playerocupation') {
-    openocupationModal();
-    return;
-  }
-  
-  setEditingField(field);
-  if (field === 'playerLevel') placeholder = "Ex: 1, 2, 3...";
-  
-  // Se for um número, converte para string para exibição no TextInput
-  if (typeof value === 'number') {
-    setCurrentValue(value.toString());
-    setTempValue(value.toString());
-  } else if (typeof value === 'object' && value !== null) {
-    // Se for um objeto (como vida/mental/energia), trata de forma especial
-    setCurrentValue(`${value.current}/${value.max}`);
-    setTempValue(`${value.current}/${value.max}`);
-  } else {
-    // Se for string, mantém como está
+  const openEditModal = (field, value) => {
+    setEditingField(field);
     setCurrentValue(value);
     setTempValue(value);
-  }
-  
-  setEditModalVisible(true);
-};
-  // Função para salvar a edição de atributos
-  const saveAtributoEdit = () => {
-    setAtributos(prev => ({
+    setEditModalVisible(true);
+  };
+
+  // Função para salvar a edição de pericias
+  const savePericiaEdit = () => {
+    setPericias(prev => ({
       ...prev,
       [editingField]: tempValue
     }));
     setEditModalVisible(false);
   };
 
-const saveEdit = () => {
-  if (editingField in atributos) {
-    // Converte para número antes de salvar
-    const numericValue = parseInt(tempValue) || 0;
-    setAtributos(prev => ({
-      ...prev,
-      [editingField]: numericValue
-    }));
-  } else {
-    switch (editingField) {
-      case 'vida': 
-      case 'mental': 
-      case 'energia': 
-        // Converte a string "current/max" de volta para objeto
-        const values = tempValue.split('/');
-        const current = parseInt(values[0]) || 0;
-        const max = parseInt(values[1]) || 0;
-        
-        if (editingField === 'vida') {
-          setVida({current, max});
-        } else if (editingField === 'mental') {
-          setMental({current, max});
-        } else if (editingField === 'energia') {
-          setEnergia({current, max});
-        }
-        break;
-      
-      // Novos casos para os campos do player
-      case 'playerName': setPlayerName(tempValue); break;
-      case 'playerLevel': setPlayerLevel(tempValue); break;
-      
-      case 'ca': setCa(parseInt(tempValue) || 0); break;
-      case 'carga': setCarga(parseInt(tempValue) || 0); break;
-      case 'movimento': setMovimento(parseInt(tempValue) || 0); break;
-      case 'creditos': setCreditos(parseInt(tempValue) || 0); break;
-      case 'forca': setForca(parseInt(tempValue) || 0); break;
-      case 'agilidade': setAgilidade(parseInt(tempValue) || 0); break;
-      case 'constituicao': setConstituicao(parseInt(tempValue) || 0); break;
-      case 'vontade': setVontade(parseInt(tempValue) || 0); break;
-      case 'inteligencia': setInteligencia(parseInt(tempValue) || 0); break;
-      case 'percepcao': setPercepcao(parseInt(tempValue) || 0); break;
-      case 'sorte': setSorte(parseInt(tempValue) || 0); break;
-      default: break;
+  // Função para salvar a edição
+  const saveEdit = async () => {
+  if (editingField in pericias) {
+  savePericiaEdit();
+  }else {
+    try{       
+      const res = await api.get("rpgetec/alterarPersonagem.php", {params: {id_personagem: 1, valor: tempValue, atributo:editingField}});
+      console.log(res.data);
+      switch (editingField) {
+        case 'vida': setVida(tempValue); break;
+        case 'mental': setMental(tempValue); break;
+        case 'energia': setEnergia(tempValue); break;
+        case 'ca': setCa(tempValue); break;
+        case 'carga': setCarga(tempValue); break;
+        case 'movimento': setMovimento(tempValue); break;
+        case 'credito': setCredito(tempValue); break;
+        case 'forca': setForca(tempValue); break;
+        case 'agilidade': setAgilidade(tempValue); break;
+        case 'constituicao': setConstituicao(tempValue); break;
+        case 'vontade': setVontade(tempValue); break;
+        case 'inteligencia': setInteligencia(tempValue); break;
+        case 'percepcao': setPercepcao(tempValue); break;
+        case 'sorte': setSorte(tempValue); break;
+        default: break;
+      }
+    }catch (error) {
+      console.error("Erro ao alterar personagens:", error);
+      }
+      setEditModalVisible(false);
     }
-  }
-  setEditModalVisible(false);
-};
+  };
+
   // Função para cancelar a edição
   const cancelEdit = () => {
     setTempValue(currentValue);
@@ -297,7 +296,7 @@ const [aparencia, setAparencia] = useState({
   const saveAppearanceEdit = () => {
     setAparencia(prev => ({
       ...prev,
-      [editingAppearanceField]:tempAppearanceValue
+      [editingAppearanceField]: tempAppearanceValue
     }));
     setEditAppearanceModalVisible(false);
   };
@@ -315,27 +314,30 @@ const [aparencia, setAparencia] = useState({
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#124A69" barStyle="light-content"/>      
+      <StatusBar backgroundColor="#124A69" barStyle="light-content" />      
 
-    <View style={styles.header}>
-    <TouchableOpacity 
-      style={styles.backButton}
-      onPress={() => navigation.navigate("TelaCampanha")}
-    >
-      <Ionicons name="arrow-back" size={20} color="#fff"/>
-    </TouchableOpacity>
-    
-    <TouchableOpacity onPress={openNameEditModal}>
-      <Text style={styles.headerTitle}>{characterName}</Text>
-    </TouchableOpacity>
-  </View>
-
+   <View style={styles.header}>
+  <TouchableOpacity 
+    style={styles.backButton}
+    onPress={() => navigation.navigate("TelaCampanha")}
+  >
+    <Ionicons name="arrow-back" size={20} color="#fff" />
+  </TouchableOpacity>
+  
+  <TouchableOpacity onPress={openNameEditModal}>
+    <Text style={styles.headerTitle}>{characterName}</Text>
+  </TouchableOpacity>
+</View>
+{/*  */}
       <Modal
         visible={editModalVisible}
         transparent={true}
         animationType="slide"
         onRequestClose={cancelEdit}
       >
+
+       
+
         <View style={styles.modalOverlay}>
           <View style={styles.editModalContainer}>
             <Text style={styles.editModalTitle}>Editar {editingField}</Text>
@@ -430,6 +432,7 @@ const [aparencia, setAparencia] = useState({
           </View>
         </View>
       </Modal>
+{/* Modal para editar nome do personagem */}
       <Modal
         visible={editNameModalVisible}
         transparent={true}
@@ -471,83 +474,34 @@ const [aparencia, setAparencia] = useState({
           </View>
         </View>
       </Modal> 
-      {/* Modal para seleção de profissao */}
-      <Modal
-        visible={ocupationModalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setocupationModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.editModalContainer}>
-            <Text style={styles.editModalTitle}>Selecionar Profissão</Text>
-            
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={selectedocupation}
-                style={styles.picker}
-                onValueChange={(itemValue) => setSelectedocupation(itemValue)}
-              >
-                <Picker.Item label="Selecione uma profissao" value="" />
-                <Picker.Item label="Médico" value="Médico" />
-                <Picker.Item label="Professor" value="Professor" />
-                <Picker.Item label="Engenheiro" value="Engenheiro" />
-                <Picker.Item label="Soldado" value="Soldado" />
-                <Picker.Item label="Cientista" value="Cientista" />
-                <Picker.Item label="Técnico" value="Técnico" />
-                <Picker.Item label="Piloto" value="Piloto" />
-                <Picker.Item label="Investigador" value="Investigador" />
-              </Picker>
-            </View>
-            
-            <View style={styles.modalButtons}>
-              <TouchableOpacity 
-                style={[styles.modalButton, styles.cancelButton]}
-                onPress={() => setocupationModalVisible(false)}
-              >
-                <Text style={styles.cancelButtonText}>Cancelar</Text>
-              </TouchableOpacity>
-              
-              <TouchableOpacity 
-                style={[styles.modalButton, styles.createButton]}
-                onPress={saveocupationSelection}
-              >
-                <Text style={styles.createButtonText}>Salvar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
 
       <View style={styles.characterBase}>
         <View style={styles.nameCharacter}>
-          <TouchableOpacity 
-            style={styles.nameInputTouchable}
-            onPress={() => openEditModal('playerName', playerName)}
-          >
-            <Text style={styles.nameText}>{playerName}</Text>
-          </TouchableOpacity>
+          <TextInput 
+            style={styles.name}
+            placeholder="Nome do player"
+            placeholderTextColor="#000"
+          />
         </View>
 
         <View style={styles.ocupationCharacter}>
-          <View style={styles.ocupationContainer}>
+          <View style={styles.occupationItem}>
             <Text style={styles.occupationLabel}>Profissão:</Text>
-            <TouchableOpacity 
-              style={styles.occupationInputTouchable}
-              onPress={openocupationModal}
-            >
-              <Text style={styles.occupationText}>{playerocupation || 'Selecione uma profissao'}</Text>
-            </TouchableOpacity>
+            <TextInput 
+              style={styles.occupationInput}
+              placeholder="Ex: Médico"
+              placeholderTextColor="#666"
+            />
           </View>
           
-          <View style={styles.levelContainer}>
+          <View style={styles.occupationItem}>
             <Text style={styles.occupationLabel}>Nível:</Text>
-            <TouchableOpacity 
-              style={styles.occupationInputTouchable}
-              onPress={() => openEditModal('playerLevel', playerLevel)}
-            >
-              <Text style={styles.occupationText}>{playerLevel || 'Ex: 1'}</Text>
-            </TouchableOpacity>
+            <TextInput 
+              style={styles.occupationInput}
+              placeholder="Ex: 1"
+              placeholderTextColor="#666"
+              keyboardType="numeric"
+            />
           </View>
         </View>
       </View>
@@ -585,32 +539,37 @@ const [aparencia, setAparencia] = useState({
               <View style={styles.resourcesContainer}>
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Vida:</Text>
-                  <TouchableOpacity 
-                    style={styles.resourceInputTouchable}
-                    onPress={() => openEditModal('vida', vida)}
-                  >
-                    <Text style={styles.resourceInputText}>{`${vida.current}/${vida.max}`}</Text>
-                  </TouchableOpacity>
+
+                    <TouchableOpacity 
+                      style={styles.resourceInputTouchable}
+                      onPress={() => openEditModal('vida', vida)}
+                    >
+                      <Text style={styles.resourceInputText}>{vida}</Text>
+                    </TouchableOpacity>
+ 
                 </View>
 
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Mental:</Text>
-                  <TouchableOpacity 
-                    style={styles.resourceInputTouchable}
-                    onPress={() => openEditModal('mental', mental)}
-                  >
-                    <Text style={styles.resourceInputText}>{`${mental.current}/${mental.max}`}</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={styles.resourceInputTouchable}
+                      onPress={() => openEditModal('mental', mental)}
+                    >
+                      <Text style={styles.resourceInputText}>{mental}</Text>
+                    </TouchableOpacity>
+
+                
                 </View>
 
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Energia:</Text>
                   <TouchableOpacity 
-                    style={styles.resourceInputTouchable}
-                    onPress={() => openEditModal('energia', energia)}
-                  >
-                    <Text style={styles.resourceInputText}>{`${energia.current}/${energia.max}`}</Text>
-                  </TouchableOpacity>
+                      style={styles.resourceInputTouchable}
+                      onPress={() => openEditModal('energia', energia)}
+                    >
+                      <Text style={styles.resourceInputText}>{energia}</Text>
+                    </TouchableOpacity>
+                 
                 </View>
               </View>
 
@@ -620,7 +579,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.statInputTouchable}
                     onPress={() => openEditModal('ca', ca)}
                   >
-                    <Text style={styles.statInputText}>{ca.toString()}</Text>
+                    <Text style={styles.statInputText}>{ca}</Text>
                   </TouchableOpacity>
                   <Text style={styles.statLabel}>CA</Text>
                 </View>
@@ -630,7 +589,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.statInputTouchable}
                     onPress={() => openEditModal('carga', carga)}
                   >
-                    <Text style={styles.statInputText}>{carga.toString()}</Text>
+                    <Text style={styles.statInputText}>{carga}</Text>
                   </TouchableOpacity>
                   <Text style={styles.statLabel}>Carga</Text>
                 </View>
@@ -640,21 +599,13 @@ const [aparencia, setAparencia] = useState({
                     style={styles.statInputTouchable}
                     onPress={() => openEditModal('movimento', movimento)}
                   >
-                    <Text style={styles.statInputText}>{movimento.toString()}</Text>
+                    <Text style={styles.statInputText}>{movimento}</Text>
                   </TouchableOpacity>
                   <Text style={styles.statLabel}>Movimento</Text>
                 </View>
               </View>
 
-              <View style={styles.creditContainer}>
-                <Text style={styles.creditLabel}>Créditos:</Text>
-                <TouchableOpacity 
-                  style={styles.creditInputTouchable}
-                  onPress={() => openEditModal('creditos', creditos)}
-                >
-                  <Text style={styles.creditInputText}>{creditos.toString()}</Text>
-                </TouchableOpacity>
-              </View>
+            
 
               <View style={styles.attributesGrid}>
                 <View style={styles.attributeRow}>
@@ -663,7 +614,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('forca', forca)}
                     >
-                      <Text style={styles.attributeInputText}>{forca.toString()}</Text>
+                      <Text style={styles.attributeInputText}>{forca}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Força</Text>
                   </View>
@@ -673,7 +624,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('agilidade', agilidade)}
                     >
-                      <Text style={styles.attributeInputText}>{agilidade.toString()}</Text>
+                      <Text style={styles.attributeInputText}>{agilidade}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Agilidade</Text>
                   </View>
@@ -683,7 +634,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('constituicao', constituicao)}
                     >
-                      <Text style={styles.attributeInputText}>{constituicao.toString()}</Text>
+                      <Text style={styles.attributeInputText}>{constituicao}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Constituição</Text>
                   </View>
@@ -695,7 +646,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('vontade', vontade)}
                     >
-                      <Text style={styles.attributeInputText}>{vontade.toString()}</Text>
+                      <Text style={styles.attributeInputText}>{vontade}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Vontade</Text>
                   </View>
@@ -705,7 +656,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('inteligencia', inteligencia)}
                     >
-                      <Text style={styles.attributeInputText}>{inteligencia.toString()}</Text>
+                      <Text style={styles.attributeInputText}>{inteligencia}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Inteligência</Text>
                   </View>
@@ -715,7 +666,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('percepcao', percepcao)}
                     >
-                      <Text style={styles.attributeInputText}>{percepcao.toString()}</Text>
+                      <Text style={styles.attributeInputText}>{percepcao}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Percepção</Text>
                   </View>
@@ -727,7 +678,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.luckInputTouchable}
                       onPress={() => openEditModal('sorte', sorte)}
                     >
-                      <Text style={styles.luckInputText}>{sorte.toString()}</Text>
+                      <Text style={styles.luckInputText}>{sorte}</Text>
                     </TouchableOpacity>
                     <Text style={styles.luckLabel}>Sorte</Text>
                   </View>
@@ -736,19 +687,18 @@ const [aparencia, setAparencia] = useState({
             </ScrollView>
           </View>
         }
-        
         {activeView === 'green' && (
           <View style={styles.greenView}>
-            <Text style={styles.viewTitle}>ATRIBUTOS</Text>
+            <Text style={styles.viewTitle}>HABILIDADES</Text>
             <ScrollView contentContainerStyle={styles.scrollContent}>
               <View style={styles.skillContainer}>
                 <View style={styles.skillBackground}>
                   <Text style={styles.skillText}>Acalmar</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('acalmar', atributos.acalmar)}
+                    onPress={() => openEditModal('acalmar', pericias.acalmar)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.acalmar.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.acalmar || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -758,9 +708,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Acrobacia</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('acrobacia', atributos.acrobacia)}
+                    onPress={() => openEditModal('acrobacia', pericias.acrobacia)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.acrobacia.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.acrobacia || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -770,9 +720,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Atletismo</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('atletismo', atributos.atletismo)}
+                    onPress={() => openEditModal('atletismo', pericias.atletismo)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.atletismo.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.atletismo || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -782,9 +732,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Atualidades</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('atualidades', atributos.atualidades)}
+                    onPress={() => openEditModal('atualidades', pericias.atualidades)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.atualidades.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.atualidades || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -794,9 +744,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Análise</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('analise', atributos.analise)}
+                    onPress={() => openEditModal('analise', pericias.analise)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.analise.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.analise || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -806,9 +756,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Charme</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('charme', atributos.charme)}
+                    onPress={() => openEditModal('charme', pericias.charme)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.charme.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.charme || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -818,9 +768,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Eletronicos</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('eletronicos', atributos.eletronicos)}
+                    onPress={() => openEditModal('eletronicos', pericias.eletronicos)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.eletronicos.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.eletronicos || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -830,9 +780,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Enganar</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('enganar', atributos.enganar)}
+                    onPress={() => openEditModal('enganar', pericias.enganar)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.enganar.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.enganar || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -842,9 +792,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Furtividade</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('furtividade', atributos.furtividade)}
+                    onPress={() => openEditModal('furtividade', pericias.furtividade)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.furtividade.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.furtividade || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -854,9 +804,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Informática</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('informatica', atributos.informatica)}
+                    onPress={() => openEditModal('informatica', pericias.informatica)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.informatica.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.informatica || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -866,9 +816,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Iniciativa</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('iniciativa', atributos.iniciativa)}
+                    onPress={() => openEditModal('iniciativa', pericias.iniciativa)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.iniciativa.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.iniciativa || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -878,9 +828,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Intimidação</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('intimidacao', atributos.intimidacao)}
+                    onPress={() => openEditModal('intimidacao', pericias.intimidacao)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.intimidacao.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.intimidacao || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -890,9 +840,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Intuição</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('intuicao', atributos.intuicao)}
+                    onPress={() => openEditModal('intuicao', pericias.intuicao)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.intuicao.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.intuicao || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -902,9 +852,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Medicina</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('medicina', atributos.medicina)}
+                    onPress={() => openEditModal('medicina', pericias.medicina)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.medicina.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.medicina || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -914,9 +864,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Mecânica</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('mecanica', atributos.mecanica)}
+                    onPress={() => openEditModal('mecanica', pericias.mecanica)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.mecanica.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.mecanica || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -926,9 +876,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Persuasão</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('persuasao', atributos.persuasao)}
+                    onPress={() => openEditModal('persuasao', pericias.persuasao)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.persuasao.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.persuasao || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -938,9 +888,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Primeiros-Socorros</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('primeirosSocorros', atributos.primeirosSocorros)}
+                    onPress={() => openEditModal('primeirosSocorros', pericias.primeirosSocorros)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.primeirosSocorros.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.primeirosSocorros || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -950,9 +900,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Procurar</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('procurar', atributos.procurar)}
+                    onPress={() => openEditModal('procurar', pericias.procurar)}
                   >
-                    <Text style={styles.skillInputText}>{atributos.procurar.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.procurar || '0'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -964,11 +914,21 @@ const [aparencia, setAparencia] = useState({
         <View style={styles.blueView}>
           <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
 
+          <View style={styles.creditContainer}>
+              <Text style={styles.creditLabel}>Créditos:</Text>
+            <TouchableOpacity 
+              style={styles.creditInputTouchable}
+              onPress={() => openEditModal('credito', credito)}
+            >
+              <Text style={styles.creditInputText}>{credito}</Text>
+            </TouchableOpacity>
+          </View>
+
           <TouchableOpacity 
             style={styles.createItemButton}
             onPress={() => setCreateModalVisible(true)}
           >
-            <Ionicons name="add-outline" size={20} color="#4cf3ffff" style={styles.createItemIcon} />
+            <Ionicons name="add-outline" size={20} color="#FFF" style={styles.createItemIcon} />
             <Text style={styles.createItemText}>Criar Item</Text>
           </TouchableOpacity>          
           
@@ -1003,7 +963,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.actionButton}
                       onPress={() => handleEditEquipment(item)}
                     >
-                      <Ionicons name="pencil-outline" size={20} color="#4cf3ffff" />
+                      <Ionicons name="pencil-outline" size={20} color="#FFF" />
                     </TouchableOpacity>
                     
                     <TouchableOpacity 
@@ -1076,7 +1036,7 @@ const [aparencia, setAparencia] = useState({
                         <TextInput
                           style={styles.textInput}
                           value={newEquipment.requirement}
-                          onChangeText={(text) => setNewEquipment({...newEquipment, requirement: text})}
+                          onChangeText={(text) => setNewEquipment({ ...newEquipment, requirement: text })}
                           placeholder="Ex: Força 12+"
                           placeholderTextColor="#888"
                         />
@@ -1087,7 +1047,7 @@ const [aparencia, setAparencia] = useState({
                         <TextInput
                           style={styles.textInput}
                           value={newEquipment.damage}
-                          onChangeText={(text) => setNewEquipment({...newEquipment, damage: text})}
+                          onChangeText={(text) => setNewEquipment({ ...newEquipment, damage: text })}
                           placeholder="Ex: 1d8"
                           placeholderTextColor="#888"
                         />
@@ -1098,7 +1058,7 @@ const [aparencia, setAparencia] = useState({
                         <TextInput
                           style={styles.textInput}
                           value={newEquipment.critical}
-                          onChangeText={(text) => setNewEquipment({...newEquipment, critical: text})}
+                          onChangeText={(text) => setNewEquipment({ ...newEquipment, critical: text })}
                           placeholder="Ex: +2"
                           placeholderTextColor="#888"
                         />
@@ -1183,7 +1143,7 @@ const [aparencia, setAparencia] = useState({
                           <TextInput
                             style={styles.textInput}
                             value={editingEquipment?.requirement || ''}
-                            onChangeText={(text) => setEditingEquipment({...editingEquipment, requirement: text})}
+                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, requirement: text })}
                             placeholder="Ex: Força 12+"
                             placeholderTextColor="#888"
                           />
@@ -1194,7 +1154,7 @@ const [aparencia, setAparencia] = useState({
                           <TextInput
                             style={styles.textInput}
                             value={editingEquipment?.damage || ''}
-                            onChangeText={(text) => setEditingEquipment({...editingEquipment, damage: text})}
+                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, damage: text })}
                             placeholder="Ex: 1d8"
                             placeholderTextColor="#888"
                           />
@@ -1205,7 +1165,7 @@ const [aparencia, setAparencia] = useState({
                           <TextInput
                             style={styles.textInput}
                             value={editingEquipment?.critical || ''}
-                            onChangeText={(text) => setEditingEquipment({...editingEquipment, critical: text})}
+                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, critical: text })}
                             placeholder="Ex: +2"
                             placeholderTextColor="#888"
                           />
@@ -1332,6 +1292,11 @@ const [aparencia, setAparencia] = useState({
                           {selectedItem.price} <Text style={styles.credit}>céditos</Text>
                         </Text>
                       </View>
+
+             
+
+                    
+
                       <View style={styles.descriptionContainer}>
                         <Text style={styles.modalLabel}>Descrição:</Text>
                         <Text style={styles.modalDescription}>
@@ -1471,8 +1436,9 @@ const [aparencia, setAparencia] = useState({
             </ScrollView>
           </View>
         }
+  
+
       </View>
     </View>
   );
 }
-
