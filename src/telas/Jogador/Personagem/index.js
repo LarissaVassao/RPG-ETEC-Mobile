@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
+import { styles, colors } from './styles';
 
 export default function Personagem({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
@@ -11,7 +12,7 @@ export default function Personagem({ navigation }) {
       name: "Espada Longa",
       type: "arma",
       price: 150,
-      weight: 2.5,
+      weight: 2,
       description: "Uma espada longa forjada em aço de alta qualidade. Ideal para combate corpo a corpo.",
     },
   ]);
@@ -24,8 +25,8 @@ export default function Personagem({ navigation }) {
     requirement: '',
     damage: '',
     critical: '',
-    price: 0, // Adicione este campo
-    weight: 0  // Adicione este campo
+    price: 0, 
+    weight: 0  
   });
   
   // Estados para os modais de edição
@@ -35,42 +36,41 @@ export default function Personagem({ navigation }) {
   const [tempValue, setTempValue] = useState('');
   
   // Estados para os valores dos atributos
-  const [vida, setVida] = useState('10/10');
-  const [mental, setMental] = useState('10/10');
-  const [energia, setEnergia] = useState('10/10');
-  const [ca, setCa] = useState('10');
-  const [carga, setCarga] = useState('50');
-  const [movimento, setMovimento] = useState('9m');
-  const [creditos, setCreditos] = useState('1');
-  const [forca, setForca] = useState('10');
-  const [agilidade, setAgilidade] = useState('12');
-  const [constituicao, setConstituicao] = useState('14');
-  const [vontade, setVontade] = useState('8');
-  const [inteligencia, setInteligencia] = useState('16');
-  const [percepcao, setPercepcao] = useState('14');
-  const [sorte, setSorte] = useState('18');
-
-  // Estados para as habilidades
-  const [habilidades, setHabilidades] = useState({
-    acalmar: '1',
-    acrobacia: '1',
-    atletismo: '1',
-    atualidades: '1',
-    analise: '1',
-    charme: '1',
-    eletronicos: '1',
-    enganar: '1',
-    furtividade: '1',
-    informatica: '1',
-    iniciativa: '1',
-    intimidacao: '1',
-    intuicao: '1',
-    medicina: '1',
-    mecanica: '1',
-    persuasao: '1',
-    primeirosSocorros: '1',
-    procurar: '1'
-  });
+  const [vida, setVida] = useState({current: 10, max: 10});
+  const [mental, setMental] = useState({current: 10, max: 10});
+  const [energia, setEnergia] = useState({current: 10, max: 10});
+  const [ca, setCa] = useState(10);
+  const [carga, setCarga] = useState(50);
+  const [movimento, setMovimento] = useState(9);
+  const [creditos, setCreditos] = useState(1);
+  const [forca, setForca] = useState(10);
+  const [agilidade, setAgilidade] = useState(12);
+  const [constituicao, setConstituicao] = useState(14);
+  const [vontade, setVontade] = useState(8);
+  const [inteligencia, setInteligencia] = useState(16);
+  const [percepcao, setPercepcao] = useState(14);
+  const [sorte, setSorte] = useState(18);
+    // Estados para as atributos
+const [atributos, setAtributos] = useState({
+  acalmar: 1,
+  acrobacia: 1,
+  atletismo: 1,
+  atualidades: 1,
+  analise: 1,
+  charme: 1,
+  eletronicos: 1,
+  enganar: 1,
+  furtividade: 1,
+  informatica: 1,
+  iniciativa: 1,
+  intimidacao: 1,
+  intuicao: 1,
+  medicina: 1,
+  mecanica: 1,
+  persuasao: 1,
+  primeirosSocorros: 1,
+  procurar: 1,
+});
 
   // Estados para o nome do personagem e modal
   const [characterName, setCharacterName] = useState('Nome do Personagem');
@@ -86,7 +86,7 @@ export default function Personagem({ navigation }) {
 
   const handleTypeChange = (itemId, newType) => {
     setRpgEquipments(prev => prev.map(item => 
-      item.id === itemId ? { ...item, type: newType } : item
+      item.id === itemId ? {...item, type: newType} : item
     ));
   };
 
@@ -100,8 +100,8 @@ export default function Personagem({ navigation }) {
       id: Math.max(...rpgEquipments.map(item => item.id), 0) + 1,
       name: newEquipment.name,
       type: newEquipment.type,
-      price: newEquipment.price, // CORRIGIDO: estava 0
-      weight: newEquipment.weight, // CORRIGIDO: estava 0
+      price: newEquipment.price, 
+      weight: newEquipment.weight,
       description: newEquipment.description,
       requirement: newEquipment.requirement,
       damage: newEquipment.damage,
@@ -116,55 +116,84 @@ export default function Personagem({ navigation }) {
       requirement: '',
       damage: '',
       critical: '',
-      price: 0, // Mantém os valores padrão
-     weight: 0  // Mantém os valores padrão
+      price: 0,
+      weight: 0,
     });
     setCreateModalVisible(false);
   };
 
   // Função para abrir o modal de edição
-  const openEditModal = (field, value) => {
-    setEditingField(field);
+ const openEditModal = (field, value) => {
+  setEditingField(field);
+  
+  // Se for um número, converte para string para exibição no TextInput
+  if (typeof value === 'number') {
+    setCurrentValue(value.toString());
+    setTempValue(value.toString());
+  } else if (typeof value === 'object' && value !== null) {
+    // Se for um objeto (como vida/mental/energia), trata de forma especial
+    setCurrentValue(`${value.current}/${value.max}`);
+    setTempValue(`${value.current}/${value.max}`);
+  } else {
+    // Se for string, mantém como está
     setCurrentValue(value);
     setTempValue(value);
-    setEditModalVisible(true);
-  };
+  }
+  
+  setEditModalVisible(true);
+};
 
-  // Função para salvar a edição de habilidades
-  const saveHabilidadeEdit = () => {
-    setHabilidades(prev => ({
+  // Função para salvar a edição de atributos
+  const saveAtributoEdit = () => {
+    setAtributos(prev => ({
       ...prev,
       [editingField]: tempValue
     }));
     setEditModalVisible(false);
   };
 
-  // Função para salvar a edição
-  const saveEdit = () => {
-    if (editingField in habilidades) {
-      saveHabilidadeEdit();
-    } else {
-      switch (editingField) {
-        case 'vida': setVida(tempValue); break;
-        case 'mental': setMental(tempValue); break;
-        case 'energia': setEnergia(tempValue); break;
-        case 'ca': setCa(tempValue); break;
-        case 'carga': setCarga(tempValue); break;
-        case 'movimento': setMovimento(tempValue); break;
-        case 'creditos': setCreditos(tempValue); break;
-        case 'forca': setForca(tempValue); break;
-        case 'agilidade': setAgilidade(tempValue); break;
-        case 'constituicao': setConstituicao(tempValue); break;
-        case 'vontade': setVontade(tempValue); break;
-        case 'inteligencia': setInteligencia(tempValue); break;
-        case 'percepcao': setPercepcao(tempValue); break;
-        case 'sorte': setSorte(tempValue); break;
-        default: break;
-      }
-      setEditModalVisible(false);
+const saveEdit = () => {
+  if (editingField in atributos) {
+    // Converte para número antes de salvar
+    const numericValue = parseInt(tempValue) || 0;
+    setAtributos(prev => ({
+      ...prev,
+      [editingField]: numericValue
+    }));
+  } else {
+    switch (editingField) {
+      case 'vida': 
+      case 'mental': 
+      case 'energia': 
+        // Converte a string "current/max" de volta para objeto
+        const values = tempValue.split('/');
+        const current = parseInt(values[0]) || 0;
+        const max = parseInt(values[1]) || 0;
+        
+        if (editingField === 'vida') {
+          setVida({current, max});
+        } else if (editingField === 'mental') {
+          setMental({current, max});
+        } else if (editingField === 'energia') {
+          setEnergia({current, max});
+        }
+        break;
+      case 'ca': setCa(parseInt(tempValue) || 0); break;
+      case 'carga': setCarga(parseInt(tempValue) || 0); break;
+      case 'movimento': setMovimento(parseInt(tempValue) || 0); break;
+      case 'creditos': setCreditos(parseInt(tempValue) || 0); break;
+      case 'forca': setForca(parseInt(tempValue) || 0); break;
+      case 'agilidade': setAgilidade(parseInt(tempValue) || 0); break;
+      case 'constituicao': setConstituicao(parseInt(tempValue) || 0); break;
+      case 'vontade': setVontade(parseInt(tempValue) || 0); break;
+      case 'inteligencia': setInteligencia(parseInt(tempValue) || 0); break;
+      case 'percepcao': setPercepcao(parseInt(tempValue) || 0); break;
+      case 'sorte': setSorte(parseInt(tempValue) || 0); break;
+      default: break;
     }
-  };
-
+  }
+  setEditModalVisible(false);
+};
   // Função para cancelar a edição
   const cancelEdit = () => {
     setTempValue(currentValue);
@@ -238,7 +267,7 @@ const [aparencia, setAparencia] = useState({
   const saveAppearanceEdit = () => {
     setAparencia(prev => ({
       ...prev,
-      [editingAppearanceField]: tempAppearanceValue
+      [editingAppearanceField]:tempAppearanceValue
     }));
     setEditAppearanceModalVisible(false);
   };
@@ -256,30 +285,27 @@ const [aparencia, setAparencia] = useState({
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#124A69" barStyle="light-content" />      
+      <StatusBar backgroundColor="#124A69" barStyle="light-content"/>      
 
-   <View style={styles.header}>
-  <TouchableOpacity 
-    style={styles.backButton}
-    onPress={() => navigation.navigate("TelaCampanha")}
-  >
-    <Ionicons name="arrow-back" size={20} color="#fff" />
-  </TouchableOpacity>
-  
-  <TouchableOpacity onPress={openNameEditModal}>
-    <Text style={styles.headerTitle}>{characterName}</Text>
-  </TouchableOpacity>
-</View>
-{/*  */}
+    <View style={styles.header}>
+    <TouchableOpacity 
+      style={styles.backButton}
+      onPress={() => navigation.navigate("TelaCampanha")}
+    >
+      <Ionicons name="arrow-back" size={20} color="#fff"/>
+    </TouchableOpacity>
+    
+    <TouchableOpacity onPress={openNameEditModal}>
+      <Text style={styles.headerTitle}>{characterName}</Text>
+    </TouchableOpacity>
+  </View>
+
       <Modal
         visible={editModalVisible}
         transparent={true}
         animationType="slide"
         onRequestClose={cancelEdit}
       >
-
-       
-
         <View style={styles.modalOverlay}>
           <View style={styles.editModalContainer}>
             <Text style={styles.editModalTitle}>Editar {editingField}</Text>
@@ -374,7 +400,6 @@ const [aparencia, setAparencia] = useState({
           </View>
         </View>
       </Modal>
-{/* Modal para editar nome do personagem */}
       <Modal
         visible={editNameModalVisible}
         transparent={true}
@@ -428,7 +453,7 @@ const [aparencia, setAparencia] = useState({
 
         <View style={styles.ocupationCharacter}>
           <View style={styles.occupationItem}>
-            <Text style={styles.occupationLabel}>Profissão:</Text>
+            <Text style={styles.occupationLabel}>Classe:</Text>
             <TextInput 
               style={styles.occupationInput}
               placeholder="Ex: Médico"
@@ -478,7 +503,7 @@ const [aparencia, setAparencia] = useState({
           <View style={styles.redView}>
             <Text style={styles.viewTitle}>ATRIBUTOS DO PERSONAGEM</Text>  
             <ScrollView contentContainerStyle={styles.redScrollContent}>
-              <View style={styles.resourcesContainer}>
+              {/* <View style={styles.resourcesContainer}>
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Vida:</Text>
 
@@ -486,8 +511,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('vida', vida)}
                     >
-                      <Text style={styles.resourceInputText}>{vida}</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.resourceInputText}>{`${vida.current}/${vida.max}`}</Text>                    </TouchableOpacity>
  
                 </View>
 
@@ -497,8 +521,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('mental', mental)}
                     >
-                      <Text style={styles.resourceInputText}>{mental}</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.resourceInputText}>{`${mental.current}/${mental.max}`}</Text></TouchableOpacity>
 
                 
                 </View>
@@ -509,11 +532,10 @@ const [aparencia, setAparencia] = useState({
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('energia', energia)}
                     >
-                      <Text style={styles.resourceInputText}>{energia}</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.resourceInputText}>{`${energia.current}/${energia.max}`}</Text></TouchableOpacity>
                  
                 </View>
-              </View>
+              </View> */}
 
               <View style={styles.statsRow}>
                 <View style={styles.statContainer}>
@@ -521,7 +543,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.statInputTouchable}
                     onPress={() => openEditModal('ca', ca)}
                   >
-                    <Text style={styles.statInputText}>{ca}</Text>
+                    <Text style={styles.statInputText}>{ca.toString()}</Text>
                   </TouchableOpacity>
                   <Text style={styles.statLabel}>CA</Text>
                 </View>
@@ -531,7 +553,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.statInputTouchable}
                     onPress={() => openEditModal('carga', carga)}
                   >
-                    <Text style={styles.statInputText}>{carga}</Text>
+                    <Text style={styles.statInputText}>{carga.toString()}</Text>
                   </TouchableOpacity>
                   <Text style={styles.statLabel}>Carga</Text>
                 </View>
@@ -541,13 +563,21 @@ const [aparencia, setAparencia] = useState({
                     style={styles.statInputTouchable}
                     onPress={() => openEditModal('movimento', movimento)}
                   >
-                    <Text style={styles.statInputText}>{movimento}</Text>
+                    <Text style={styles.statInputText}>{movimento.toString()}</Text>
                   </TouchableOpacity>
                   <Text style={styles.statLabel}>Movimento</Text>
                 </View>
               </View>
 
-            
+              <View style={styles.creditContainer}>
+                <Text style={styles.creditLabel}>Créditos:</Text>
+                <TouchableOpacity 
+                  style={styles.creditInputTouchable}
+                  onPress={() => openEditModal('creditos', creditos)}
+                >
+                  <Text style={styles.creditInputText}>{creditos.toString()}</Text>
+                </TouchableOpacity>
+              </View>
 
               <View style={styles.attributesGrid}>
                 <View style={styles.attributeRow}>
@@ -556,7 +586,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('forca', forca)}
                     >
-                      <Text style={styles.attributeInputText}>{forca}</Text>
+                      <Text style={styles.attributeInputText}>{forca.toString()}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Força</Text>
                   </View>
@@ -566,7 +596,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('agilidade', agilidade)}
                     >
-                      <Text style={styles.attributeInputText}>{agilidade}</Text>
+                      <Text style={styles.attributeInputText}>{agilidade.toString()}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Agilidade</Text>
                   </View>
@@ -576,7 +606,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('constituicao', constituicao)}
                     >
-                      <Text style={styles.attributeInputText}>{constituicao}</Text>
+                      <Text style={styles.attributeInputText}>{constituicao.toString()}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Constituição</Text>
                   </View>
@@ -588,7 +618,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('vontade', vontade)}
                     >
-                      <Text style={styles.attributeInputText}>{vontade}</Text>
+                      <Text style={styles.attributeInputText}>{vontade.toString()}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Vontade</Text>
                   </View>
@@ -598,7 +628,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('inteligencia', inteligencia)}
                     >
-                      <Text style={styles.attributeInputText}>{inteligencia}</Text>
+                      <Text style={styles.attributeInputText}>{inteligencia.toString()}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Inteligência</Text>
                   </View>
@@ -608,7 +638,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.attributeInputTouchable}
                       onPress={() => openEditModal('percepcao', percepcao)}
                     >
-                      <Text style={styles.attributeInputText}>{percepcao}</Text>
+                      <Text style={styles.attributeInputText}>{percepcao.toString()}</Text>
                     </TouchableOpacity>
                     <Text style={styles.attributeLabel}>Percepção</Text>
                   </View>
@@ -620,7 +650,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.luckInputTouchable}
                       onPress={() => openEditModal('sorte', sorte)}
                     >
-                      <Text style={styles.luckInputText}>{sorte}</Text>
+                      <Text style={styles.luckInputText}>{sorte.toString()}</Text>
                     </TouchableOpacity>
                     <Text style={styles.luckLabel}>Sorte</Text>
                   </View>
@@ -629,6 +659,7 @@ const [aparencia, setAparencia] = useState({
             </ScrollView>
           </View>
         }
+        
         {activeView === 'green' && (
           <View style={styles.greenView}>
             <Text style={styles.viewTitle}>HABILIDADES</Text>
@@ -638,9 +669,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Acalmar</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('acalmar', habilidades.acalmar)}
+                    onPress={() => openEditModal('acalmar', atributos.acalmar)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.acalmar || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.acalmar.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -650,9 +681,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Acrobacia</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('acrobacia', habilidades.acrobacia)}
+                    onPress={() => openEditModal('acrobacia', atributos.acrobacia)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.acrobacia || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.acrobacia.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -662,9 +693,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Atletismo</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('atletismo', habilidades.atletismo)}
+                    onPress={() => openEditModal('atletismo', atributos.atletismo)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.atletismo || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.atletismo.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -674,9 +705,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Atualidades</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('atualidades', habilidades.atualidades)}
+                    onPress={() => openEditModal('atualidades', atributos.atualidades)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.atualidades || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.atualidades.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -686,9 +717,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Análise</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('analise', habilidades.analise)}
+                    onPress={() => openEditModal('analise', atributos.analise)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.analise || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.analise.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -698,9 +729,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Charme</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('charme', habilidades.charme)}
+                    onPress={() => openEditModal('charme', atributos.charme)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.charme || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.charme.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -710,9 +741,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Eletronicos</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('eletronicos', habilidades.eletronicos)}
+                    onPress={() => openEditModal('eletronicos', atributos.eletronicos)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.eletronicos || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.eletronicos.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -722,9 +753,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Enganar</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('enganar', habilidades.enganar)}
+                    onPress={() => openEditModal('enganar', atributos.enganar)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.enganar || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.enganar.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -734,9 +765,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Furtividade</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('furtividade', habilidades.furtividade)}
+                    onPress={() => openEditModal('furtividade', atributos.furtividade)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.furtividade || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.furtividade.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -746,9 +777,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Informática</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('informatica', habilidades.informatica)}
+                    onPress={() => openEditModal('informatica', atributos.informatica)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.informatica || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.informatica.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -758,9 +789,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Iniciativa</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('iniciativa', habilidades.iniciativa)}
+                    onPress={() => openEditModal('iniciativa', atributos.iniciativa)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.iniciativa || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.iniciativa.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -770,9 +801,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Intimidação</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('intimidacao', habilidades.intimidacao)}
+                    onPress={() => openEditModal('intimidacao', atributos.intimidacao)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.intimidacao || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.intimidacao.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -782,9 +813,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Intuição</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('intuicao', habilidades.intuicao)}
+                    onPress={() => openEditModal('intuicao', atributos.intuicao)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.intuicao || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.intuicao.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -794,9 +825,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Medicina</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('medicina', habilidades.medicina)}
+                    onPress={() => openEditModal('medicina', atributos.medicina)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.medicina || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.medicina.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -806,9 +837,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Mecânica</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('mecanica', habilidades.mecanica)}
+                    onPress={() => openEditModal('mecanica', atributos.mecanica)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.mecanica || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.mecanica.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -818,9 +849,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Persuasão</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('persuasao', habilidades.persuasao)}
+                    onPress={() => openEditModal('persuasao', atributos.persuasao)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.persuasao || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.persuasao.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -830,9 +861,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Primeiros-Socorros</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('primeirosSocorros', habilidades.primeirosSocorros)}
+                    onPress={() => openEditModal('primeirosSocorros', atributos.primeirosSocorros)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.primeirosSocorros || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.primeirosSocorros.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -842,9 +873,9 @@ const [aparencia, setAparencia] = useState({
                   <Text style={styles.skillText}>Procurar</Text>
                   <TouchableOpacity 
                     style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('procurar', habilidades.procurar)}
+                    onPress={() => openEditModal('procurar', atributos.procurar)}
                   >
-                    <Text style={styles.skillInputText}>{habilidades.procurar || '0'}</Text>
+                    <Text style={styles.skillInputText}>{atributos.procurar.toString()}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -856,21 +887,11 @@ const [aparencia, setAparencia] = useState({
         <View style={styles.blueView}>
           <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
 
-          <View style={styles.creditContainer}>
-              <Text style={styles.creditLabel}>Créditos:</Text>
-            <TouchableOpacity 
-              style={styles.creditInputTouchable}
-              onPress={() => openEditModal('creditos', creditos)}
-            >
-              <Text style={styles.creditInputText}>{creditos}</Text>
-            </TouchableOpacity>
-          </View>
-
           <TouchableOpacity 
             style={styles.createItemButton}
             onPress={() => setCreateModalVisible(true)}
           >
-            <Ionicons name="add-outline" size={20} color="#FFF" style={styles.createItemIcon} />
+            <Ionicons name="add-outline" size={20} color="#4cf3ffff" style={styles.createItemIcon} />
             <Text style={styles.createItemText}>Criar Item</Text>
           </TouchableOpacity>          
           
@@ -905,7 +926,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.actionButton}
                       onPress={() => handleEditEquipment(item)}
                     >
-                      <Ionicons name="pencil-outline" size={20} color="#FFF" />
+                      <Ionicons name="pencil-outline" size={20} color="#4cf3ffff" />
                     </TouchableOpacity>
                     
                     <TouchableOpacity 
@@ -978,7 +999,7 @@ const [aparencia, setAparencia] = useState({
                         <TextInput
                           style={styles.textInput}
                           value={newEquipment.requirement}
-                          onChangeText={(text) => setNewEquipment({ ...newEquipment, requirement: text })}
+                          onChangeText={(text) => setNewEquipment({...newEquipment, requirement: text})}
                           placeholder="Ex: Força 12+"
                           placeholderTextColor="#888"
                         />
@@ -989,7 +1010,7 @@ const [aparencia, setAparencia] = useState({
                         <TextInput
                           style={styles.textInput}
                           value={newEquipment.damage}
-                          onChangeText={(text) => setNewEquipment({ ...newEquipment, damage: text })}
+                          onChangeText={(text) => setNewEquipment({...newEquipment, damage: text})}
                           placeholder="Ex: 1d8"
                           placeholderTextColor="#888"
                         />
@@ -1000,7 +1021,7 @@ const [aparencia, setAparencia] = useState({
                         <TextInput
                           style={styles.textInput}
                           value={newEquipment.critical}
-                          onChangeText={(text) => setNewEquipment({ ...newEquipment, critical: text })}
+                          onChangeText={(text) => setNewEquipment({...newEquipment, critical: text})}
                           placeholder="Ex: +2"
                           placeholderTextColor="#888"
                         />
@@ -1085,7 +1106,7 @@ const [aparencia, setAparencia] = useState({
                           <TextInput
                             style={styles.textInput}
                             value={editingEquipment?.requirement || ''}
-                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, requirement: text })}
+                            onChangeText={(text) => setEditingEquipment({...editingEquipment, requirement: text})}
                             placeholder="Ex: Força 12+"
                             placeholderTextColor="#888"
                           />
@@ -1096,7 +1117,7 @@ const [aparencia, setAparencia] = useState({
                           <TextInput
                             style={styles.textInput}
                             value={editingEquipment?.damage || ''}
-                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, damage: text })}
+                            onChangeText={(text) => setEditingEquipment({...editingEquipment, damage: text})}
                             placeholder="Ex: 1d8"
                             placeholderTextColor="#888"
                           />
@@ -1107,7 +1128,7 @@ const [aparencia, setAparencia] = useState({
                           <TextInput
                             style={styles.textInput}
                             value={editingEquipment?.critical || ''}
-                            onChangeText={(text) => setEditingEquipment({ ...editingEquipment, critical: text })}
+                            onChangeText={(text) => setEditingEquipment({...editingEquipment, critical: text})}
                             placeholder="Ex: +2"
                             placeholderTextColor="#888"
                           />
@@ -1234,11 +1255,6 @@ const [aparencia, setAparencia] = useState({
                           {selectedItem.price} <Text style={styles.credit}>céditos</Text>
                         </Text>
                       </View>
-
-             
-
-                    
-
                       <View style={styles.descriptionContainer}>
                         <Text style={styles.modalLabel}>Descrição:</Text>
                         <Text style={styles.modalDescription}>
@@ -1378,1072 +1394,8 @@ const [aparencia, setAparencia] = useState({
             </ScrollView>
           </View>
         }
-  
-
       </View>
     </View>
   );
 }
 
-
-const styles = StyleSheet.create({
-  colors: {
-    primaryBlue: '#092534',
-    secondaryBlue: '#1A709E',
-    lightBlue: '#2295D3',
-    darkBlue: '#124A69',
-    gold: '#FFF',
-    white: '#FFFFFF',
-    lightGray: '#CCCCCC',
-    darkGray: '#333333'
-  },
-
-  container: {
-    flex: 1,
-    backgroundColor: '#f8fafc',
-  },
-
-
-  //Header quase completa
-header: {
-  backgroundColor: '#124A69',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  paddingHorizontal: 10,
-  paddingVertical: 12,
-  height: 60,
-  elevation: 3,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 1 },
-  shadowOpacity: 0.1,
-  shadowRadius: 2,
-},
-headerTitle: {
-  color: '#fff',
-  fontSize: 20,
-  fontWeight: '600',
-  letterSpacing: 0.3,
-  textAlign: 'center',
-  flex: 1, 
-  marginHorizontal: 10,
-  top: 5
-},
-backButton: {
-  width: 36,
-  height: 36,
-  zIndex: 1,
-  position: 'absolute',
-  left: 10,
-  justifyContent: 'center',
-  alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 100,
-},
-
-//é da modal
-  createButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  mainContent: {
-    flex: 1,
-    marginTop: 205,
-  },
-  viewTitle: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#ffffffff',
-    textAlign: 'center',
-    marginVertical: 10,
-    marginTop: 5,
-    textShadowColor: '#000000ff',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 10,
-
-  },
-  scrollContent: {
-    paddingBottom: 30,
-    paddingHorizontal: 10,
-  },
-  columnStyle: {
-    position: 'absolute',
-    top: 0,
-    width: 5,
-    height: '10%',
-    backgroundColor: '#124A69',
-  },
-  namePlayer: {
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    height: 50,
-    backgroundColor: '#124A69',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  playerText: {
-    fontSize: 16,
-    color: '#000',
-    marginLeft: 135, 
-  },
-  playerInput: {
-    flex: 1,
-    height: 50,
-    backgroundColor: 'transparent',
-    paddingHorizontal: 10,
-    color: '#dfdfdfff',
-    fontSize: 16,
-  },
-
-  characterBase: {
-    position: 'absolute',
-    top: 75,
-    width: '100%',
-    height: 50,
-    //backgroundColor: '#cde1ffff'
-  },
-  nameCharacter: {
-    top: 0,
-    marginLeft: 110, 
-  },
-  name:{
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  ocupationCharacter: {
-    marginLeft: 120,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: '-10',
-  },
-  occupationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  occupationLabel: {
-    fontSize: 15,
-    color: '#000',
-    marginRight: 5,
-  },
-  occupationInput: {
-    width: 100,
-    height: 40,
-    borderColor: '#ccc',
-  },
-  imageStyle: {
-    position: 'absolute',
-    top: 70,
-    left: 5,
-    width: 100,
-    height: 100,
-    //borderBottomRightRadius: 100,
-    zIndex: 1,
-    //borderBottomColor: '#124A69',
-    borderRadius: 100,
-    borderWidth: 5,
-    borderColor: '#124A69',
-  },
-
-  buttonsContainer: {
-    position: 'absolute',
-    top: 185, 
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 0,
-  },
-  buttons: {
-    width: '23%',
-    height: 80,
-    borderRadius: 10,
-    borderBottomEndRadius:0,
-    borderBottomLeftRadius:0,
-    marginInline: '1%',
-    justifyContent: 'center', 
-    alignItems: 'center', 
-  },
-
-  redView: {
-    flex: 1,
-    backgroundColor: '#2188C0',
-    padding: 10,
-  },
-  greenView: {
-    flex: 1,
-    backgroundColor: '#1E7CAE',
-    padding: 10,
-  },
-  blueView: {
-    flex: 1,
-    backgroundColor: '#18638C',
-    padding: 10,
-  },
-  pinkView: {
-    flex: 1,
-    backgroundColor: '#124A69',
-    padding: 10,
-  },
-  containerWithBorder: {
-    backgroundColor: '#2295D3',
-    padding: 15,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#FFF',
-    marginBottom: 15,
-  },
-  label: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#2295D3',
-    color: '#FFF',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    fontSize: 14,
-  },
-sectionTitle: {
-  fontSize: 27,
-  fontWeight: 'bold',
-  color: '#ffffffff',
-  textAlign: 'center',
-  marginBottom: 20,
-  fontFamily: 'System',
-  textShadowColor: '#a19420ff',
-  textShadowOffset: { width: 1, height: 1 },
-  textShadowRadius: 2,
-},
-tableContainer: {
-  flex: 1,
-  backgroundColor: '#cccccc8e',
-  borderRadius: 12,
-  overflow: 'hidden',
-  borderWidth: 2,
-  borderColor: '#2295D3',
-  marginHorizontal: 2, // Adicione margens laterais menores
-},
-  tableHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#2295D3',
-    padding: 15,
-    borderBottomWidth: 2,
-    borderBottomColor: '#FFF',
-  },
-  headerText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-headerName: { flex: 2, textAlign: 'center' }, // Adicionei textAlign: 'left'
-headerPrice: { flex: 1, textAlign: 'center' },
-headerWeight: { flex: 1, textAlign: 'center' },
-headerActions: { flex: 0.8, textAlign: 'center' },
-      
- tableRow: {
-  flexDirection: 'row',
-  padding: 8,
-  borderBottomWidth: 1,
-  borderBottomColor: '#444',
-  alignItems: 'center', // Centraliza verticalmente
-  backgroundColor: '#333',
-  minHeight: 50, // Altura mínima para melhor visualização
-},
-cellText: {
-  fontSize: 14,
-  color: '#FFF',
-  textAlign: 'center', // Centraliza horizontalmente
-  textAlignVertical: 'center', // Centraliza verticalmente (funciona melhor em alguns casos)
-},
-cellName: { 
-  flex: 2,
-  fontWeight: 'bold',
-  color: '#FFF',
-  textAlign: 'center', // Centralizado
-  paddingHorizontal: 5, // Pequeno padding lateral
-},
-cellPrice: { 
-  flex: 1,
-  fontWeight: 'bold',
-  color: '#FFF',
-  textAlign: 'center', // Centralizado
-  paddingHorizontal: 5,
-},
-cellWeight: { 
-  flex: 1,
-  fontWeight: 'bold',
-  color: '#FFF',
-  textAlign: 'center', // Centralizado
-  paddingHorizontal: 5,
-},
-cellActions: {
-  flex: 0.8,
-  flexDirection: 'row',
-  justifyContent: 'center', // Centraliza os ícones
-  alignItems: 'center',
-  paddingHorizontal: 5,
-},
-
-
-credit: {
-  color: '#FFF',
-  fontWeight: 'bold',
-},
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    height: '100%'
-  },
-  modalContainer: {
-    backgroundColor: '#686868ff',
-    padding: 25,
-    borderRadius: 15,
-    width: '90%',
-    maxHeight: '80%', 
-    borderWidth: 3,
-    borderColor: '#ffffffff',
-  },
-  modalContentScroll: {
-  maxHeight: 250, 
-  },
-  modalContentContainer: {
-    paddingBottom: 20, 
-  },
-  modalHeader: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#ffffffff',
-    paddingBottom: 15,
-    marginBottom: 15,
-  },
-  modalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#5bb5ffff',
-    textAlign: 'center',
-    marginBottom: 5,
-  },
-  modalType: {
-    fontSize: 16,
-    color: '#dadadaff',
-    textAlign: 'center',
-    textTransform: 'capitalize',
-    fontStyle: 'italic',
-  },
-  modalInfoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-    padding: 10,
-    backgroundColor: '#5e5e5eff',
-    borderRadius: 6,
-  },
-  modalLabel: {
-    color: '#a9e1ffff',
-    fontWeight: 'bold',
-    fontSize: 14,
-    flex: 1,
-  },
-  modalValue: {
-    color: '#FFF',
-    fontSize: 14,
-    fontWeight: '600',
-    flex: 1,
-    textAlign: 'right',
-  },
-  modalDescription: {
-    color: '#CCC',
-    fontSize: 14,
-    lineHeight: 20,
-    fontStyle: 'italic',
-    marginTop: 8,
-  },
-  modalCloseButton: {
-    backgroundColor: '#59a2f7ff',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 15,
-    borderWidth: 1,
-    borderColor: '#ffffffff',
-  },
-  modalCloseText: {
-    color: '#ffffffff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-// comum: { color: '#FFFFFF' },
-// raro: { color: '#0070DD' },
-// epico: { color: '#A335EE' },
-// lendario: { color: '#FF8000' },
-descriptionContainer: {
-  marginTop: 20,
-  padding: 12,
-  backgroundColor: '#6e6e6eff',
-  borderRadius: 8,
-  borderLeftWidth: 4,
-  borderLeftColor: '#092534',
-},
-
-  containerBackground: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    
-    marginBottom: 7, 
-  },
-
-  lifeBackground: {
-    backgroundColor: '#79899D',
-    width: '50%',
-    height: 45,
-    borderRadius: 50,
-    borderColor: '#4B617C',
-    borderWidth: 3,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-
-  subtractAndAdditionbox: {
-    backgroundColor: '#79899D',
-    width: '15%',
-    height: 45,
-    borderWidth: 3,
-    borderColor: '#4B617C',
-    borderRadius: 3
-  },
-
-  three: {
-      top: 10,
-      justifyContent: 'space-around',
-      width: '90%',
-      flexDirection: 'row',
-
-  },
-
-    
-  scrollView: {
-    flex: 1,
-  },
-
-  
- skillTitle: {
-  fontSize: 27,
-  fontWeight: 'bold',
-  color: '#FFF',
-  textAlign: 'center',
-  marginTop: 10,
-  marginBottom: 15,
-  textShadowColor: '#251083ff',
-  textShadowOffset: { width: 1, height: 1 },
-  textShadowRadius: 2,
-},
-
-skillContainer: {
-  marginBottom: 12,
-  width: '100%',
-  alignSelf: 'center'
-},
-
-skillBackground: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  backgroundColor: '#2295D3',
-  paddingVertical: 10,
-  paddingHorizontal: 10,
-  borderRadius: 8,
-  borderWidth: 2,
-  borderColor: '#FFF',
-},
-skillText: {
-  flex: 1,
-  fontSize: 16,
-    textTransform: 'uppercase',
-  fontWeight: 'bold',
-  color: '#FFF',
-  
-},
-  skillInputTouchable: {
-    width: 100,
-    height: 35,
-    backgroundColor: '#1A709E',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-  },
-  skillInputText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-skillInput: {
-  width: 50,
-  height: 35,
-  backgroundColor: '#FFF',
-  borderRadius: 5,
-  textAlign: 'center',
-  fontWeight: 'bold',
-  color: '#092534',
-},
-  attributeContainer:{
-    position: 'absolute',
-    top: 1, 
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 2, 
-  },
-  attributesBackgroundTop:{
-    width: '30%',
-    height: 110,
-    backgroundColor: '#2295D3',
-    marginInline: 5,
-    borderTopEndRadius: 10,
-    borderTopStartRadius: 10,
-
-  },
- attributesBackgroundBottom:{
-    width: '30%',
-    height: 110,
-    backgroundColor: '#2295D3',
-    marginInline: 5,
-    borderBottomEndRadius: 10,
-    borderBottomStartRadius: 10,
-
-  },
-   attributeContainerLuck:{
-    position: 'absolute',
-    alignItems: 'center',
-    width: '100%',
-  },
-  attributeBackgroundLuck: {
-    top: 250,
-    width: '70%',
-    height: 110,
-    backgroundColor: '#2295D3',
-    borderRadius: 10
-  },
-  appearanceTitle: {
-    fontSize: 27,
-    fontWeight: 'bold',
-    color: '#FFF',
-    textAlign: 'center',
-    marginBottom: 20,
-    textShadowColor: '#000',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-  },
-  appearanceContainer: {
-    paddingBottom: 30,
-  },
-  appearanceItem: {
-    marginBottom: 15,
-    backgroundColor: '#2295D3',
-    padding: 15,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: '#FFF',
-  },
-  appearanceLabel: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFF',
-    marginBottom: 8,
-  },
-  appearanceInput: {
-    backgroundColor: '#1A709E',
-    color: '#FFF',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    fontSize: 14,
-  },
-   appearanceInputTouchable: {
-    backgroundColor: '#1A709E',
-    color: '#FFF',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    fontSize: 14,
-    minHeight: 44,
-  },
-  bioInputTouchable: {
-    minHeight: 100,
-  },
-  appearanceInputText: {
-    color: '#FFF',
-    fontSize: 14,
-  },
-
-  // Estilo para o input modal de biografia
-  bioModalInput: {
-    minHeight: 180,
-    height: 180,
-    textAlignVertical: 'top',
-    padding: 12,
-    fontSize: 16,
-  },
-
-  bioInput: {
-    minHeight: 100,
-    textAlignVertical: 'top',
-  },
-
-  redScrollContent: {
-    paddingBottom: 30, 
-  },
-  resourcesContainer: {
-    justifyContent: 'center', 
-    backgroundColor: '#2295D3',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: '#FFF',
-    width: '95%',
-    alignSelf: 'center',
-  },
-  resourceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  resourceLabel: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    width: 80,
-    fontSize: 16,
-    left: 5
-  },
-
-  resourceButton: {
-    backgroundColor: '#092534',
-    padding: 8,
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minWidth: 40,
-  },
-  resourceInput: {
-    flex: 1,
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#2295D3',
-    borderRadius: 8,
-    padding: 10,
-    marginHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    minWidth: 100,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  statContainer: {
-    backgroundColor: '#2295D3',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    flex: 1,
-    marginHorizontal: 5,
-    borderWidth: 2,
-    borderColor: '#FFF',
-  },
-  statInput: {
-    color: '#FFF',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#1A709E',
-    borderRadius: 8,
-    padding: 5,
-    minWidth: 60,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-  },
-  statLabel: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    marginTop: 5,
-    fontSize: 14,
-  },
-
-
-  attributesGrid: {
-    marginBottom: 20,
-  },
-  attributeRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  attributeItem: {
-    backgroundColor: '#2295D3',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    flex: 1,
-    marginHorizontal: 5,
-    borderWidth: 2,
-    borderColor: '#FFF',
-  },
-  attributeInput: {
-    color: '#FFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#2295D3',
-    borderRadius: 8,
-    padding: 10,
-    minWidth: 70,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-  },
-  attributeLabel: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    marginTop: 8,
-    fontSize: 13.3,
-    textAlign: 'center',
-  },
- luckRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  luckContainer: {
-    backgroundColor: '#2295D3',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    width: '32%', 
-    borderWidth: 2,
-    borderColor: '#FFF',
-  },
-  luckInput: {
-    color: '#FFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#2295D3',
-    borderRadius: 8,
-    padding: 10,
-    minWidth: 70,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-  },
-  luckLabel: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    marginTop: 8,
-    fontSize: 14,
-    textAlign: 'center',
-  },
-    createItemButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2295D3',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-    borderWidth: 2,
-    borderColor: '#FFF',
-    alignSelf: 'center',
-    alignItems: 'center'
-
-  },
-  createItemIcon: {
-    marginRight: 8,
-  },
-  createItemText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-    width: '90%',
-    textAlign: 'center',
-  },
-  createModalContainer: {
-    backgroundColor: '#2D3748',
-    padding: 25,
-    borderRadius: 15,
-    width: '90%',
-    maxHeight: '80%',
-    borderWidth: 3,
-    borderColor: '#FFF',
-  },
-  createModalTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#FFF',
-    textAlign: 'center',
-    marginBottom: 20,
-    textShadowColor: '#000',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-  },
-  createModalScroll: {
-    maxHeight: 400,
-  },
-  createModalScrollContent: {
-  paddingBottom: 20,
-},
-  inputGroup: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  textInput: {
-    backgroundColor: '#1A709E',
-    color: '#FFF',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    fontSize: 14,
-  },
-  descriptionInput: {
-    minHeight: 100,
-    textAlignVertical: 'top',
-  },
-  pickerContainer: {
-    backgroundColor: '#1A709E',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    overflow: 'hidden',
-  },
-  picker: {
-    color: '#FFF',
-    height: 50,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  modalButton: {
-    flex: 1,
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  cancelButton: {
-    backgroundColor: '#718096',
-    borderWidth: 1,
-    borderColor: '#4A5568',
-  },
-  createButton: {
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#2C7A7B',
-  },
-  cancelButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
-  createButtonText: {
-    color: '#092534',
-    fontWeight: 'bold',
-  },
-    editModalContainer: {
-    backgroundColor: '#2D3748',
-    padding: 25,
-    borderRadius: 15,
-    width: '80%',
-    borderWidth: 3,
-    borderColor: '#FFF',
-  },
-  editModalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFF',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  editModalInput: {
-    backgroundColor: '#1A709E',
-    color: '#FFF',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center'
-  },
-  
-  // Estilos para os elementos touchable que substituem os TextInput
-  resourceInputTouchable: {
-    flex: 1,
-    backgroundColor: '#1A709E',
-    borderRadius: 8,
-    padding: 10,
-    marginHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    minWidth: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  resourceInputText: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  statInputTouchable: {
-    backgroundColor: '#1A709E',
-    borderRadius: 8,
-    padding: 5,
-    minWidth: 60,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  statInputText: {
-    color: '#FFF',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-creditContainer: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#2295D3',
-  height: 'auto', // Alterado de 60 para 'auto'
-  borderRadius: 10,
-  marginBottom: 20,
-  borderWidth: 2,
-  borderColor: '#FFF',
-  paddingHorizontal: 12,
-  paddingVertical: 8, // 
-},
-
-creditLabel: {
-  color: '#FFF',
-  fontWeight: 'bold',
-  fontSize: 16,
-  flex: 0.4,             // ocupa 40% do espaço
-  textAlign: 'left',
-},
-creditInputTouchable: {
-  flex: 0.6,
-  backgroundColor: '#1A709E',
-  borderRadius: 8,
-  paddingHorizontal: 10,
-  borderWidth: 1,
-  borderColor: '#ADE2FF',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: 35,
-},
-
-creditInputText: {
-  color: '#FFF',
-  fontSize: 18,
-  fontWeight: 'bold',
-},
-
-  attributeInputTouchable: {
-    backgroundColor: '#1A709E',
-    borderRadius: 8,
-    padding: 10,
-    minWidth: 70,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  attributeInputText: {
-    color: '#FFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  luckInputTouchable: {
-    backgroundColor: '#1A709E',
-    borderRadius: 8,
-    padding: 10,
-    minWidth: 70,
-    borderWidth: 1,
-    borderColor: '#ADE2FF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  luckInputText: {
-    color: '#FFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  cellTouchable: {
-    flex: 2,
-    justifyContent: 'center', // Centraliza verticalmente
-    alignItems: 'center', // Centraliza horizontalmente
-    paddingHorizontal: 5,
-  },
-actionButton: {
-  padding: 5,
-  marginHorizontal: 2,
-},
-headerActions: { 
-  flex: 1,
-  textAlign: 'center'
-},
-cellActions: {
-  flex: 1,
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  alignItems: 'center',
-},
-editNameModalContainer: {
-  backgroundColor: '#2D3748',
-  padding: 25,
-  borderRadius: 15,
-  width: '90%',
-  borderWidth: 3,
-  borderColor: '#FFF',
-},
-editNameInput: {
-  backgroundColor: '#1A709E',
-  color: '#FFF',
-  padding: 12,
-  borderRadius: 8,
-  borderWidth: 1,
-  borderColor: '#ADE2FF',
-  fontSize: 16,
-  marginBottom: 10,
-  textAlign: 'center'
-},
-charCounter: {
-  color: '#FFF',
-  textAlign: 'center',
-  marginBottom: 20,
-  fontSize: 12,
-},
-
-});
