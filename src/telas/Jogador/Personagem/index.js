@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
-import { styles, colors } from './styles';
+import { styles} from './styles';
 
 export default function Personagem({ navigation }) {
   const [activeView, setActiveView] = useState('red'); 
