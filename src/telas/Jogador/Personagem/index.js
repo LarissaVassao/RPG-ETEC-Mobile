@@ -739,7 +739,7 @@ const [aparencia, setAparencia] = useState({
         
         {activeView === 'green' && (
           <View style={styles.greenView}>
-            <Text style={styles.viewTitle}>HABILIDADES</Text>
+            <Text style={styles.viewTitle}>ATRIBUTOS</Text>
             <ScrollView contentContainerStyle={styles.scrollContent}>
               <View style={styles.skillContainer}>
                 <View style={styles.skillBackground}>

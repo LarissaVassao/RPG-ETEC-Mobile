@@ -111,17 +111,18 @@ backButton: {
     fontSize: 16,
   },
 
-  characterBase: {
-    position: 'absolute',
-    top: 75,
-    width: '100%',
-    height: 50,
-    //backgroundColor: '#cde1ffff'
-  },
-  nameCharacter: {
-    top: 0,
-    marginLeft: 110, 
-  },
+characterBase: {
+  position: 'absolute',
+  top: 60,
+  width: '100%',
+  height: 120, // Aumente a altura para acomodar os dois containers
+  //backgroundColor: '#cde1ffff'
+},
+nameCharacter: {
+  top: 0,
+  marginLeft: 110, 
+  marginBottom: 10, // Adicione margem inferior
+},
   // Adicione esses estilos ao seu arquivo styles.js
 nameInputTouchable: {
   padding: 10,
@@ -135,23 +136,27 @@ nameText: {
   fontWeight: '600'
 },
 occupationInputTouchable: {
-  padding: 8,
+  padding: 1,
   borderRadius: 5,
-  minHeight: 35,
+  minHeight: 10,
   justifyContent: 'center',
-  flex: 1,
+
 },
 // Adicione esses estilos ao seu arquivo styles.js
 classContainer: {
   marginBottom: 10, // Espaço entre classe e nível
   width: '100%', // Ocupa toda a largura
 },
-levelContainer: {
-  width: '100%', // Ocupa toda a largura
+ocupationContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 5, // Margem de 10px entre os containers
+  width: '100%',
 },
-ocupationCharacter: {
-  flexDirection: 'column', // Muda para coluna para empilhar verticalmente
-  alignItems: 'flex-start', // Alinha à esquerda
+
+levelContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
   width: '100%',
 },
 occupationItem: {
@@ -162,27 +167,30 @@ occupationItem: {
 },
 occupationText: {
   fontSize: 14,
+  color: '#000',
+  textAlign: 'center',
 },
   name:{
     fontSize: 20,
     fontWeight: 'bold'
   },
-  ocupationCharacter: {
-    marginLeft: 120,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: '-10',
-  },
+ocupationCharacter: {
+  flexDirection: 'column', // Muda para coluna para empilhar verticalmente
+  alignItems: 'flex-start', // Alinha à esquerda
+  width: '100%',
+  marginLeft: 110, // Adicione a margem esquerda aqui
+},
   occupationItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: '10',
   },
-  occupationLabel: {
-    fontSize: 15,
-    color: '#000',
-    marginRight: 5,
-  },
+occupationLabel: {
+  fontSize: 15,
+  color: '#000',
+  marginRight: 0,
+  width: 80, // Largura fixa para alinhar os labels
+},
   occupationInput: {
     width: 100,
     height: 40,
