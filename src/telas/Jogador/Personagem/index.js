@@ -50,6 +50,9 @@ export default function Personagem({ navigation }) {
   const [inteligencia, setInteligencia] = useState(16);
   const [percepcao, setPercepcao] = useState(14);
   const [sorte, setSorte] = useState(18);
+  // Novo estado para a modal de seleção de profissao
+const [ocupationModalVisible, setocupationModalVisible] = useState(false);
+const [selectedocupation, setSelectedocupation] = useState('');
     // Estados para as atributos
 const [atributos, setAtributos] = useState({
   acalmar: 1,
@@ -77,6 +80,9 @@ const [atributos, setAtributos] = useState({
   const [tempCharacterName, setTempCharacterName] = useState('');
   const [editNameModalVisible, setEditNameModalVisible] = useState(false);
 
+  const [playerName, setPlayerName] = useState('Nome do Player');
+  const [playerocupation, setPlayerocupation] = useState('');
+  const [playerLevel, setPlayerLevel] = useState('');
   const [editingEquipment, setEditingEquipment] = useState(null);
   const [editEquipmentModalVisible, setEditEquipmentModalVisible] = useState(false);
 
@@ -89,7 +95,16 @@ const [atributos, setAtributos] = useState({
       item.id === itemId ? {...item, type: newType} : item
     ));
   };
-
+// Função para abrir a modal de seleção de profissao
+const openocupationModal = () => {
+  setSelectedocupation(playerocupation);
+  setocupationModalVisible(true);
+};
+// Função para salvar a profissao selecionada
+const saveocupationSelection = () => {
+  setPlayerocupation(selectedocupation);
+  setocupationModalVisible(false);
+};
   const handleCreateEquipment = () => {
     if (!newEquipment.name.trim()) {
       alert('Por favor, digite um nome para o equipamento');
@@ -123,8 +138,19 @@ const [atributos, setAtributos] = useState({
   };
 
   // Função para abrir o modal de edição
- const openEditModal = (field, value) => {
+const openEditModal = (field, value) => {
   setEditingField(field);
+  
+  // Define placeholder baseado no campo
+  let placeholder = "Digite aqui...";
+  if (field === 'playerName') placeholder = "Digite o nome do player";
+   if (field === 'playerocupation') {
+    openocupationModal();
+    return;
+  }
+  
+  setEditingField(field);
+  if (field === 'playerLevel') placeholder = "Ex: 1, 2, 3...";
   
   // Se for um número, converte para string para exibição no TextInput
   if (typeof value === 'number') {
@@ -142,7 +168,6 @@ const [atributos, setAtributos] = useState({
   
   setEditModalVisible(true);
 };
-
   // Função para salvar a edição de atributos
   const saveAtributoEdit = () => {
     setAtributos(prev => ({
@@ -178,6 +203,11 @@ const saveEdit = () => {
           setEnergia({current, max});
         }
         break;
+      
+      // Novos casos para os campos do player
+      case 'playerName': setPlayerName(tempValue); break;
+      case 'playerLevel': setPlayerLevel(tempValue); break;
+      
       case 'ca': setCa(parseInt(tempValue) || 0); break;
       case 'carga': setCarga(parseInt(tempValue) || 0); break;
       case 'movimento': setMovimento(parseInt(tempValue) || 0); break;
@@ -441,34 +471,83 @@ const [aparencia, setAparencia] = useState({
           </View>
         </View>
       </Modal> 
+      {/* Modal para seleção de profissao */}
+      <Modal
+        visible={ocupationModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setocupationModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.editModalContainer}>
+            <Text style={styles.editModalTitle}>Selecionar Profissão</Text>
+            
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={selectedocupation}
+                style={styles.picker}
+                onValueChange={(itemValue) => setSelectedocupation(itemValue)}
+              >
+                <Picker.Item label="Selecione uma profissao" value="" />
+                <Picker.Item label="Médico" value="Médico" />
+                <Picker.Item label="Professor" value="Professor" />
+                <Picker.Item label="Engenheiro" value="Engenheiro" />
+                <Picker.Item label="Soldado" value="Soldado" />
+                <Picker.Item label="Cientista" value="Cientista" />
+                <Picker.Item label="Técnico" value="Técnico" />
+                <Picker.Item label="Piloto" value="Piloto" />
+                <Picker.Item label="Investigador" value="Investigador" />
+              </Picker>
+            </View>
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setocupationModalVisible(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.createButton]}
+                onPress={saveocupationSelection}
+              >
+                <Text style={styles.createButtonText}>Salvar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.characterBase}>
         <View style={styles.nameCharacter}>
-          <TextInput 
-            style={styles.name}
-            placeholder="Nome do player"
-            placeholderTextColor="#000"
-          />
+          <TouchableOpacity 
+            style={styles.nameInputTouchable}
+            onPress={() => openEditModal('playerName', playerName)}
+          >
+            <Text style={styles.nameText}>{playerName}</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.ocupationCharacter}>
-          <View style={styles.occupationItem}>
-            <Text style={styles.occupationLabel}>Classe:</Text>
-            <TextInput 
-              style={styles.occupationInput}
-              placeholder="Ex: Médico"
-              placeholderTextColor="#666"
-            />
+          <View style={styles.ocupationContainer}>
+            <Text style={styles.occupationLabel}>Profissão:</Text>
+            <TouchableOpacity 
+              style={styles.occupationInputTouchable}
+              onPress={openocupationModal}
+            >
+              <Text style={styles.occupationText}>{playerocupation || 'Selecione uma profissao'}</Text>
+            </TouchableOpacity>
           </View>
           
-          <View style={styles.occupationItem}>
+          <View style={styles.levelContainer}>
             <Text style={styles.occupationLabel}>Nível:</Text>
-            <TextInput 
-              style={styles.occupationInput}
-              placeholder="Ex: 1"
-              placeholderTextColor="#666"
-              keyboardType="numeric"
-            />
+            <TouchableOpacity 
+              style={styles.occupationInputTouchable}
+              onPress={() => openEditModal('playerLevel', playerLevel)}
+            >
+              <Text style={styles.occupationText}>{playerLevel || 'Ex: 1'}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -503,39 +582,37 @@ const [aparencia, setAparencia] = useState({
           <View style={styles.redView}>
             <Text style={styles.viewTitle}>ATRIBUTOS DO PERSONAGEM</Text>  
             <ScrollView contentContainerStyle={styles.redScrollContent}>
-              {/* <View style={styles.resourcesContainer}>
+              <View style={styles.resourcesContainer}>
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Vida:</Text>
-
-                    <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('vida', vida)}
-                    >
-                    <Text style={styles.resourceInputText}>{`${vida.current}/${vida.max}`}</Text>                    </TouchableOpacity>
- 
+                  <TouchableOpacity 
+                    style={styles.resourceInputTouchable}
+                    onPress={() => openEditModal('vida', vida)}
+                  >
+                    <Text style={styles.resourceInputText}>{`${vida.current}/${vida.max}`}</Text>
+                  </TouchableOpacity>
                 </View>
 
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Mental:</Text>
-                    <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('mental', mental)}
-                    >
-                    <Text style={styles.resourceInputText}>{`${mental.current}/${mental.max}`}</Text></TouchableOpacity>
-
-                
+                  <TouchableOpacity 
+                    style={styles.resourceInputTouchable}
+                    onPress={() => openEditModal('mental', mental)}
+                  >
+                    <Text style={styles.resourceInputText}>{`${mental.current}/${mental.max}`}</Text>
+                  </TouchableOpacity>
                 </View>
 
                 <View style={styles.resourceRow}>
                   <Text style={styles.resourceLabel}>Energia:</Text>
                   <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('energia', energia)}
-                    >
-                    <Text style={styles.resourceInputText}>{`${energia.current}/${energia.max}`}</Text></TouchableOpacity>
-                 
+                    style={styles.resourceInputTouchable}
+                    onPress={() => openEditModal('energia', energia)}
+                  >
+                    <Text style={styles.resourceInputText}>{`${energia.current}/${energia.max}`}</Text>
+                  </TouchableOpacity>
                 </View>
-              </View> */}
+              </View>
 
               <View style={styles.statsRow}>
                 <View style={styles.statContainer}>

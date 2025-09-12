@@ -122,6 +122,47 @@ backButton: {
     top: 0,
     marginLeft: 110, 
   },
+  // Adicione esses estilos ao seu arquivo styles.js
+nameInputTouchable: {
+  padding: 10,
+  borderRadius: 5,
+  minHeight: 40,
+  justifyContent: 'center',
+},
+nameText: {
+  fontSize: 20,
+  color: '#000',
+  fontWeight: '600'
+},
+occupationInputTouchable: {
+  padding: 8,
+  borderRadius: 5,
+  minHeight: 35,
+  justifyContent: 'center',
+  flex: 1,
+},
+// Adicione esses estilos ao seu arquivo styles.js
+classContainer: {
+  marginBottom: 10, // Espaço entre classe e nível
+  width: '100%', // Ocupa toda a largura
+},
+levelContainer: {
+  width: '100%', // Ocupa toda a largura
+},
+ocupationCharacter: {
+  flexDirection: 'column', // Muda para coluna para empilhar verticalmente
+  alignItems: 'flex-start', // Alinha à esquerda
+  width: '100%',
+},
+occupationItem: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 5,
+  width: '100%',
+},
+occupationText: {
+  fontSize: 14,
+},
   name:{
     fontSize: 20,
     fontWeight: 'bold'
