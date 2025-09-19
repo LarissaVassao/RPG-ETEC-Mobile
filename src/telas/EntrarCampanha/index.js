@@ -6,15 +6,15 @@ import { styles } from './styles';
 import api from "../../../services/api.js";
 
 export default function App({ navigation }) { 
-  const [id, setID] = useState('');
+  const [idCampanha, setIdCampanha] = useState('');
   const [senha, setSenha] = useState('');
 
 async function login(){
   try{
-    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: id, senha: senha}});
+    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: idCampanha, senha: senha, idUsuario: idUsuario}});
     if (res.data.success)
     {
-    navigation.navigate("TelaCampanha", {id})
+    navigation.navigate("TelaCampanha", {email, idUsuario, idCampanha})
     }
     else{
       Alert.alert("Senha ou ID incorreto(s)!")
@@ -32,7 +32,7 @@ async function login(){
       
       <TouchableOpacity 
         style={styles.backButton}
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("Home", {email, idUsuario})}
       >
         <Ionicons name="arrow-back-outline" size={30} color="#2295D1" />
       </TouchableOpacity>
@@ -51,7 +51,7 @@ async function login(){
                 style={styles.input}
                 placeholder="Digite o id da campanha"
                 placeholderTextColor="#999"
-                value={id}
+                value={idCampanha}
                 onChangeText={setID}
               />
             </View>
