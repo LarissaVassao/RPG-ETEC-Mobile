@@ -280,7 +280,8 @@ export const styles = StyleSheet.create({
   },
   createModalContainer: {
     backgroundColor: '#2D3748',
-    padding: 25,
+    paddingRight: 10,
+    padding: 20,
     borderRadius: 15,
     width: '90%',
     maxHeight: '80%',
@@ -291,7 +292,7 @@ export const styles = StyleSheet.create({
     maxHeight: 400,
   },
   createModalScrollContent: {
-    paddingBottom: 20,
+    marginRight: 10
   },
   createModalTitle: {
     fontSize: 22,
@@ -352,9 +353,9 @@ export const styles = StyleSheet.create({
   },
   editModalContainer: {
     backgroundColor: '#2D3748',
-    padding: 25,
+    padding: 20,
     borderRadius: 15,
-    width: '80%',
+    width: '90%',
     borderWidth: 3,
     borderColor: '#fff',
   },
@@ -541,7 +542,8 @@ export const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: '#686868ff',
-    padding: 25,
+    paddingRight: 10,
+    padding: 20,
     borderRadius: 15,
     width: '90%',
     maxHeight: '80%', 
@@ -550,6 +552,7 @@ export const styles = StyleSheet.create({
   },
   modalContentContainer: {
     paddingBottom: 20, 
+    marginRight: 10
   },
   modalContentScroll: {
     maxHeight: 250, 
