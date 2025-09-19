@@ -11,6 +11,7 @@ export default function Login({ navigation }) {
     const [opac] = useState(new Animated.Value(0));
     const [senha, setSenha] = useState('');
     const [email, setEmail] = useState('');
+    const [idUsuario, setIdUsuario] = useState('');
 
     useEffect(() => {
         Animated.parallel([
@@ -37,7 +38,8 @@ async function login(){
         console.log(res.data);
     if (res.data.success)
     {
-    navigation.navigate("Home", { email, senha });
+    setIdUsuario(res.data.id);
+    navigation.navigate("Home", {email, idUsuario});
     }
     else{
       Alert.alert("Senha ou Email incorreto(s)!");

@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity 
           style={styles.actionButton}
-          onPress={() => navigation.navigate("EntrarCampanha")}
+          onPress={() => navigation.navigate("EntrarCampanha", {email, idUsuario})}
           activeOpacity={0.9}
         >
           <View style={styles.buttonContent}>
@@ -45,7 +45,7 @@ export default function Home({ navigation }) {
 
         <TouchableOpacity 
           style={styles.actionButton}
-          onPress={() => navigation.navigate("CriarCampanha")}
+          onPress={() => navigation.navigate("CriarCampanha", {email, idUsuario})}
           activeOpacity={0.9}
         >
           <View style={styles.buttonContent}>

@@ -30,7 +30,7 @@ async function saveData() {
             }
             
           Alert.alert("Salvo com Sucesso", "Sua campanha foi registrada com o seguinte ID: "+ res.data.id +", anote esse número!")
-          navigation.navigate("EntrarCampanha");       
+          navigation.navigate("EntrarCampanha", {email, idUsuario});       
 
           }
           catch(error){console.log("ERRO" + error)}
@@ -46,7 +46,7 @@ async function saveData() {
       
       <TouchableOpacity 
         style={styles.backButton}
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("Home", {email, idUsuario})}
       >
         <Ionicons name="arrow-back-outline" size={30} color="#2295D1" />
       </TouchableOpacity>
