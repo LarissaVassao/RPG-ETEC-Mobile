@@ -311,12 +311,14 @@ export const styles = StyleSheet.create({
   creditContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2394D1',
+    backgroundColor: '#1B6F9D',
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
     borderWidth: 2,
     borderColor: '#fff',
+    width: '95%',
+    alignSelf: 'center'
   },
   creditInputText: {
     color: '#fff',
@@ -325,14 +327,17 @@ export const styles = StyleSheet.create({
   },
   creditInputTouchable: {
     flex: 1,
-    backgroundColor: '#1E7CAE',
+    backgroundColor: '15577A',
     borderRadius: 8,
-    padding: 10,
+    padding: 5,
     borderWidth: 1,
     borderColor: '#ffffffff',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#18638C',
+
   },
+
   creditLabel: {
     color: '#fff',
     fontWeight: 'bold',
@@ -680,6 +685,7 @@ export const styles = StyleSheet.create({
   },
   redScrollContent: {
     paddingBottom: 30, 
+
   },
   redView: {
     flex: 1,
@@ -791,6 +797,8 @@ export const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderWidth: 2,
     borderColor: '#fff',
+
+
   },
   statInputText: {
     color: '#fff',
@@ -801,11 +809,12 @@ export const styles = StyleSheet.create({
     backgroundColor: '#1E7CAE',
     borderRadius: 8,
     padding: 5,
-    minWidth: 60,
     borderWidth: 1,
     borderColor: '#ffffffff',
     justifyContent: 'center',
     alignItems: 'center',
+    width: '95%',
+
   },
   statLabel: {
     color: '#fff',
@@ -817,7 +826,31 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+    width: '95%',
+    alignSelf: 'center'
   },
+  // resourcesContainer: {
+  //   justifyContent: 'center', 
+  //   backgroundColor: '#2394D1',
+  //   padding: 15,
+  //   borderRadius: 10,
+  //   marginBottom: 20,
+  //   borderWidth: 2,
+  //   borderColor: '#ffffffff',
+  //   width: '95%',
+  //   alignSelf: 'center',
+  // },
+  verticalLine:{
+    height: 30,
+    backgroundColor: '#1E7CAE',
+    marginBottom: 20,
+    borderRadius: 1,
+    borderWidth: 1,
+    borderColor: '#ffffffff',
+    width: '95%',
+    alignSelf: 'center'
+  },
+
   subtractAndAdditionbox: {
     backgroundColor: '#79899D',
     width: '15%',
@@ -834,7 +867,7 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#15577A',
     marginHorizontal: 2, 
-    width: '94%',
+    width: '95%',
     alignSelf: 'center'
   },
   tableHeader: {

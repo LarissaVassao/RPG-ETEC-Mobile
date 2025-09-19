@@ -42,7 +42,7 @@ export default function Personagem({ navigation }) {
   const [ca, setCa] = useState(10);
   const [carga, setCarga] = useState(50);
   const [movimento, setMovimento] = useState(9);
-  const [creditos, setCreditos] = useState(1);
+  const [creditos, setCreditos] = useState({current: 10, max: 10});
   const [forca, setForca] = useState(10);
   const [agilidade, setAgilidade] = useState(12);
   const [constituicao, setConstituicao] = useState(14);
@@ -190,6 +190,7 @@ const saveEdit = () => {
       case 'vida': 
       case 'mental': 
       case 'energia': 
+      case 'creditos': 
         // Converte a string "current/max" de volta para objeto
         const values = tempValue.split('/');
         const current = parseInt(values[0]) || 0;
@@ -201,6 +202,9 @@ const saveEdit = () => {
           setMental({current, max});
         } else if (editingField === 'energia') {
           setEnergia({current, max});
+        }
+        else if (editingField === 'creditos') {
+          setCreditos({current, max});
         }
         break;
       
@@ -614,6 +618,8 @@ const [aparencia, setAparencia] = useState({
                 </View>
               </View>
 
+              <View style={styles.verticalLine}/>
+
               <View style={styles.statsRow}>
                 <View style={styles.statContainer}>
                   <TouchableOpacity 
@@ -646,15 +652,7 @@ const [aparencia, setAparencia] = useState({
                 </View>
               </View>
 
-              <View style={styles.creditContainer}>
-                <Text style={styles.creditLabel}>Créditos:</Text>
-                <TouchableOpacity 
-                  style={styles.creditInputTouchable}
-                  onPress={() => openEditModal('creditos', creditos)}
-                >
-                  <Text style={styles.creditInputText}>{creditos.toString()}</Text>
-                </TouchableOpacity>
-              </View>
+              <View style={styles.verticalLine}/>
 
               <View style={styles.attributesGrid}>
                 <View style={styles.attributeRow}>
@@ -963,6 +961,16 @@ const [aparencia, setAparencia] = useState({
       {activeView === 'blue' && 
         <View style={styles.blueView}>
           <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
+
+          <View style={styles.creditContainer}>
+            <Text style={styles.creditLabel}>Créditos:</Text>
+            <TouchableOpacity 
+              style={styles.creditInputTouchable}
+              onPress={() => openEditModal('creditos', creditos)}
+            >
+              <Text style={styles.resourceInputText}>{`${creditos.current}/${creditos.max}`}</Text>
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity 
             style={styles.createItemButton}
