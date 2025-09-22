@@ -3,15 +3,16 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated,StatusBar
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from './styles';
-
+import { useUser } from "../context/UserContext";
 import api from "../../../services/api.js";
 
 export default function Login({ navigation }) {
+    const { setUser } = useUser();
     const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
     const [opac] = useState(new Animated.Value(0));
     const [senha, setSenha] = useState('');
     const [email, setEmail] = useState('');
-    const [idUsuario, setIdUsuario] = useState('');
+    const [id, setId] = useState('');
 
     useEffect(() => {
         Animated.parallel([
@@ -38,8 +39,9 @@ async function login(){
         console.log(res.data);
     if (res.data.success)
     {
-    setIdUsuario(res.data.id);
-    navigation.navigate("Home", {email, idUsuario});
+    setId(res.data.id);
+    setUser({ id, email });
+    navigation.navigate("Home");
     }
     else{
       Alert.alert("Senha ou Email incorreto(s)!");

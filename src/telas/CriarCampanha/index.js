@@ -30,7 +30,7 @@ async function saveData() {
             }
             
           Alert.alert("Salvo com Sucesso", "Sua campanha foi registrada com o seguinte ID: "+ res.data.id +", anote esse número!")
-          navigation.navigate("EntrarCampanha", {email, idUsuario});       
+          navigation.navigate("EntrarCampanha");       
 
           }
           catch(error){console.log("ERRO" + error)}
@@ -46,7 +46,7 @@ async function saveData() {
       
       <TouchableOpacity 
         style={styles.backButton}
-        onPress={() => navigation.navigate("Home", {email, idUsuario})}
+        onPress={() => navigation.navigate("Home")}
       >
         <Ionicons name="arrow-back-outline" size={30} color="#2295D1" />
       </TouchableOpacity>
@@ -68,6 +68,7 @@ async function saveData() {
                 value={nomeCampanha}
                 onChangeText={setNomeCampanha}
               />
+              
             </View>
              <View style={styles.formGroup}>
               <Text style={styles.label}>SENHA PARA A CAMPANHA</Text>
