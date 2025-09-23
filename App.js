@@ -19,6 +19,8 @@ import Mapa from './src/telas/Jogador/Mapa';
 
 import Teste from './src/telas/Teste';
 
+import { UserProvider } from './src/context/UserContext';
+
 import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
 
@@ -69,7 +71,7 @@ export default function App() {
   const Stack = createStackNavigator();
 
   return (
-    
+  <UserProvider>
  <NavigationContainer>
  <Stack.Navigator initialRouteName='Personagem'>
 
@@ -105,6 +107,7 @@ export default function App() {
 
  </Stack.Navigator>
 </NavigationContainer>
+</UserProvider>
   );
 }
 

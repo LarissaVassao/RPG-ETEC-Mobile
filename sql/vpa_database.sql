@@ -133,10 +133,4 @@ CREATE TABLE token(
   FOREIGN KEY (id_npc) REFERENCES npc(id) ON DELETE CASCADE,
 );
 
-CREATE TABLE loginToken(
-  token VARCHAR(256) PRIMARY KEY,
-  id_usuario INT NOT NULL,
-  expires_at TIMESTAMP DEFAULT now()
-)
-
  

@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './styles';
-
+import { useUser } from "../context/UserContext";
 import api from "../../../services/api.js";
 
 export default function App({ navigation }) { 
   const [idCampanha, setIdCampanha] = useState('');
   const [senha, setSenha] = useState('');
+  const { user } = useUser();
 
 async function login(){
   try{
-    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: idCampanha, senha: senha, idUsuario: idUsuario}});
+    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: idCampanha, senha: senha, idUsuario: user.idUsuario}});
     if (res.data.success)
     {
-    navigation.navigate("TelaCampanha", {email, idUsuario, idCampanha})
+    navigation.navigate("TelaCampanha", {idCampanha})
     }
     else{
       Alert.alert("Senha ou ID incorreto(s)!")
@@ -32,7 +33,7 @@ async function login(){
       
       <TouchableOpacity 
         style={styles.backButton}
-        onPress={() => navigation.navigate("Home", {email, idUsuario})}
+        onPress={() => navigation.navigate("Home")}
       >
         <Ionicons name="arrow-back-outline" size={30} color="#2295D1" />
       </TouchableOpacity>
