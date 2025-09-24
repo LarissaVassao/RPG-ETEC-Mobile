@@ -2,16 +2,21 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar, Modal, Pressable } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './styles';
+import { useUser } from "../../context/UserContext.js";
 
 export default function Home({ navigation }) {
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  
+  const { user } = useUser();
+  const { setUser } = useUser();
+
   const handleLogout = () => {
     setLogoutModalVisible(true);
   };
 
   const confirmLogout = () => {
     setLogoutModalVisible(false);
+    console.log(user);
+    setUser(null);
     navigation.navigate("Login");
   };
 

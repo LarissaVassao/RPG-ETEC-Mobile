@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './styles';
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../context/UserContext.js";
 import api from "../../../services/api.js";
 
 export default function App({ navigation }) { 
-  const [idCampanha, setIdCampanha] = useState('');
+  const [id, setId] = useState('');
   const [senha, setSenha] = useState('');
-  const { user } = useUser();
+  const { user, setCampanha } = useUser();
+
 
 async function login(){
   try{
-    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: idCampanha, senha: senha, idUsuario: user.idUsuario}});
+    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: id, senha: senha, idUsuario: user.id}});
     if (res.data.success)
     {
-    navigation.navigate("TelaCampanha", {idCampanha})
+    setCampanha(id);
+    navigation.navigate("TelaCampanha", {id})
     }
     else{
       Alert.alert("Senha ou ID incorreto(s)!")
@@ -52,8 +54,8 @@ async function login(){
                 style={styles.input}
                 placeholder="Digite o id da campanha"
                 placeholderTextColor="#999"
-                value={idCampanha}
-                onChangeText={setID}
+                value={id}
+                onChangeText={setId}
               />
             </View>
 

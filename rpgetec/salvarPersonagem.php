@@ -6,7 +6,6 @@ $input = json_decode(file_get_contents('php://input'), true);
 $nome = $input['nome'] ?? '';
 $descricao = $input['descricao'] ?? '';
 $senhaBase = $input['senha'] ?? '';
-$usuario = $input['id_usuario'] ?? '';
 //$usuario = PEGAR O ID DO USUARIO LOGADO AQ.
 
 $senha = password_hash($senhaBase, PASSWORD_DEFAULT);
@@ -17,21 +16,10 @@ try {
     $res->bindValue(":senha", $senha);
     $res->execute();
 
-$lastId = $pdo->lastInsertId();
-    try{
 	//Inserir na tabela campanha_usuario
-	$res = $pdo->prepare("INSERT INTO campanha_usuario SET id_usuario = :usuario, id_campanha = :id_campanha, mestre = 1");	
-    $res->bindValue(":usuario", $usuario);
-    $res->bindValue(":id_campanha", $lastId, PDO::PARAM_INT);
-    $res->execute();
-    }
-    catch(Exception $e){
-        $result = json_encode([
-         'mensagem' => 'Erro ao salvar em campanha_usuario: ' . $e->getMessage(),
-         'sucesso' => false
-     ]);
-     echo $result;
-    }
+	//$res = $pdo->prepare("INSERT INTO campanha_usuario SET id_usuario = :usuario, id_campanha = $lastId, mestre = 1");	
+    //$res->bindValue(":usuario", $usuario);
+    //$res->execute();
 
 // Error Check
 if ($res->rowCount() === 0) {
@@ -42,6 +30,7 @@ if ($res->rowCount() === 0) {
     exit;
 }
 
+$lastId = $pdo->lastInsertId();
 if ($lastId == 0) {
     echo json_encode([
         'mensagem' => 'Falha ao obter ID da campanha.',

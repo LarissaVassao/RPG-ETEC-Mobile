@@ -31,22 +31,18 @@ CREATE TABLE personagem(
   id INT PRIMARY KEY AUTO_INCREMENT,
   id_campanha INT NOT NULL,
   id_usuario INT NOT NULL,
-  tokenImage VARCHAR(250) NOT NULL,
-  profileImage VARCHAR(250) NOT NULL,
-  nome VARCHAR(50) NOT NULL,
-  vida INT NOT NULL DEFAULT 10,
-  vidaAtual INT NOT NULL DEFAULT 10,
   nome VARCHAR(64) NOT NULL,
   vida INT NOT NULL DEFAULT 10,
+  vidaAtual INT NOT NULL DEFAULT 10,
   tokenImage VARCHAR(256) NOT NULL,
   profileImage VARCHAR(256) NOT NULL,
   mental INT NOT NULL DEFAULT 10,
   mentalAtual INT NOT NULL DEFAULT 10,
   energia INT NOT NULL DEFAULT 10,
   energiaAtual INT NOT NULL DEFAULT 10,
-  ca INT NOT NULL DEFAULT 3
-  carga INT NOT NULL DEFAULT 10,
-  cargaAtual INT NOT NULL DEFAULT 0,
+  ca INT NOT NULL DEFAULT 3,
+  cargaMax INT NOT NULL DEFAULT 10,
+  carga INT NOT NULL DEFAULT 0,
   credito INT NOT NULL DEFAULT 0,
   creditoMax INT NOT NULL DEFAULT 5,
   movimento INT NOT NULL DEFAULT 6,
@@ -84,8 +80,7 @@ CREATE TABLE npc(
 
 CREATE TABLE pericia (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  nome VARCHAR(128) NOT NULL,
-  descricao TEXT
+  nome VARCHAR(128) NOT NULL
 );
 
 CREATE TABLE personagem_pericia (
@@ -117,7 +112,7 @@ CREATE TABLE mapa(
   mapImage VARCHAR(256),
   largura int(4) NOT NULL,
   altura int(4) NOT NULL,
-  FOREIGN KEY (id_campanha) REFERENCES campanha(id) ON DELETE CASCADE,
+  FOREIGN KEY (id_campanha) REFERENCES campanha(id) ON DELETE CASCADE
 );
 
 CREATE TABLE token(
@@ -130,7 +125,7 @@ CREATE TABLE token(
   tokenImage VARCHAR(256),
   FOREIGN KEY (id_mapa) REFERENCES mapa(id) ON DELETE CASCADE,
   FOREIGN KEY (id_personagem) REFERENCES personagem(id) ON DELETE CASCADE,
-  FOREIGN KEY (id_npc) REFERENCES npc(id) ON DELETE CASCADE,
+  FOREIGN KEY (id_npc) REFERENCES npc(id) ON DELETE CASCADE
 );
 
  

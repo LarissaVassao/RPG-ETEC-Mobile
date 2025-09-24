@@ -2,6 +2,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Modal, Pressable} from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 import { styles } from './styles';
+import { useUser } from "../../../context/UserContext.js";
 
 
 import api from "../../../../services/api.js";
@@ -9,12 +10,20 @@ import api from "../../../../services/api.js";
 export default function ListaPersonagens({ navigation }) {
     // Estado para armazenar a lista de personagens
     const [personagens, setPersonagens] = useState([]);
+    const [mestre, setMestre] = useState(false);
+    const { user, campanha } = useUser();
+
 
     useEffect(() => {
         const listarPersonagens = async () => {
+            try{
+            const res = await api.get("rpgetec/verificarMestre.php", {params: {id_campanha: campanha, id_usuario: user.id}});
+            setMestre(res.data)
+           
             try {
-              
-                const res = await api.get("rpgetec/listarPersonagens.php", {params: {id_campanha: 1}});
+                
+                const res = await api.get("rpgetec/listarPersonagens.php", {params: {id_campanha: campanha, mestre: mestre}});
+                console.log(campanha)
                 console.log(res.data);
                 if(res.data.success){
                 const personagensMapeados = res.data.personagens.map(p => ({
@@ -26,6 +35,8 @@ export default function ListaPersonagens({ navigation }) {
               }
             } catch (error) {
                 console.error("Erro ao buscar personagens:", error);
+            }  }catch (error) {
+                console.error("Erro ao verificar se mestre:", error);
             }
         };
 
@@ -70,14 +81,14 @@ export default function ListaPersonagens({ navigation }) {
                 
                 <Text style={styles.headerTitle}>Lista de Personagens</Text>
                 
-                {/*
-                Caso for Mestre
-                <TouchableOpacity 
-                    style={styles.createButton}
-                    onPress={() => navigation.navigate("CadastrarPersonagem")}
-                >
-                    <Ionicons name="add-outline" size={22} color="#fff" />
-                </TouchableOpacity> */}
+                {mestre && (
+                    <TouchableOpacity 
+                        style={styles.createButton}
+                        onPress={() => navigation.navigate("CadastrarPersonagem")}
+                    >
+                        <Ionicons name="add-outline" size={22} color="#fff" />
+                    </TouchableOpacity>
+                )}
             </View>
 
             <ScrollView 

@@ -3,11 +3,12 @@ import { StyleSheet, Text, View, KeyboardAvoidingView, Image, Animated,StatusBar
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from './styles';
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../context/UserContext.js";
 import api from "../../../services/api.js";
 
 export default function Login({ navigation }) {
     const { setUser } = useUser();
+    const { user } = useUser();
     const [offset] = useState(new Animated.ValueXY({ x: 0, y: 90 }));
     const [opac] = useState(new Animated.Value(0));
     const [senha, setSenha] = useState('');
@@ -31,24 +32,20 @@ export default function Login({ navigation }) {
     }, []);
 
 async function login(){
-    console.log("iniciando login");
-    console.log(senha);
-    console.log(email);
     try{const res = await api.get('rpgetec/checarUsuarios.php', {params: {email: email, senha: senha}});
-    console.log("pós api.get");
-        console.log(res.data);
     if (res.data.success)
     {
     setId(res.data.id);
-    setUser({ id, email });
+    setUser({ id: res.data.id, email });
+    console.log(user)
     navigation.navigate("Home");
     }
     else{
       Alert.alert("Senha ou Email incorreto(s)!");
     }
-    console.log(res);
+
   }
-  catch(error){console.log(error)}
+  catch(error){console.error(error)}
   }
 
     return (

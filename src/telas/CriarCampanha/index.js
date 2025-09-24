@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, TextInput, ScrollView, KeyboardAvoidingView, Platform, Alert} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { styles } from './styles';
+import { useUser } from "../../context/UserContext.js";
 
 import api from "../../../services/api.js";
 
@@ -11,8 +12,10 @@ export default function App({ navigation }) {
   const [nomeCampanha, setNomeCampanha] = useState('');
   const [descricao, setDescricao] = useState('');
   const [senhaCampanha, setSenhaCampanha] = useState('');
+  const { user } = useUser();
 
-async function saveData() {     
+async function saveData() {   
+        console.log(user)  
         console.log("saveData start");       ;
         if (nomeCampanha == "") {
           console.log("saveData error empty");  
@@ -22,7 +25,7 @@ async function saveData() {
         else{
           console.log("saveData non-empty, proceding");  
           try{
-            const res = await api.post('rpgetec/salvarCampanha.php',{nome: nomeCampanha, descricao: descricao, senha: senhaCampanha});
+            const res = await api.post('rpgetec/salvarCampanha.php',{nome: nomeCampanha, descricao: descricao, senha: senhaCampanha, id_usuario:user.id});
             console.log(res.data);
             if (!res.data.sucesso) {
               Alert.alert("Erro ao salvar", res.data.mensagem);              

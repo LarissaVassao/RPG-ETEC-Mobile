@@ -58,6 +58,8 @@ export default function Personagem({ navigation }) {
   const [percepcao, setPercepcao] = useState(1);
   const [sorte, setSorte] = useState(1);
 
+  const [ocupationModalVisible, setocupationModalVisible] = useState(false);
+  const [selectedocupation, setSelectedocupation] = useState('');
   // Estados para as pericias
   const [pericias, setPericias] = useState({
     // acalmar: '1',
@@ -140,6 +142,16 @@ export default function Personagem({ navigation }) {
     setRpgEquipments(prev => prev.map(item => 
       item.id === itemId ? { ...item, type: newType } : item
     ));
+  };
+
+  const openocupationModal = () => {
+    setSelectedocupation(playerocupation);
+    setocupationModalVisible(true);
+  };
+  // Função para salvar a profissao selecionada
+  const saveocupationSelection = () => {
+    setPlayerocupation(selectedocupation);
+    setocupationModalVisible(false);
   };
 
   const handleCreateEquipment = () => {
@@ -749,7 +761,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('acalmar', pericias.acalmar)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.acalmar.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.acalmar}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -761,7 +773,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('acrobacia', pericias.acrobacia)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.acrobacia.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.acrobacia}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -773,7 +785,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('atletismo', pericias.atletismo)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.atletismo.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.atletismo}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -785,7 +797,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('atualidades', pericias.atualidades)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.atualidades.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.atualidades}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -797,7 +809,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('analise', pericias.analise)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.analise.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.analise}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -809,7 +821,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('charme', pericias.charme)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.charme.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.charme}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -821,7 +833,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('eletronicos', pericias.eletronicos)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.eletronicos.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.eletronicos}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -833,7 +845,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('enganar', pericias.enganar)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.enganar.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.enganar}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -845,7 +857,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('furtividade', pericias.furtividade)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.furtividade.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.furtividade}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -857,7 +869,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('informatica', pericias.informatica)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.informatica.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.informatica}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -869,7 +881,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('iniciativa', pericias.iniciativa)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.iniciativa.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.iniciativa}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -881,7 +893,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('intimidacao', pericias.intimidacao)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.intimidacao.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.intimidacao}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -893,7 +905,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('intuicao', pericias.intuicao)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.intuicao.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.intuicao}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -905,7 +917,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('medicina', pericias.medicina)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.medicina.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.medicina}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -917,7 +929,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('mecanica', pericias.mecanica)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.mecanica.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.mecanica}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -929,7 +941,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('persuasao', pericias.persuasao)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.persuasao.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.persuasao}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -941,7 +953,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('primeirosSocorros', pericias.primeirosSocorros)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.primeirosSocorros.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.primeirosSocorros}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -953,7 +965,7 @@ const [aparencia, setAparencia] = useState({
                     style={styles.skillInputTouchable}
                     onPress={() => openEditModal('procurar', pericias.procurar)}
                   >
-                    <Text style={styles.skillInputText}>{pericias.procurar.toString()}</Text>
+                    <Text style={styles.skillInputText}>{pericias.procurar}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -1059,7 +1071,7 @@ const [aparencia, setAparencia] = useState({
                     <Text style={styles.inputLabel}>Preço (Créditos)</Text>
                     <TextInput
                       style={styles.textInput}
-                      value={newEquipment.price.toString()}
+                      value={newEquipment.price}
                       onChangeText={(text) => setNewEquipment({...newEquipment, price: parseInt(text) || 0})}
                       placeholder="Digite o preço em créditos"
                       placeholderTextColor="#888"
@@ -1071,7 +1083,7 @@ const [aparencia, setAparencia] = useState({
                     <Text style={styles.inputLabel}>Volume</Text>
                     <TextInput
                       style={styles.textInput}
-                      value={newEquipment.weight.toString()}
+                      value={newEquipment.weight}
                       onChangeText={(text) => setNewEquipment({...newEquipment, weight: parseFloat(text) || 0})}
                       placeholder="Digite o volume/peso"
                       placeholderTextColor="#888"
