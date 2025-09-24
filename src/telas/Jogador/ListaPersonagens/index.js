@@ -17,9 +17,13 @@ export default function ListaPersonagens({ navigation }) {
     useEffect(() => {
         const listarPersonagens = async () => {
             try{
+            
+            console.log("Id da Campanha: "+campanha);
+            console.log("Id da Usuario: "+user.id);
             const res = await api.get("rpgetec/verificarMestre.php", {params: {id_campanha: campanha, id_usuario: user.id}});
-            setMestre(res.data)
-           
+            console.log("Resultado de verificar mestre: "+res.data);
+            setMestre(res.data);
+              
             try {
                 
                 const res = await api.get("rpgetec/listarPersonagens.php", {params: {id_campanha: campanha, mestre: mestre}});

@@ -13,7 +13,7 @@ export default function App({ navigation }) {
 
 async function login(){
   try{
-    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: id, senha: senha, idUsuario: user.id}});
+    const res = await  api.get('rpgetec/checarCampanhas.php', {params: {id: id, senha: senha, id_usuario: user.id}});
     if (res.data.success)
     {
     setCampanha(id);

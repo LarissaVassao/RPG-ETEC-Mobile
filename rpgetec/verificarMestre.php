@@ -28,7 +28,7 @@ try {
     echo json_encode([
         'success' => true,
         'mestre' => $res['mestre']
-    ])
+    ]);
         exit;
     ;
 }
