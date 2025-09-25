@@ -3,14 +3,15 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, StatusBar, ScrollV
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
 import { styles } from './styles';
+import { useUser } from "../../context/UserContext.js";
 
 
 export default function CadastrarPersonagem({ navigation }) {
     const [nomePersonagem, setNomePersonagem] = useState('');
     const [jogador, setJogador] = useState('');
-    const [nivelPersonagem, setNivelPersonagem] = useState('');
+    const [nivelPersonagem, setNivelPersonagem] = useState(1);
     const [antepassado, setAntepassado] = useState(0);
-
+    const { user, campanha } = useUser();
     
 const antepassados = [
   {nome: "Estudante", valor: 1, pericia1: "atualidades", valor1: 2, pericia2: "analise", valor2: 1, credito: 0},
@@ -50,6 +51,31 @@ const antepassados = [
   {nome: "Fanático", valor: 37, pericia1: "fanatismo", valor1: 3, credito: 1}
 ];
 
+async function saveData() {   
+        console.log(user)  
+        console.log("saveData start");      
+        if (nomeCampanha == "" || antepassado == "" || jogador == "" || nivelPersonagem == "") {
+          console.log("saveData error empty");  
+          Alert.alert("Erro!", "Preencha os dados!");
+          return;
+        }
+        else{
+          console.log("saveData non-empty, proceding");  
+          try{
+            const res = await api.post('rpgetec/salvarPersonagem.php',{nome: nome, id_usuario: user.id, id_campanha: campanha.id, antepassado:antepassado, nivel:nivelPersonagem});
+            console.log(res.data);
+            if (!res.data.sucesso) {
+              Alert.alert("Erro ao salvar", res.data.mensagem);              
+              return;
+            }
+            
+          
+          navigation.navigate("Personagem");       
+
+          }
+          catch(error){console.error("ERRO" + error)}
+    }     
+}     
 
     let antepassadosItems = antepassados.map((v,k) => {
         return <Picker.Item key={k} value={k} label={v.nome} />
