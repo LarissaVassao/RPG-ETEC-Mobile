@@ -21,8 +21,8 @@ export default function ListaPersonagens({ navigation }) {
             console.log("Id da Campanha: "+campanha);
             console.log("Id da Usuario: "+user.id);
             const res = await api.get("rpgetec/verificarMestre.php", {params: {id_campanha: campanha, id_usuario: user.id}});
-            console.log("Resultado de verificar mestre: "+res.data);
-            setMestre(res.data);
+            console.log("Resultado de verificar mestre: "+res.data.mestre);
+            setMestre(res.data.mestre);
               
             try {
                 
