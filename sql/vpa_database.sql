@@ -108,6 +108,7 @@ CREATE TABLE equipamento(
 
 CREATE TABLE mapa(
   id INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(128) NOT NULL,
   id_campanha INT NOT NULL,
   mapImage VARCHAR(256),
   largura int(4) NOT NULL,

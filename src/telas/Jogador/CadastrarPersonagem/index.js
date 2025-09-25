@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, StatusBar, ScrollV
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
 import { styles } from './styles';
-import { useUser } from "../../context/UserContext.js";
+import { useUser } from "../../../context/UserContext.js";
 
 
 export default function CadastrarPersonagem({ navigation }) {
@@ -164,7 +164,7 @@ async function saveData() {
                     </View>
                     
                     <TouchableOpacity style={styles.button}
-                     onPress={() => navigation.navigate("Personagem")}>
+                     onPress={() => saveData()}>
                         <Text style={styles.buttonText}>CRIAR PERSONAGEM</Text>
                     </TouchableOpacity>
                 </View>
