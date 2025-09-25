@@ -16,6 +16,8 @@ import Personagem from './src/telas/Jogador/Personagem';
 import ListaPersonagens from './src/telas/Jogador/ListaPersonagens';
 import TelaCampanha from './src/telas/TelaCampanha';
 import Mapa from './src/telas/Jogador/Mapa';
+import ListaMapas from './src/telas/Jogador/ListaMapas';
+
 
 import Teste from './src/telas/Teste';
 
@@ -40,7 +42,7 @@ function Tabs(){
         }else if (route.name === 'ListaPersonagens') {
           iconName = focused ? 'person' : 'person-outline';
         }
-        else if (route.name === 'Mapa'){
+        else if (route.name === 'ListaMapas'){
           iconName = focused ? 'map' : 'map-outline'
         }
 
@@ -60,7 +62,7 @@ function Tabs(){
     >
       {/* <Tab.Screen name= "TelaCampanha" component={TelaCampanha} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen> */}
       <Tab.Screen name= "ListaPersonagens" component={ListaPersonagens} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
-      <Tab.Screen name= "Mapa" component={Mapa} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
+      <Tab.Screen name= "ListaMapas" component={ListaMapas} options={{headerShown: false, tabBarShowLabel: false}}></Tab.Screen>
 
 
     </Tab.Navigator>
@@ -101,6 +103,7 @@ export default function App() {
    <Stack.Screen name="Personagem" component={Personagem} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="TelaCampanha" component={Tabs} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Mapa" component={Mapa} options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="ListaMapas" component={ListaMapas} options={{headerShown: false}}></Stack.Screen>
 
       <Stack.Screen name="Teste" component={Teste} options={{headerShown: false}}></Stack.Screen>
 
