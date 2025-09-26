@@ -11,6 +11,7 @@ export default function ListaMapas({ navigation }) {
     const [mapas, setMapas] = useState([]);
     const [mestre, setMestre] = useState(false);
     const { user, campanha } = useUser();
+    console.log("====LISTA MAPAS====");
 
     useEffect(() => {
         const listarMapas = async () => {
@@ -105,9 +106,9 @@ export default function ListaMapas({ navigation }) {
                     ) : (
                         mapas.map((mapa) => (
                             <TouchableOpacity 
-                                key={mapa.id}
+                                key={mapa.key}
                                 style={styles.mapaCard}
-                                onPress={() => navigation.navigate("Mapa", { id: mapa.id })}
+                                onPress={() => navigation.navigate("Mapa", { id: mapa.key })}
                             >
                                 <Image 
                                     style={styles.mapaImage} 

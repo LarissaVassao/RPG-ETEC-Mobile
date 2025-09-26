@@ -6,7 +6,7 @@ import { styles} from './styles';
 
 import api from "../../../../services/api.js";
 
-export default function Personagem({ navigation }) {
+export default function Personagem({ route, navigation }) {
   const [activeView, setActiveView] = useState('red'); 
   const [rpgEquipments, setRpgEquipments] = useState([
     // {
@@ -30,7 +30,8 @@ export default function Personagem({ navigation }) {
     price: 0, // Adicione este campo
     weight: 0  // Adicione este campo
   });
-  
+  const { idPersonagem } = route.params;
+    console.log("====PERSONAGEM====, id: " + idPersonagem);
   // Estados para os modais de edição
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [editingField, setEditingField] = useState('');
@@ -97,12 +98,10 @@ export default function Personagem({ navigation }) {
         const checarPersonagem = async () => {
             try {
               
-                const res = await api.get("rpgetec/checarPersonagem.php", {params: {id_personagem: 1}});
-                console.log(res.data);
+                const res = await api.get("rpgetec/checarPersonagem.php", {params: {id_personagem: idPersonagem}});
+                console.log("RES DATA PERSONAGEM:" + res.data.personagem);
                 if (res.data.success) {
                   const p = res.data.personagem;
-                  console.log('success confirmed, proceding');
-                  console.log(p);
                   setVida(p.vida);
                   setVidaAtual(p.vidaAtual);
                   setMental(p.mental);
@@ -209,13 +208,13 @@ export default function Personagem({ navigation }) {
   savePericiaEdit();
   }else {
     try{       
-      const res = await api.get("rpgetec/alterarPersonagem.php", {params: {id_personagem: 1, valor: tempValue, atributo:editingField}});
+      const res = await api.get("rpgetec/alterarPersonagem.php", {params: {id_personagem: idPersonagem, valor: tempValue, atributo:editingField}});
       console.log(res.data);
       switch (editingField) {
         case 'vida': setVida(tempValue); break;
         case 'mental': setMental(tempValue); break;
         case 'energia': setEnergia(tempValue); break;
-        case 'creditos': 
+        case 'credito': 
         case 'ca': setCa(tempValue); break;
         case 'carga': setCarga(tempValue); break;
         case 'movimento': setMovimento(tempValue); break;
@@ -978,12 +977,12 @@ const [aparencia, setAparencia] = useState({
           <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
 
           <View style={styles.creditContainer}>
-            <Text style={styles.creditLabel}>Créditos:</Text>
+            <Text style={styles.creditLabel}>Crédito Usado:</Text>
             <TouchableOpacity 
               style={styles.creditInputTouchable}
-              onPress={() => openEditModal('creditos', creditos)}
+              onPress={() => openEditModal('credito', credito)}
             >
-              <Text style={styles.resourceInputText}>{`${creditos.current}/${creditos.max}`}</Text>
+              <Text style={styles.resourceInputText}>{`${credito}/${creditoMax}`}</Text>
             </TouchableOpacity>
           </View>
 

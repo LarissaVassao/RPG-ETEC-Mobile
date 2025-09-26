@@ -12,7 +12,7 @@ export default function ListaPersonagens({ navigation }) {
     const [personagens, setPersonagens] = useState([]);
     const [mestre, setMestre] = useState(false);
     const { user, campanha } = useUser();
-
+    console.log("====LISTAR PERSONAGENS====");
 
     useEffect(() => {
         const listarPersonagens = async () => {
@@ -26,12 +26,12 @@ export default function ListaPersonagens({ navigation }) {
               
             try {
                 
-                const res = await api.get("rpgetec/listarPersonagens.php", {params: {id_campanha: campanha, mestre: mestre}});
-                console.log(campanha)
+                const res = await api.get("rpgetec/listarPersonagens.php", {params: {id_campanha: campanha, mestre: mestre, id_usuario: user.id}});
+                console.log('CAMPANHA:' + campanha)
                 console.log(res.data);
                 if(res.data.success){
                 const personagensMapeados = res.data.personagens.map(p => ({
-                    key: p.id,
+                    id: p.id,
                     nome: p.nome,
                     imagem: require('../../../../assets/img/logo.png') 
                 })); 
@@ -110,7 +110,7 @@ export default function ListaPersonagens({ navigation }) {
                             <TouchableOpacity 
                                 key={personagem.id}
                                 style={styles.characterCard}
-                                onPress={() => navigation.navigate("Personagem", { id: personagem.id })}
+                                onPress={() => navigation.navigate("Personagem", { idPersonagem: personagem.id })}
                             >
                                 <Image 
                                     style={styles.characterImage} 

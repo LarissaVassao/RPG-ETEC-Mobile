@@ -18,10 +18,10 @@ else if ($valor == '') {
 }
 if($atributo != ''){
     try{
-        $queryStr = "UPDATE personagem SET :atributo = :valor WHERE id = :id_personagem" ;
+        $queryStr = "UPDATE personagem SET $atributo = :valor WHERE id = :id_personagem" ;
         $query = $pdo->prepare($queryStr);
         $query->bindParam(':id_personagem', $id_personagem);
-        $query->bindParam(':atributo', $atributo);
+        //$query->bindParam(':atributo', $atributo);
         $query->bindParam(':valor', $valor);
         $query->execute();
     }

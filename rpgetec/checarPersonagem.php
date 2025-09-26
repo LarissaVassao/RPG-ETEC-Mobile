@@ -5,7 +5,7 @@ include_once('conexao.php');
 
 $id_personagem = $_GET['id_personagem'] ?? '';
 
-if ($id_campanha == '') {
+if ($id_personagem== '') {
     echo json_encode(['success' => false, 'error' => 'id_personagem not provided']);
     exit;
 }
@@ -17,7 +17,7 @@ try {
     $res = $query->fetch(PDO::FETCH_ASSOC);
     echo json_encode([
         'success' => true,
-        'personagens' => $res 
+        'personagem' => $res 
     ]);
 } catch (PDOException $e) {
     echo json_encode([

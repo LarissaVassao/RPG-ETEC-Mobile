@@ -113,6 +113,7 @@ CREATE TABLE mapa(
   mapImage VARCHAR(256),
   largura int(4) NOT NULL,
   altura int(4) NOT NULL,
+  cellSize int(4) NOT NULL,
   FOREIGN KEY (id_campanha) REFERENCES campanha(id) ON DELETE CASCADE
 );
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -10,14 +10,19 @@ import {
   Animated,
   TouchableOpacity, 
   StatusBar,
+  ImageBackground,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { styles } from './styles';
 
+import url from '../../../../services/url.js';
+import api from "../../../../services/api.js";
 
 const TOKEN_IMAGE = require('../../../../assets/img/logo.png');
 
-export default function Mapa({ navigation }) {
+export default function Mapa({ route, navigation }) {
+  const { id } = route.params;
+  const [bg, setBg] = useState('');
   const [tokens, setTokens] = useState([]);
   const [showGrid, setShowGrid] = useState(false);
   const [gridWidth, setGridWidth] = useState('10');
@@ -55,6 +60,26 @@ const updateTokenPosition = (id, newX, newY) => {
     }
   }
 
+useEffect(() => {
+        const checarMapa = async () => {
+            try {
+                console.log("ID:" + id)
+                const res = await api.get("rpgetec/checarMapa.php", {params: {id_mapa: id}});
+                console.log("RES DATA mapa:" + res.data.mapa);
+                const p = res.data.mapa;
+                setGridHeight(p['altura']);
+                setGridWidth(p['largura']);
+                setCellSize(p['cellSize']);
+                setBg(p['mapImage']);
+                setShowGrid(true);
+                console.log(bg);
+            } catch (error) {
+                console.error("Erro ao buscar mapa:", error);
+            }
+        };
+
+        checarMapa();
+    }, [gridHeight, bg]);;
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#124A69" barStyle="light-content" />
@@ -62,7 +87,7 @@ const updateTokenPosition = (id, newX, newY) => {
                   <View style={styles.header}>
                       <TouchableOpacity 
                           style={styles.backButton}
-                          onPress={() => navigation.navigate("Home")}
+                          onPress={() => navigation.navigate("ListaMapas")}
                       >
                           <Ionicons name="arrow-back-outline" size={20} color="#fff" />
                       </TouchableOpacity>
@@ -86,9 +111,10 @@ const updateTokenPosition = (id, newX, newY) => {
       )}
 
       {showGrid && (
-        <>
         <ScrollView horizontal>
         <ScrollView>
+        <ImageBackground source={{ uri: `${url}rpgetec/mapas/${bg}` }}>
+
           <Grid
             gridWidth={parsedWidth}
             gridHeight={parsedHeight}
@@ -114,9 +140,10 @@ const updateTokenPosition = (id, newX, newY) => {
               <Text style={styles.buttonText}>Alterar Mapa</Text>
             </TouchableOpacity>
           </View>
+        </ImageBackground>
+
           </ScrollView>
           </ScrollView>
-        </>
       )}
       </View>
     </View>
@@ -125,7 +152,7 @@ const updateTokenPosition = (id, newX, newY) => {
 
 const Grid = ({ gridWidth, gridHeight, cellSize }) => {
   return (
-  
+    
     <View style={{ flexDirection: 'column' }}>
       {Array.from({ length: gridHeight }).map((_, row) => (
         <View style={{ flexDirection: 'row' }} key={`row-${row}`}>

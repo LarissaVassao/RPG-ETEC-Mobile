@@ -5,7 +5,7 @@ include_once('conexao.php');
 
 $id = $_GET['id_mapa'] ?? '';
 
-if ($id_campanha == '') {
+if ($id == '') {
     echo json_encode(['success' => false, 'error' => 'id_mapa not provided']);
     exit;
 }

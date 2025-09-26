@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, StatusBar, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, StatusBar, ScrollView, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
 import { styles } from './styles';
 import { useUser } from "../../../context/UserContext.js";
+
+import api from "../../../../services/api.js";
 
 
 export default function CadastrarPersonagem({ navigation }) {
     const [nomePersonagem, setNomePersonagem] = useState('');
     const [jogador, setJogador] = useState('');
     const [nivelPersonagem, setNivelPersonagem] = useState(1);
-    const [antepassado, setAntepassado] = useState(0);
+    const [antepassado, setAntepassado] = useState(1);
     const { user, campanha } = useUser();
-    
+
+    console.log("====CADASTRAR PERSONAGEM====");
+
 const antepassados = [
   {nome: "Estudante", valor: 1, pericia1: "atualidades", valor1: 2, pericia2: "analise", valor2: 1, credito: 0},
   {nome: "Artista Marcial", valor: 2, pericia1: "luta", valor1: 2, pericia2: "atletismo", valor2: 1, credito: 1},
@@ -52,9 +56,11 @@ const antepassados = [
 ];
 
 async function saveData() {   
-        console.log(user)  
+        console.log(user);
+        console.log("ANTEPASSADO: "+antepassado);
         console.log("saveData start");      
-        if (nomeCampanha == "" || antepassado == "" || jogador == "" || nivelPersonagem == "") {
+        const antepassadoObj = antepassados.find(a => a.valor === antepassado);
+        if (nomePersonagem == "" || antepassadoObj == "" || jogador == "" || nivelPersonagem == "") {
           console.log("saveData error empty");  
           Alert.alert("Erro!", "Preencha os dados!");
           return;
@@ -62,15 +68,17 @@ async function saveData() {
         else{
           console.log("saveData non-empty, proceding");  
           try{
-            const res = await api.post('rpgetec/salvarPersonagem.php',{nome: nome, id_usuario: user.id, id_campanha: campanha.id, antepassado:antepassado, nivel:nivelPersonagem});
+            console.log(campanha);
+            const res = await api.post('rpgetec/salvarPersonagem.php',{nome: nomePersonagem, id_usuario: user.id, id_campanha: campanha, antepassado:antepassadoObj, nivel:nivelPersonagem});
             console.log(res.data);
             if (!res.data.sucesso) {
-              Alert.alert("Erro ao salvar", res.data.mensagem);              
+              Alert.alert("Erro ao salvar", res.data.mensagem);
+              console.error(res.data);              
               return;
             }
             
           
-          navigation.navigate("Personagem");       
+          navigation.navigate("Personagem", {id: res.data.id});       
 
           }
           catch(error){console.error("ERRO" + error)}
