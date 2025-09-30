@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal} from 'react-native';
+import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal, Alert} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
 import { styles} from './styles';
 
 import api from "../../../../services/api.js";
+import url from "../../../../services/url.js";
 
 export default function Personagem({ route, navigation }) {
   const [activeView, setActiveView] = useState('red'); 
+  const { user } = useUser();
   const [rpgEquipments, setRpgEquipments] = useState([
     // {
     //   id: 1,
@@ -94,6 +96,45 @@ export default function Personagem({ route, navigation }) {
   const [editingEquipment, setEditingEquipment] = useState(null);
   const [editEquipmentModalVisible, setEditEquipmentModalVisible] = useState(false);
 
+  // Para imagem
+  const [selectedImage, setSelectedImage] = useState(null);
+
+const pickImage = () => {
+    ImagePicker.launchImageLibrary(
+      { mediaType: "photo" },
+      async (response) => {
+        if (response.didCancel || response.errorCode) {
+          return;
+        }
+
+        const uri = response.assets[0].uri;
+        setSelectedImage(uri);
+
+        // Build FormData for upload
+        const formData = new FormData();
+        formData.append("file", {
+          uri,
+          type: "image/jpeg",
+          name: "upload.jpg",
+        });
+        formData.append("id_personagem", user.id); // example
+
+        try {
+          const res = await api.post("upload.php", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          Alert.alert("Upload", res.data.message);
+        } catch (e) {
+          Alert.alert("Error", e.message);
+        }
+      }
+    );
+  };
+
+  //Puxar do banco de dados
     useEffect(() => {
         const checarPersonagem = async () => {
             try {
@@ -566,10 +607,16 @@ const [aparencia, setAparencia] = useState({
         </View>
       </View>
       
-      <Image 
-        source={require('../../../../assets/img/pessoa.png')}
-        style={styles.imageStyle}
-      />
+      <TouchableOpacity onPress={pickImage}>
+        <Image
+          source={
+            selectedImage
+              ? { uri: selectedImage }
+              : require("../../../../assets/img/pessoa.png")
+          }
+          style={styles.imageStyle}
+        />
+      </TouchableOpacity>
 
       <View style={styles.buttonsContainer}>
         <TouchableOpacity 
