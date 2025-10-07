@@ -10,17 +10,17 @@ import EntrarCampanha from './src/telas/EntrarCampanha';
 import CriarCampanha from './src/telas/CriarCampanha';
 import Login from './src/telas/Login';
 import Cadastro from './src/telas/Cadastro';
-//import Tutorial from './src/telas/Tutorial';
+import Tutorial from './src/telas/Tutorial';
+
 import CadastrarPersonagem from './src/telas/Jogador/CadastrarPersonagem';
 import CadastrarMapa from './src/telas/Jogador/CadastrarMapa';
-
-import Personagem from './src/telas/Jogador/Personagem';
 import ListaPersonagens from './src/telas/Jogador/ListaPersonagens';
 import ListaNpcs from './src/telas/Jogador/ListaNpcs';
+import ListaMapas from './src/telas/Jogador/ListaMapas';
 
+import Personagem from './src/telas/Jogador/Personagem';
 import TelaCampanha from './src/telas/TelaCampanha';
 import Mapa from './src/telas/Jogador/Mapa';
-import ListaMapas from './src/telas/Jogador/ListaMapas';
 import TelaChat from './src/telas/Jogador/TelaChat';
 
 
@@ -155,7 +155,7 @@ export default function App() {
    <Stack.Screen name="TelaCampanha" component={Tabs} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Mapa" component={Mapa} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="ListaMapas" component={ListaMapas} options={{headerShown: false}}></Stack.Screen>
-   {/* <Stack.Screen name="Tutorial" component={Tutorial} options={{headerShown: false}}></Stack.Screen> */}
+   <Stack.Screen name="Tutorial" component={Tutorial} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="TelaChat" component={TelaChat} options={{headerShown: false}}></Stack.Screen>
 
 
