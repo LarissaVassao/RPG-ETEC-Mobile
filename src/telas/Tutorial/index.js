@@ -1,69 +1,112 @@
-// apenas copiei o appMostraImagem
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import PagerView from 'react-native-pager-view';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { styles } from './styles';
 
-import 'react-native-reanimated';
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  StyleSheet,
-  Image,
-  Dimensions,
-  SafeAreaView,
-} from 'react-native';
+export default function MyPager() {
+  const pagerRef = useRef(null);
+  const navigation = useNavigation();
+  const [page, setPage] = useState(0);
 
-//instalar a biblioteca expo install react-native-reanimated
-import Carousel from 'react-native-reanimated-carousel';
+  const totalPages = 3;
 
-const { width } = Dimensions.get('window');
+  const goToPage = (index) => {
+    pagerRef.current?.setPage(index);
+    setPage(index);
+  };
 
-export default function App() {
-  const [imagens, setImagens] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const nextPage = () => {
+    if (page < totalPages - 1) goToPage(page + 1);
+  };
 
-  useEffect(() => {
-    async function carregarImagens() {
-      try {
-        const response = await fetch('http://10.239.0.139/imagem/listar_imagens.php');
-        const data = await response.json();
-        setImagens(data);
-      } catch (error) {
-        console.error('Erro ao buscar imagens:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    carregarImagens();
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#4a90e2" />
-        <Text style={styles.loadingText}>Carregando imagens...</Text>
-      </View>
-    );
-  }
+  const prevPage = () => {
+    if (page > 0) goToPage(page - 1);
+  };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <Text style={styles.header}>📷 Galeria de Imagens BD</Text>
-      {imagens.length === 0 ? (
-        <Text style={styles.emptyText}>Nenhuma imagem encontrada.</Text>
+    <View style={styles.container}>
+      <PagerView
+        ref={pagerRef}
+        style={styles.pager}
+        initialPage={0}
+        onPageSelected={(e) => setPage(e.nativeEvent.position)}
+      >
+        <View style={styles.page} key="1">
+          <Image
+            style={styles.image}
+            resizeMode="cover"
+            source={require('../../../assets/tutorial/teste.jpg')}
+          />
+          <Text style={styles.title}>Primeira página</Text>
+          <Text style={styles.text}>Deslize ➡️ para continuar</Text>
+        </View>
+
+        <View style={styles.page} key="2">
+          <Image
+            style={styles.image}
+            resizeMode="cover"
+            source={require('../../../assets/tutorial/teste.jpg')}
+          />
+          <Text style={styles.title}>Segunda página</Text>
+          <Text style={styles.text}>Conteúdo explicativo aqui</Text>
+        </View>
+
+        <View style={styles.page} key="3">
+          <Image
+            style={styles.image}
+            resizeMode="cover"
+            source={require('../../../assets/tutorial/teste.jpg')}
+          />
+          <Text style={styles.title}>Terceira página</Text>
+          <Text style={styles.text}>Fim do tutorial 🎉</Text>
+        </View>
+      </PagerView>
+
+      {/* Setas ou botão "Home" */}
+      {page < totalPages - 1 ? (
+        <View style={styles.arrowContainer}>
+          <TouchableOpacity onPress={prevPage} disabled={page === 0}>
+            <Ionicons
+              name="chevron-back-circle"
+              size={50}
+              color={page === 0 ? '#cce0ff' : '#2295D1'}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={nextPage}>
+            <Ionicons
+              name="chevron-forward-circle"
+              size={50}
+              color="#2295D1"
+            />
+          </TouchableOpacity>
+        </View>
       ) : (
-        <Carousel
-          loop
-          width={width}
-          height={250}
-          autoPlay
-          data={imagens}
-          scrollAnimationDuration={1000}
-          renderItem={({ item }) => (
-            <Image source={{ uri: item }} style={styles.imagem} />
-          )}
-        />
+        <View style={styles.homeButtonContainer}>
+          <TouchableOpacity
+            style={styles.homeButton}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Text style={styles.homeButtonText}>Ir para Home</Text>
+          </TouchableOpacity>
+        </View>
       )}
-    </SafeAreaView>
+
+      {/* Indicadores */}
+      <View style={styles.indicatorContainer}>
+        {[...Array(totalPages)].map((_, i) => (
+          <View
+            key={i}
+            style={[
+              styles.indicator,
+              { opacity: i === page ? 1 : 0.4 },
+              i === page && styles.activeIndicator,
+            ]}
+          />
+        ))}
+      </View>
+    </View>
   );
 }
-
