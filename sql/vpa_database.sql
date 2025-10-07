@@ -32,6 +32,7 @@ CREATE TABLE personagem(
   id_campanha INT NOT NULL,
   id_usuario INT NOT NULL,
   nome VARCHAR(64) NOT NULL,
+  antepassado VARCHAR(64) NOT NULL,
   vida INT NOT NULL DEFAULT 10,
   vidaAtual INT NOT NULL DEFAULT 10,
   tokenImage VARCHAR(256) NOT NULL,

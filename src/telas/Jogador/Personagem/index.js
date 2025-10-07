@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal, Alert} from 'react-native';
+import { View, StyleSheet, Image, Platform, Text, TextInput, StatusBar, TouchableOpacity, ScrollView, Modal, Alert} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from "@react-native-picker/picker";
 import { styles} from './styles';
+import { useUser } from "../../../context/UserContext.js";
 
+import * as ImagePicker from "expo-image-picker";
 import api from "../../../../services/api.js";
 import url from "../../../../services/url.js";
 
@@ -64,26 +66,7 @@ export default function Personagem({ route, navigation }) {
   const [ocupationModalVisible, setocupationModalVisible] = useState(false);
   const [selectedocupation, setSelectedocupation] = useState('');
   // Estados para as pericias
-  const [pericias, setPericias] = useState({
-    // acalmar: '1',
-    // acrobacia: '1',
-    // atletismo: '1',
-    // atualidades: '1',
-    // analise: '1',
-    // charme: '1',
-    // eletronicos: '1',
-    // enganar: '1',
-    // furtividade: '1',
-    // informatica: '1',
-    // iniciativa: '1',
-    // intimidacao: '1',
-    // intuicao: '1',
-    // medicina: '1',
-    // mecanica: '1',
-    // persuasao: '1',
-    // primeirosSocorros: '1',
-    // procurar: '1'
-  });
+  const [pericias, setPericias] = useState({});
 
   // Estados para o nome do personagem e modal
   const [characterName, setCharacterName] = useState('Nome do Personagem');
@@ -99,48 +82,79 @@ export default function Personagem({ route, navigation }) {
   // Para imagem
   const [selectedImage, setSelectedImage] = useState(null);
 
-const pickImage = () => {
-    ImagePicker.launchImageLibrary(
-      { mediaType: "photo" },
-      async (response) => {
-        if (response.didCancel || response.errorCode) {
-          return;
-        }
+const pickImage = async () => {
+  try {
+    // Request permissions
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert("Permissão negada", "Precisa permitir acesso à galeria.");
+      return;
+    }
 
-        const uri = response.assets[0].uri;
-        setSelectedImage(uri);
+    // Pick image
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 1,
+    });
 
-        // Build FormData for upload
-        const formData = new FormData();
-        formData.append("file", {
-          uri,
-          type: "image/jpeg",
-          name: "upload.jpg",
-        });
-        formData.append("id_personagem", user.id); // example
+    if (result.canceled || !result.assets || result.assets.length === 0) return;
 
-        try {
-          const res = await api.post("upload.php", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
+    const asset = result.assets[0];
+    let uri = asset.uri;
 
-          Alert.alert("Upload", res.data.message);
-        } catch (e) {
-          Alert.alert("Error", e.message);
-        }
-      }
-    );
-  };
+    console.log("Upload URI:", uri);
+    setSelectedImage(uri);
+
+    // Build FormData like Postman
+    const formData = new FormData();
+    formData.append("file", {
+      uri,
+      name: asset.fileName || "upload.jpg",
+      type: asset.type || "image/jpeg",
+    });
+    formData.append("id_personagem", user.id.toString());
+
+    // Use fetch (works reliably in Expo)
+    const response = await fetch(url + "rpgetec/upload.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+    console.log("Upload response:", data);
+
+    if (data.success) {
+      Alert.alert("Upload", data.message);
+    } else {
+      Alert.alert("Upload failed", data.message || "Erro desconhecido");
+    }
+
+  } catch (err) {
+    console.log("UPLOAD ERROR:", err);
+    Alert.alert("Upload failed", err.message);
+  }
+};
+
+
+  //   const data = await response.json();
+  //   console.log("Upload response:", data);
+
+  //   if (data.success) {
+  //     Alert.alert("Upload", data.message);
+  //   } else {
+  //     Alert.alert("Upload failed", data.message || "Erro desconhecido");
+  //   }
 
   //Puxar do banco de dados
     useEffect(() => {
         const checarPersonagem = async () => {
             try {
-              
+
                 const res = await api.get("rpgetec/checarPersonagem.php", {params: {id_personagem: idPersonagem}});
                 console.log("RES DATA PERSONAGEM:" + res.data.personagem);
+                console.log("RES DATA:" + res.data);
+          
                 if (res.data.success) {
                   const p = res.data.personagem;
                   setVida(p.vida);
@@ -162,7 +176,8 @@ const pickImage = () => {
                   setInteligencia(p.inteligencia);
                   setPercepcao(p.percepcao);
                   setSorte(p.sorte);
-                  //setPericias(res.data.pericias)
+                  console.log("PERICIAS: " + res.data.pericias);
+                  setPericias(res.data.pericias);
                 }
             } catch (error) {
                 console.error("Erro ao buscar personagens:", error);
@@ -188,7 +203,7 @@ const pickImage = () => {
     setSelectedocupation(playerocupation);
     setocupationModalVisible(true);
   };
-  // Função para salvar a profissao selecionada
+  // Função para salvar o antepassado selecionada
   const saveocupationSelection = () => {
     setPlayerocupation(selectedocupation);
     setocupationModalVisible(false);
@@ -245,36 +260,74 @@ const pickImage = () => {
 
   // Função para salvar a edição
   const saveEdit = async () => {
+  // Se for uma perícia
   if (editingField in pericias) {
-  savePericiaEdit();
-  }else {
-    try{       
-      const res = await api.get("rpgetec/alterarPersonagem.php", {params: {id_personagem: idPersonagem, valor: tempValue, atributo:editingField}});
-      console.log(res.data);
-      switch (editingField) {
-        case 'vida': setVida(tempValue); break;
-        case 'mental': setMental(tempValue); break;
-        case 'energia': setEnergia(tempValue); break;
-        case 'credito': 
-        case 'ca': setCa(tempValue); break;
-        case 'carga': setCarga(tempValue); break;
-        case 'movimento': setMovimento(tempValue); break;
-        case 'credito': setCredito(tempValue); break;
-        case 'forca': setForca(tempValue); break;
-        case 'agilidade': setAgilidade(tempValue); break;
-        case 'constituicao': setConstituicao(tempValue); break;
-        case 'vontade': setVontade(tempValue); break;
-        case 'inteligencia': setInteligencia(tempValue); break;
-        case 'percepcao': setPercepcao(tempValue); break;
-        case 'sorte': setSorte(tempValue); break;
-        default: break;
+    try {
+      const res = await api.get("rpgetec/alterarPersonagem.php", {
+        params: {
+          id_personagem: idPersonagem,
+          valor: tempValue,
+          pericia: editingField, // <- envia como perícia
+        },
+      });
+      console.log("Alterar perícia:", res.data);
+
+      if (res.data.success) {
+        // Atualiza localmente
+        setPericias(prev => ({
+          ...prev,
+          [editingField]: tempValue,
+        }));
+      } else {
+        Alert.alert("Erro", res.data.error || "Falha ao atualizar perícia");
       }
-    }catch (error) {
-      console.error("Erro ao alterar personagens:", error);
-      }
-      setEditModalVisible(false);
+    } catch (error) {
+      console.error("Erro ao alterar perícia:", error);
     }
-  };
+
+    setEditModalVisible(false);
+  } 
+  // Se for atributo normal
+  else {
+    try {
+      const res = await api.get("rpgetec/alterarPersonagem.php", {
+        params: {
+          id_personagem: idPersonagem,
+          valor: tempValue,
+          atributo: editingField,
+        },
+      });
+      console.log("Alterar atributo:", res.data);
+
+      if (res.data.success) {
+        switch (editingField) {
+          case 'vida': setVida(tempValue); break;
+          case 'mental': setMental(tempValue); break;
+          case 'energia': setEnergia(tempValue); break;
+          case 'ca': setCa(tempValue); break;
+          case 'carga': setCarga(tempValue); break;
+          case 'movimento': setMovimento(tempValue); break;
+          case 'credito': setCredito(tempValue); break;
+          case 'forca': setForca(tempValue); break;
+          case 'agilidade': setAgilidade(tempValue); break;
+          case 'constituicao': setConstituicao(tempValue); break;
+          case 'vontade': setVontade(tempValue); break;
+          case 'inteligencia': setInteligencia(tempValue); break;
+          case 'percepcao': setPercepcao(tempValue); break;
+          case 'sorte': setSorte(tempValue); break;
+          default: break;
+        }
+      } else {
+        Alert.alert("Erro", res.data.error || "Falha ao atualizar atributo");
+      }
+    } catch (error) {
+      console.error("Erro ao alterar personagem:", error);
+    }
+
+    setEditModalVisible(false);
+  }
+};
+
 
   // Função para cancelar a edição
   const cancelEdit = () => {
@@ -527,7 +580,7 @@ const [aparencia, setAparencia] = useState({
           </View>
         </View>
       </Modal> 
-      {/* Modal para seleção de profissao */}
+      {/* Modal para seleção de antepassado */}
       <Modal
         visible={ocupationModalVisible}
         transparent={true}
@@ -536,7 +589,7 @@ const [aparencia, setAparencia] = useState({
       >
         <View style={styles.modalOverlay}>
           <View style={styles.editModalContainer}>
-            <Text style={styles.editModalTitle}>Selecionar Profissão</Text>
+            <Text style={styles.editModalTitle}>Selecionar Antepassado</Text>
             
             <View style={styles.pickerContainer}>
               <Picker
@@ -544,7 +597,7 @@ const [aparencia, setAparencia] = useState({
                 style={styles.picker}
                 onValueChange={(itemValue) => setSelectedocupation(itemValue)}
               >
-                <Picker.Item label="Selecione uma Profissão" value="" />
+                <Picker.Item label="Selecione um Antepassado" value="" />
                 <Picker.Item label="Médico" value="Médico" />
                 <Picker.Item label="Professor" value="Professor" />
                 <Picker.Item label="Engenheiro" value="Engenheiro" />
@@ -586,12 +639,12 @@ const [aparencia, setAparencia] = useState({
 
         <View style={styles.ocupationCharacter}>
           <View style={styles.occupationItem}>
-            <Text style={styles.occupationLabel}>Profissão:</Text>
+            <Text style={styles.occupationLabel}>Antepassado:</Text>
             <TouchableOpacity 
               style={styles.occupationInputTouchable}
               onPress={openocupationModal}
             >
-              <Text style={styles.occupationText}>{playerocupation || 'Selecione uma Profissão'}</Text>
+              <Text style={styles.occupationText}>{playerocupation || 'Selecione um Antepassado'}</Text>
             </TouchableOpacity>
           </View>
           
@@ -800,221 +853,23 @@ const [aparencia, setAparencia] = useState({
           <View style={styles.greenView}>
             <Text style={styles.viewTitle}>PERÍCIA</Text>
             <ScrollView contentContainerStyle={styles.scrollContent}>
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Acalmar</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('acalmar', pericias.acalmar)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.acalmar}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+{/* Loop em ordem alfabética */}
+              {Object.entries(pericias)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([nome, valor]) => (
+                  <View key={nome} style={styles.skillContainer}>
+                    <View style={styles.skillBackground}>
+                      <Text style={styles.skillText}>{nome}</Text>
+                      <TouchableOpacity
+                        style={styles.skillInputTouchable}
+                        onPress={() => openEditModal(nome, valor)}
+                      >
+                        <Text style={styles.skillInputText}>{valor}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+              ))}
 
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Acrobacia</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('acrobacia', pericias.acrobacia)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.acrobacia}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Atletismo</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('atletismo', pericias.atletismo)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.atletismo}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Atualidades</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('atualidades', pericias.atualidades)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.atualidades}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Análise</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('analise', pericias.analise)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.analise}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Charme</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('charme', pericias.charme)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.charme}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Eletronicos</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('eletronicos', pericias.eletronicos)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.eletronicos}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Enganar</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('enganar', pericias.enganar)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.enganar}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Furtividade</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('furtividade', pericias.furtividade)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.furtividade}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Informática</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('informatica', pericias.informatica)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.informatica}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Iniciativa</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('iniciativa', pericias.iniciativa)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.iniciativa}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Intimidação</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('intimidacao', pericias.intimidacao)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.intimidacao}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Intuição</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('intuicao', pericias.intuicao)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.intuicao}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Medicina</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('medicina', pericias.medicina)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.medicina}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Mecânica</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('mecanica', pericias.mecanica)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.mecanica}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Persuasão</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('persuasao', pericias.persuasao)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.persuasao}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Primeiros-Socorros</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('primeirosSocorros', pericias.primeirosSocorros)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.primeirosSocorros}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              <View style={styles.skillContainer}>
-                <View style={styles.skillBackground}>
-                  <Text style={styles.skillText}>Procurar</Text>
-                  <TouchableOpacity 
-                    style={styles.skillInputTouchable}
-                    onPress={() => openEditModal('procurar', pericias.procurar)}
-                  >
-                    <Text style={styles.skillInputText}>{pericias.procurar}</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
             </ScrollView>
           </View>
         )}

@@ -8,7 +8,8 @@ $usuario = $input['id_usuario'] ?? '';
 $campanha = $input['id_campanha'] ?? '';
 $antepassado = $input['antepassado'] ?? '';
 $nivel = $input['nivel'] ?? '';
-//$atributos = $input['atributos'] ?? '';
+$periciasRecebidas = $input['pericias'] ?? []; // 👈 opcional: caso venha do front
+
 $atributos = [
     'forca' => 1,
     'agilidade' => 1,
@@ -23,11 +24,18 @@ $vida = $atributos['constituicao'] + 9;
 $mental = $atributos['vontade'] + 9;
 $energia = 10;
 $ca = $atributos['agilidade'] + 3;
-$credito = $antepassado['credito'] + 5;
+$credito = (is_array($antepassado) && isset($antepassado['credito'])) ? $antepassado['credito'] + 5 : 5;
+
 try {
-    $res = $pdo->prepare("INSERT INTO personagem SET nome = :nome, id_campanha = :id_campanha, id_usuario = :id_usuario, vida = :vida, vidaAtual = :vida, mental = :mental,
-    mentalAtual = :mental, energia = :energia, energiaAtual = :energia, ca = :ca, credito = 0, creditoMax = :credito, movimento = 6, forca = :forca,
-    agilidade = :agilidade, constituicao = :constituicao, inteligencia = :inteligencia, percepcao = :percepcao, vontade = :vontade, sorte = :sorte");	
+    $pdo->beginTransaction();
+
+    // 🎲 1. Inserir personagem
+    $res = $pdo->prepare("INSERT INTO personagem 
+        (nome, id_campanha, id_usuario, vida, vidaAtual, mental, mentalAtual, energia, energiaAtual, ca, credito, creditoMax, movimento, 
+         forca, agilidade, constituicao, inteligencia, percepcao, vontade, sorte, tokenImage, profileImage)
+        VALUES (:nome, :id_campanha, :id_usuario, :vida, :vida, :mental, :mental, :energia, :energia, :ca, 0, :credito, 6,
+                :forca, :agilidade, :constituicao, :inteligencia, :percepcao, :vontade, :sorte, '', '')");	
+    
     $res->bindValue(":nome", $nome);
     $res->bindValue(":id_campanha", $campanha);
     $res->bindValue(":id_usuario", $usuario);
@@ -45,33 +53,97 @@ try {
     $res->bindValue(":sorte", $atributos['sorte']);
     $res->execute();
 
-if ($res->rowCount() === 0) {
-    echo json_encode([
-        'mensagem' => 'Nenhuma linha foi inserida.',
-        'sucesso' => false
-    ]);
-    exit;
-}
+    if ($res->rowCount() === 0) {
+        throw new Exception("Nenhuma linha foi inserida em personagem.");
+    }
 
-$lastId = $pdo->lastInsertId();
-if ($lastId == 0) {
-    echo json_encode([
-        'mensagem' => 'Falha ao obter ID da campanha.',
-        'sucesso' => false
-    ]);
-    exit;
-}
+    $id_personagem = $pdo->lastInsertId();
 
-echo json_encode([
-    'mensagem' => 'Salvo com sucesso!',
-    'sucesso' => true,
-    'id' => $lastId 
-]);
+    // 🧠 2. Perícias padrão
+    $periciasPadrao = [
+        'Acalmar', 'Acrobacia', 'Atletismo', 'Atualidades', 'Análise', 'Charme', 
+        'Eletronicos', 'Enganar', 'Furtividade', 'Informática', 'Iniciativa', 
+        'Intimidação', 'Intuição', 'Medicina', 'Mecânica', 'Persuasão', 
+        'Primeiros-Socorros', 'Procurar'
+    ];
+
+    // 3️⃣ Garantir que todas as perícias padrão existam no banco
+    foreach ($periciasPadrao as $nomePericia) {
+        $stmt = $pdo->prepare("SELECT id FROM pericia WHERE nome = :nome");
+        $stmt->bindParam(':nome', $nomePericia);
+        $stmt->execute();
+
+        if ($stmt->rowCount() === 0) {
+            $insert = $pdo->prepare("INSERT INTO pericia (nome) VALUES (:nome)");
+            $insert->bindParam(':nome', $nomePericia);
+            $insert->execute();
+        }
+    }
+
+    // 4️⃣ Inserir perícias do personagem (padrões + opcionais)
+    foreach ($periciasPadrao as $nomePericia) {
+        // valor padrão: 1
+        $valor = 1;
+        // Se o front enviou alguma perícia com valor extra
+        if (isset($periciasRecebidas[$nomePericia])) {
+            $valor += intval($periciasRecebidas[$nomePericia]);
+        }
+
+        // Buscar id da perícia
+        $stmt = $pdo->prepare("SELECT id FROM pericia WHERE nome = :nome");
+        $stmt->bindParam(':nome', $nomePericia);
+        $stmt->execute();
+        $id_pericia = $stmt->fetchColumn();
+
+        // Inserir em personagem_pericia
+        $ins = $pdo->prepare("INSERT INTO personagem_pericia (id_personagem, id_pericia, valor)
+                              VALUES (:id_personagem, :id_pericia, :valor)");
+        $ins->bindParam(':id_personagem', $id_personagem);
+        $ins->bindParam(':id_pericia', $id_pericia);
+        $ins->bindParam(':valor', $valor);
+        $ins->execute();
+    }
+
+    // 5️⃣ Inserir outras perícias não padrão (se enviadas)
+    foreach ($periciasRecebidas as $nomePericia => $valor) {
+        if (!in_array($nomePericia, $periciasPadrao)) {
+            // criar perícia se não existir
+            $stmt = $pdo->prepare("SELECT id FROM pericia WHERE nome = :nome");
+            $stmt->bindParam(':nome', $nomePericia);
+            $stmt->execute();
+
+            if ($stmt->rowCount() === 0) {
+                $insert = $pdo->prepare("INSERT INTO pericia (nome) VALUES (:nome)");
+                $insert->bindParam(':nome', $nomePericia);
+                $insert->execute();
+                $id_pericia = $pdo->lastInsertId();
+            } else {
+                $id_pericia = $stmt->fetchColumn();
+            }
+
+            // Inserir valor seco
+            $ins = $pdo->prepare("INSERT INTO personagem_pericia (id_personagem, id_pericia, valor)
+                                  VALUES (:id_personagem, :id_pericia, :valor)");
+            $ins->bindParam(':id_personagem', $id_personagem);
+            $ins->bindParam(':id_pericia', $id_pericia);
+            $ins->bindParam(':valor', $valor);
+            $ins->execute();
+        }
+    }
+
+    $pdo->commit();
+
+    echo json_encode([
+        'mensagem' => 'Personagem e perícias criados com sucesso!',
+        'sucesso' => true,
+        'id' => $id_personagem
+    ]);
+
 } catch (Exception $e) {
-     $result = json_encode([
-         'mensagem' => 'Erro ao salvar: ' . $e->getMessage(),
-         'sucesso' => false
-     ]);
-     echo $result;
- }
- ?>
+    $pdo->rollBack();
+    echo json_encode([
+        'mensagem' => 'Erro ao salvar personagem: ' . $e->getMessage(),
+        'sucesso' => false
+    ]);
+}
+?>

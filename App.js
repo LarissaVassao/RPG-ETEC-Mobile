@@ -19,7 +19,7 @@ import Mapa from './src/telas/Jogador/Mapa';
 import ListaMapas from './src/telas/Jogador/ListaMapas';
 
 
-import Teste from './src/telas/Teste';
+//import Teste from './src/telas/Teste';
 
 import { UserProvider } from './src/context/UserContext';
 
@@ -105,7 +105,7 @@ export default function App() {
    <Stack.Screen name="Mapa" component={Mapa} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="ListaMapas" component={ListaMapas} options={{headerShown: false}}></Stack.Screen>
 
-      <Stack.Screen name="Teste" component={Teste} options={{headerShown: false}}></Stack.Screen>
+      {/* <Stack.Screen name="Teste" component={Teste} options={{headerShown: false}}></Stack.Screen> */}
 
 
  </Stack.Navigator>

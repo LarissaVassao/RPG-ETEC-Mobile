@@ -1,5 +1,8 @@
 <?php
-require_once 'conexao.php'; // ✅ reuse the DB connection + headers
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+require_once 'conexao.php';
+header('Content-Type: application/json');
 
 $id_personagem = $_POST['id_personagem'] ?? null;
 
@@ -18,7 +21,6 @@ if (isset($_FILES['file'])) {
     $targetFile = $targetDir . $fileName;
 
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFile)) {
-        // Save filename in personagem.profileImage
         $sql = "UPDATE personagem SET profileImage = :img WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(":img", $fileName);
