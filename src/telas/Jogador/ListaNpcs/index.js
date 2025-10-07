@@ -1,75 +1,91 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Modal, Pressable} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Modal, Pressable } from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
-import { styles } from './styles';
+import { styles } from './styles.js';
 import { useUser } from "../../../context/UserContext.js";
-
 import api from "../../../../services/api.js";
 
-export default function ListaMapas({ navigation }) {
-    // Estado para armazenar a lista de mapas
-    const [mapas, setMapas] = useState([]);
+export default function ListaNpc({ navigation }) {
+    // Estado para armazenar a lista de NPCs
+    const [npcs, setNpcs] = useState([]);
     const [mestre, setMestre] = useState(false);
     const { user, campanha } = useUser();
-    console.log("====LISTA MAPAS====");
+    console.log("====LISTAR NPCS====");
 
     useEffect(() => {
-        const listarMapas = async () => {
+        const listarNpcs = async () => {
             try {
-                console.log("Id da Campanha: "+campanha);
-                console.log("Id da Usuario: "+user.id);
-                const res = await api.get("rpgetec/verificarMestre.php", {params: {id_campanha: campanha, id_usuario: user.id}});
-                console.log("Resultado de verificar mestre: "+res.data.mestre);
-                setMestre(res.data.mestre);
+                console.log("Id da Campanha: " + campanha);
+                console.log("Id do Usuário: " + user.id);
+                
+                // Verificar se é mestre
+                const resMestre = await api.get("rpgetec/verificarMestre.php", {
+                    params: { id_campanha: campanha, id_usuario: user.id }
+                });
+                console.log("Resultado de verificar mestre: " + resMestre.data.mestre);
+                setMestre(resMestre.data.mestre);
+
+                // Listar NPCs
                 try {
-                    const res = await api.get("rpgetec/listarMapas.php", {params: {id_campanha: campanha, mestre: mestre}});
-                    console.log(campanha)
+                    const res = await api.get("rpgetec/listarNpcs.php", {
+                        params: { id_campanha: campanha }
+                    });
+                    console.log('CAMPANHA: ' + campanha);
                     console.log(res.data);
-                    if(res.data.success){
-                    const mapasMapeados = res.data.mapas.map(m => ({
-                        key: m.id,
-                        nome: m.nome,
-                        imagem: require('../../../../assets/img/logo.png') 
-                    })); 
-                    setMapas(mapasMapeados);
-                  }
+                    
+                    if (res.data.success) {
+                        const npcsMapeados = res.data.npcs.map(npc => ({
+                            id: npc.id,
+                            nome: npc.nome,
+                            imagem: npc.imagem ? { uri: npc.imagem } : require('../../../../assets/img/logo.png')
+                        }));
+                        setNpcs(npcsMapeados);
+                    }
                 } catch (error) {
-                    console.error("Erro ao buscar mapas:", error);
-                }  
+                    console.error("Erro ao buscar NPCs:", error);
+                }
             } catch (error) {
                 console.error("Erro ao verificar se mestre:", error);
             }
         };
 
-        listarMapas();
-    }, []);
+        listarNpcs();
+    }, [campanha, user.id]);
 
     // Estados para controlar o modal
     const [modalVisible, setModalVisible] = useState(false);
-    const [mapaParaDeletar, setMapaParaDeletar] = useState(null);
+    const [npcParaDeletar, setNpcParaDeletar] = useState(null);
 
     // Função para abrir o modal de confirmação
     const confirmarDelecao = (id) => {
-        setMapaParaDeletar(id);
+        setNpcParaDeletar(id);
         setModalVisible(true);
     };
 
-    // Função para deletar um mapa
-    const deletarMapa = () => {
-        if (mapaParaDeletar) {
-            setMapas(mapas.filter(mapa => mapa.id !== mapaParaDeletar));
-            setModalVisible(false);
-            setMapaParaDeletar(null);
+    // Função para deletar um NPC
+    const deletarNpcs = async () => {
+        if (npcParaDeletar) {
+            try {
+                await api.delete("rpgetec/deletarNpcs.php", {
+                    data: { id_npc: npcParaDeletar }
+                });
+                setNpcs(npcs.filter(npc => npc.id !== npcParaDeletar));
+            } catch (error) {
+                console.error("Erro ao deletar NPCs:", error);
+            } finally {
+                setModalVisible(false);
+                setNpcParaDeletar(null);
+            }
         }
     };
 
     // Função para cancelar a deleção
     const cancelarDelecao = () => {
         setModalVisible(false);
-        setMapaParaDeletar(null);
+        setNpcParaDeletar(null);
     };
 
-    return(
+    return (
         <View style={styles.container}>
             <StatusBar backgroundColor="#124A69" barStyle="light-content" />
             
@@ -81,12 +97,12 @@ export default function ListaMapas({ navigation }) {
                     <Ionicons name="arrow-back-outline" size={20} color="#fff" />
                 </TouchableOpacity>
                 
-                <Text style={styles.headerTitle}>Lista de Mapas</Text>
+                <Text style={styles.headerTitle}>Lista de NPCs</Text>
                 
                 {mestre && (
                     <TouchableOpacity 
                         style={styles.createButton}
-                        onPress={() => navigation.navigate("CadastrarMapa")}
+                        onPress={() => navigation.navigate("CadastrarNpc")}
                     >
                         <Ionicons name="add-outline" size={22} color="#fff" />
                     </TouchableOpacity>
@@ -98,40 +114,39 @@ export default function ListaMapas({ navigation }) {
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
             >
-                <Text style={styles.title}>Mapas</Text>
+                <Text style={styles.title}>NPCs da Campanha</Text>
                 
-                <View style={styles.mapasList}>
-                    {mapas.length === 0 ? (
-                        <Text style={styles.emptyText}>Nenhum mapa criado ainda.</Text>
+                <View style={styles.npcsList}>
+                    {npcs.length === 0 ? (
+                        <Text style={styles.emptyText}>Nenhum NPC criado ainda.</Text>
                     ) : (
-                        mapas.map((mapa) => (
+                        npcs.map((npc) => (
                             <TouchableOpacity 
-                                key={mapa.key}
-                                style={styles.mapaCard}
-                                onPress={() => navigation.navigate("Mapa", { id: mapa.key })}
+                                key={npc.id}
+                                style={styles.npcCard}
+                                onPress={() => navigation.navigate("DetalhesNpc", { idNpc: npc.id })}
                             >
                                 <Image 
-                                    style={styles.mapaImage} 
+                                    style={styles.npcImage} 
                                     resizeMode="cover" 
-                                    source={mapa.imagem} 
+                                    source={npc.imagem} 
                                 />
-                                <View style={styles.mapaInfo}>
-                                    <Text style={styles.mapaName}>{mapa.nome}</Text>
+                                <View style={styles.npcInfo}>
+                                    <Text style={styles.npcName}>{npc.nome}</Text>
                                 </View>
-                                {/* 
-                                  Caso for Mestre
                                 
-                                <TouchableOpacity 
-                                    style={styles.archiveButton}
-                                    onPress={() => confirmarDelecao(mapa.id)}
-                                >
-                                    <Ionicons name="archive" size={30} color="#c00000" />
-                                </TouchableOpacity> */}
+                                {mestre && (
+                                    <TouchableOpacity 
+                                        style={styles.archiveButton}
+                                        onPress={() => confirmarDelecao(npc.id)}
+                                    >
+                                        <Ionicons name="trash-outline" size={24} color="#c00000" />
+                                    </TouchableOpacity>
+                                )}
                             </TouchableOpacity>
                         ))
                     )}
                 </View>
-
             </ScrollView>
 
             {/* Modal de Confirmação */}
@@ -149,7 +164,7 @@ export default function ListaMapas({ navigation }) {
                         </View>
                         
                         <Text style={styles.modalMessage}>
-                            Tem certeza que deseja excluir este mapa? Esta ação não pode ser desfeita.
+                            Tem certeza que deseja excluir este NPC? Esta ação não pode ser desfeita.
                         </Text>
                         
                         <View style={styles.modalButtons}>
@@ -161,7 +176,7 @@ export default function ListaMapas({ navigation }) {
                             </Pressable>
                             <Pressable 
                                 style={[styles.modalButton, styles.confirmButton]}
-                                onPress={deletarMapa}
+                                onPress={deletarNpcs}
                             >
                                 <Text style={styles.confirmButtonText}>Excluir</Text>
                             </Pressable>
@@ -169,7 +184,6 @@ export default function ListaMapas({ navigation }) {
                     </View>
                 </View>
             </Modal>
-            
         </View>
     )
 }

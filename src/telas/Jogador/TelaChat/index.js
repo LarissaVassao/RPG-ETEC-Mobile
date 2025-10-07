@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import {StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, Image, ImageBackground, ScrollView} from "react-native";
+import {StyleSheet, Text, View, StatusBar, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, Image, ImageBackground, ScrollView} from "react-native";
 import axios from "axios";
 import { styles } from './styles';
 
 
-const API_URL = "http://10.239.0.212/chatOdonto_Larissa";
+const API_URL = "http://10.239.0.214/chatOdonto_Larissa";
 
-const EMOJIS_POSSIVEIS = ["👄", "🪥", "🗣️", "👩‍⚕️", "🍽️"];
-const EMOJI_PADRAO = "🦷";
+const EMOJIS_POSSIVEIS = ["🤖", "🧝", "🕵️‍♂️", "👾", "🥷"];
+const EMOJI_PADRAO = "🎲";
 
 export default function App() {
   const [paciente, setPaciente] = useState("");
@@ -88,49 +88,53 @@ export default function App() {
   };
 
 //Defina a Tela Inicial do Chat 
-  if (!nomeConfirmado) {
-    return (
-      <View style={styles.loginContainer}>
-        <ImageBackground
-          source={require('./assets/imagem.jpg')}  resizeMode="cover" style={styles.image}
-        >
-          <View style={styles.branco}>
-            <View style={styles.itensCOntainer}>
-              <Text style={styles.titulo}> BEM-VINDO</Text>
+  // if (!nomeConfirmado) {
+  //   return (
+  //     <View style={styles.loginContainer}>
+  //       <ImageBackground
+  //         source={require('../../../../assets/imagem.jpg')}  resizeMode="cover" style={styles.image}
+  //       >
+  //         <View style={styles.branco}>
+  //           <View style={styles.itensCOntainer}>
+  //             <Text style={styles.titulo}> BEM-VINDO</Text>
 
-              <View style={styles.digitarNome}>
-                <Text style={styles.subtitulo}>Digite seu nome: </Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Seu nome"
-                  value={paciente}
-                  onChangeText={setPaciente}
-                />
-              </View>
-              <TouchableOpacity
-                style={styles.botaoEntrar}
-                onPress={() => paciente.trim() !== "" && setNomeConfirmado(true)}
-              >
-                <Text style={styles.botaoTexto}>Entrar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <Image source={require('./assets/icon.jpg')} style={styles.icon} resizeMode="contain"/>
-          <Text style={styles.logotitulo}>ODONTOETEQUIAN</Text>
+  //             <View style={styles.digitarNome}>
+  //               <Text style={styles.subtitulo}>Digite seu nome: </Text>
+  //               <TextInput
+  //                 style={styles.input}
+  //                 placeholder="Seu nome"
+  //                 value={paciente}
+  //                 onChangeText={setPaciente}
+  //               />
+  //             </View>
+  //             <TouchableOpacity
+  //               style={styles.botaoEntrar}
+  //               onPress={() => paciente.trim() !== "" && setNomeConfirmado(true)}
+  //             >
+  //               <Text style={styles.botaoTexto}>Entrar</Text>
+  //             </TouchableOpacity>
+  //           </View>
+  //         </View>
+  //         <Image source={require('../../../../assets/icon.jpg')} style={styles.icon} resizeMode="contain"/>
+  //         <Text style={styles.logotitulo}>ODONTOETEQUIAN</Text>
 
 
-        </ImageBackground>
-      </View>
-    );
-  }
+  //       </ImageBackground>
+  //     </View>
+  //   );
+  // }
     //defina a tela do Chat 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <Text style={styles.header}> Bem Vindo ao Chat, {paciente}</Text>
-      
+      <StatusBar backgroundColor="#124A69" barStyle="light-content" />
+         <View style={styles.header}>
+                <Text style={styles.headerTitle}>Escrever-algo-aqui</Text>
+        </View>
+
+          
       <FlatList
         ref={flatListRef}
         data={mensagens}
@@ -180,7 +184,7 @@ export default function App() {
       <View style={styles.inputArea}>
         <TextInput
           style={styles.inputMensagem}
-          placeholder="Digite sua mensagem..."
+          placeholder="Digite a sua mensagem..."
           value={mensagem}
           onChangeText={setMensagem}
         />

@@ -76,15 +76,29 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#e6ebf2",
-    padding: 10,
-    paddingTop: 40,
   },
   header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 12,
-    color: "#333",
+    backgroundColor: '#124A69',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    height: 60,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+    textAlign: 'center',
+    flex: 1,
+    marginHorizontal: 10,
   },
   msg: {
     maxWidth: "75%",
@@ -132,13 +146,14 @@ export const styles = StyleSheet.create({
   inputArea: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#dffeffff",
+    backgroundColor: "#aad6eeff",
     borderRadius: 30,
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 5,
     margin: 10,
     elevation: 3,
-    bottom: 35
+    bottom: 35,
+    marginBottom: -25
 
   },
   inputMensagem: {
@@ -147,9 +162,9 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   botaoEnviar: {
-    backgroundColor: "#31cacfff",
-    width: 45,
-    height: 45,
+    backgroundColor: "#124A69",
+    width: 40,
+    height: 40,
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",

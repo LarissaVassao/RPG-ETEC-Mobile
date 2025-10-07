@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8fafc',
@@ -60,10 +59,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 5,
   },
-  charactersList: {
+  npcsList: {
     marginBottom: 20,
   },
-  characterCard: {
+  npcCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 12,
@@ -76,23 +75,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 2,
     borderLeftWidth: 3,
-    borderLeftColor: '#2295D1',
+    borderLeftColor: '#34A853', // Cor diferente para diferenciar de personagens
   },
-  characterImage: {
-    width: 45,
-    height: 45,
-    borderRadius: 22,
-    backgroundColor: '#e3f2fd',
+  npcImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#e8f5e8',
   },
-  characterInfo: {
+  npcInfo: {
     flex: 1,
     marginLeft: 12,
   },
-  characterName: {
+  npcName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#124A69',
-    marginBottom: 3,
+    marginBottom: 4,
+  },
+  npcDescription: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 18,
   },
   archiveButton: {
     padding: 8,
