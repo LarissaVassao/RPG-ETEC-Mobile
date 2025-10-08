@@ -13,7 +13,7 @@ import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 import { styles } from "./styles";
 
-const API_URL = "http://10.239.0.214/chatOdonto_Larissa";
+const API_URL = "http://192.168.0.110/chatOdonto_Larissa";
 const EMOJIS_POSSIVEIS = ["🤖", "🧝", "🕵️‍♂️", "👾", "🥷"];
 const EMOJI_PADRAO = "🎲";
 

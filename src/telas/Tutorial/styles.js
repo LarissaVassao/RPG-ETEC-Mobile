@@ -6,15 +6,16 @@ export const styles = StyleSheet.create({
     backgroundColor: '#f8fafc',
     alignItems: 'center',
     justifyContent: 'center',
-    top: -40,
   },
   pager: {
     flex: 1,
     width: '100%',
+    top: -40
   },
   page: {
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
   image: {
     width: '90%',
@@ -67,6 +68,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 20,
     gap: 8,
+    top: -40
+
   },
   indicator: {
     width: 10,

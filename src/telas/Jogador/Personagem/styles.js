@@ -162,7 +162,7 @@ export const styles = StyleSheet.create({
   },
   buttonsContainer: {
     position: 'absolute',
-    top: 185, 
+    top: 195, 
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: 0,
@@ -445,7 +445,7 @@ export const styles = StyleSheet.create({
   headerWeight: { flex: 1, textAlign: 'center' },
   imageStyle: {
     position: 'absolute',
-    top: 70,
+    top: 15,
     left: 5,
     width: 100,
     height: 100,
@@ -517,7 +517,7 @@ export const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    marginTop: 205,
+    marginTop: 215,
   },
   modalButton: {
     flex: 1,
@@ -638,35 +638,52 @@ export const styles = StyleSheet.create({
     color: '#000',
     fontWeight: '600'
   },
-  occupationInputTouchable: {
-    padding: 1,
-    borderRadius: 5,
-    minHeight: 10,
-    justifyContent: 'center',
-  },
-  occupationLabel: {
-    fontSize: 15,
-    color: '#000',
-    marginRight: 0,
-    width: 80, 
-  },
-  occupationText: {
-    fontSize: 14,
-    color: '#000',
-    textAlign: 'center',
-  },
-  ocupationCharacter: {
-    flexDirection: 'column',
-    alignItems: 'flex-start', 
-    width: '100%',
-    marginLeft: 120
-  },
-  ocupationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5, 
-    width: '100%',
-  },
+ocupationCharacter: {
+  flexDirection: 'column',
+  alignItems: 'flex-start', 
+  width: '100%',
+  marginLeft: 120
+},
+ocupationContainer: {
+  flexDirection: 'row', // Agora os items ficam lado a lado
+  alignItems: 'center',
+  marginBottom: 5, 
+  width: '100%',
+  gap: 20, // Espaço entre as colunas
+},
+occupationItem: {
+  flexDirection: 'column', // Text e Touchable/Input como coluna
+  alignItems: 'flex-start',
+},
+occupationLabel: {
+  fontSize: 15,
+  color: '#000',
+  marginBottom: 5, // Espaço entre label e input
+  width: 'auto', // Remove largura fixa
+},
+occupationInputTouchable: {
+  padding: 10,
+  borderRadius: 5,
+  minHeight: 40,
+  justifyContent: 'center',
+  borderWidth: 1,
+  borderColor: '#ccc',
+  minWidth: 150, // Largura mínima para consistência
+},
+occupationInput: {
+  padding: 10,
+  borderRadius: 5,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  minHeight: 40,
+  minWidth: 80, // Largura menor para o nível
+  textAlign: 'center',
+},
+occupationText: {
+  fontSize: 14,
+  color: '#000',
+  textAlign: 'center',
+},
   picker: {
     color: '#FFF',
     height: 50,

@@ -632,32 +632,34 @@ const [aparencia, setAparencia] = useState({
         <View style={styles.nameCharacter}>
           <TextInput 
             style={styles.name}
-            placeholder="Nome do player"
+            placeholder="Nome do jogador"
             placeholderTextColor="#000"
           />
         </View>
 
         <View style={styles.ocupationCharacter}>
-          <View style={styles.occupationItem}>
-            <Text style={styles.occupationLabel}>Antepassado:</Text>
-            <TouchableOpacity 
-              style={styles.occupationInputTouchable}
-              onPress={openocupationModal}
-            >
-              <Text style={styles.occupationText}>{playerocupation || 'Selecione um Antepassado'}</Text>
-            </TouchableOpacity>
+          <View style={styles.ocupationContainer}>
+            <View style={styles.occupationItem}>
+              <Text style={styles.occupationLabel}>Antepassado:</Text>
+              <TouchableOpacity 
+                style={styles.occupationInputTouchable}
+                onPress={openocupationModal}
+              >
+                <Text style={styles.occupationText}>{playerocupation || 'Selecione aqui'}</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.occupationItem}>
+              <Text style={styles.occupationLabel}>Nível:</Text>
+              <TextInput 
+                style={styles.occupationInput}
+                placeholder="Ex: 1"
+                placeholderTextColor="#666"
+                keyboardType="numeric"
+              />
+            </View>
           </View>
-          
-          <View style={styles.occupationItem}>
-            <Text style={styles.occupationLabel}>Nível:</Text>
-            <TextInput 
-              style={styles.occupationInput}
-              placeholder="Ex: 1"
-              placeholderTextColor="#666"
-              keyboardType="numeric"
-            />
-          </View>
-        </View>
+</View>
       </View>
       
       <TouchableOpacity onPress={pickImage}>

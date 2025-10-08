@@ -33,7 +33,7 @@ export default function Home({ navigation }) {
           style={styles.logo}
           source={require('../../../assets/img/logo.png')}
         />
-        <Text style={styles.welcomeText}>Bem-Vindo(a)!</Text>
+        <Text style={styles.welcomeText}>Vale Místico</Text>
       </View>
 
       <View style={styles.buttonsContainer}>
