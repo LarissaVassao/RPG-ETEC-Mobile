@@ -13,7 +13,6 @@ export default function Login({ navigation }) {
     const [opac] = useState(new Animated.Value(0));
     const [senha, setSenha] = useState('');
     const [email, setEmail] = useState('');
-    const [id, setId] = useState('');
 
     useEffect(() => {
         Animated.parallel([
@@ -35,8 +34,7 @@ async function login(){
     try{const res = await api.get('rpgetec/checarUsuarios.php', {params: {email: email, senha: senha}});
     if (res.data.success)
     {
-    setId(res.data.id);
-    setUser({ id: res.data.id, email });
+    setUser({ id: res.data.id, email, nome: res.data.nome });
     console.log(user)
     navigation.navigate("Home");
     }

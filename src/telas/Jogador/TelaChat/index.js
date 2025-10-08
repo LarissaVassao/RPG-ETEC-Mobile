@@ -9,65 +9,37 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 import { styles } from "./styles";
-
-const API_URL = "http://192.168.0.110/chatOdonto_Larissa";
-const EMOJIS_POSSIVEIS = ["🤖", "🧝", "🕵️‍♂️", "👾", "🥷"];
-const EMOJI_PADRAO = "🎲";
 
 export default function Chat() {
   const route = useRoute(); // permite receber nome vindo de outra tela
   const flatListRef = useRef();
 
-  // Nome do paciente vindo de outra tela, ou padrão
-  const nomeDoPaciente = route.params?.paciente || "Usuário";
+  // Nome do usuario vindo de outra tela, ou padrão
+  const nomeDoUsuario = route.params?.usuario || "Usuário";
+  
+  const { user, campanha } = useUser();
 
-  const [paciente, setPaciente] = useState(nomeDoPaciente);
+  const [usuario, setUsuario] = useState(nomeDoUsuario);
   const [mensagem, setMensagem] = useState("");
   const [mensagens, setMensagens] = useState([]);
-  const [userEmojis, setUserEmojis] = useState({});
 
   useEffect(() => {
     carregarMensagens();
-    marcarComoLido();
     const interval = setInterval(() => {
       carregarMensagens();
-      marcarComoLido();
     }, 3000);
     return () => clearInterval(interval);
   }, []);
 
   // ---- Funções principais ----
-  const marcarComoLido = async () => {
-    try {
-      await axios.post(`${API_URL}/marcar_lido.php`, { paciente });
-    } catch (err) {
-      console.log("Erro ao marcar como lido", err);
-    }
-  };
 
   const carregarMensagens = async () => {
     try {
-      const res = await axios.get(`${API_URL}/listar.php`);
+      const res = await api.get('rpgetec/listar.php');
       const msgs = res.data.reverse();
       setMensagens(msgs);
-
-      // Mapeia emojis
-      setUserEmojis((prev) => {
-        const novoMapa = { ...prev };
-        msgs.forEach((msg) => {
-          if (!novoMapa[msg.paciente]) {
-            const emoji =
-              EMOJIS_POSSIVEIS[
-                Math.floor(Math.random() * EMOJIS_POSSIVEIS.length)
-              ];
-            novoMapa[msg.paciente] = emoji;
-          }
-        });
-        return novoMapa;
-      });
     } catch (err) {
       console.log("Erro ao buscar mensagens", err);
     }
@@ -76,7 +48,7 @@ export default function Chat() {
   const enviarMensagem = async () => {
     if (mensagem.trim() === "") return;
     try {
-      await axios.post(`${API_URL}/enviar.php`, { paciente, mensagem });
+      await api.post(`rpgetec/enviar.php`, { user: user.id, mensagem, campanha: campanha });
       setMensagem("");
       carregarMensagens();
     } catch (err) {
@@ -92,12 +64,6 @@ export default function Chat() {
       hour: "2-digit",
       minute: "2-digit",
     });
-  };
-
-  const renderStatus = (status) => {
-    if (status === "entregue") return "✔️✔️";
-    if (status === "lido") return "✅✅";
-    return "";
   };
 
   // ---- Interface do Chat ----
@@ -116,27 +82,17 @@ export default function Chat() {
         data={mensagens}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => {
-          const isMe = item.paciente === paciente;
+          const isMe = item.usuario === user.id;
           return (
             <View style={[styles.msg, isMe ? styles.msgMinha : styles.msgOutro]}>
               {!isMe && (
-                <Text style={styles.paciente}>
-                  {item.paciente}
+                <Text style={styles.usuario}>
+                  {item.usuario}
                 </Text>
               )}
               <Text style={styles.texto}>{item.mensagem}</Text>
               <View style={styles.linhaHora}>
                 <Text style={styles.hora}>{formatarHora(item.data_hora)}</Text>
-                {isMe && (
-                  <Text
-                    style={[
-                      styles.status,
-                      item.status === "lido" && styles.statusLido,
-                    ]}
-                  >
-                    {renderStatus(item.status)}
-                  </Text>
-                )}
               </View>
             </View>
           );

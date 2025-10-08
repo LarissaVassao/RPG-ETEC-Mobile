@@ -24,7 +24,7 @@ foreach ($res as $row) {
 echo json_encode(['unique' => $unique]);
 }
 else{
-    $queryStr = "SELECT senha, id FROM usuario WHERE email = :email";
+    $queryStr = "SELECT senha, id, nome FROM usuario WHERE email = :email";
     $query = $pdo->prepare($queryStr);
     $query->bindParam(':email', $email);
     $query->execute();
@@ -32,7 +32,7 @@ else{
 
     
     if ($res && password_verify($senha, $res['senha'])) {
-    echo json_encode(['success' => true, 'id' => $res['id']]);
+    echo json_encode(['success' => true, 'id' => $res['id'], 'nome' => $res['nome']]);
 } else {
     echo json_encode(['success' => false]);
 }

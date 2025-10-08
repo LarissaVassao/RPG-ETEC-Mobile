@@ -1,6 +1,4 @@
 <?php
-header('Content-Type: application/json; charset=utf-8');
-
 include_once('conexao.php');
 
 $id_personagem = $_GET['id_personagem'] ?? '';

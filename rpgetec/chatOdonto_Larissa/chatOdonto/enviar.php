@@ -1,20 +1,18 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
 
+include_once('conexao.php');
 // Conexão com banco
 $conn = new mysqli("localhost", "root", "", "chatodonto_db");
-if ($conn->connect_error) {
-    die(json_encode(["erro" => "Falha na conexão: " . $conn->connect_error]));
-}
 
 // Pega JSON enviado pelo React Native
 $input = json_decode(file_get_contents("php://input"), true);
-$paciente = $conn->real_escape_string($input['paciente']);
+$user = $conn->real_escape_string($input['user']);
 $mensagem = $conn->real_escape_string($input['mensagem']);
+$campanha = $conn->real_escape_string($input['campanha']);
+
 
 // Insere mensagem no banco
-$sql = "INSERT INTO mensagens (paciente, mensagem, status) VALUES ('$paciente', '$mensagem', 'enviado')";
+$sql = "INSERT INTO chat (user_id, mensagem, campanha_id) VALUES ('$user', '$mensagem', '$campanha')";
 if ($conn->query($sql) === TRUE) {
     echo json_encode(["sucesso" => true, "id" => $conn->insert_id]);
 } else {
