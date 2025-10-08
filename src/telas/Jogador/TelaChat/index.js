@@ -12,6 +12,13 @@ import {
 import { useRoute } from "@react-navigation/native";
 import { styles } from "./styles";
 
+<<<<<<< HEAD
+=======
+const API_URL = "http://10.239.0.214/chatOdonto_Larissa";
+const EMOJIS_POSSIVEIS = ["🤖", "🧝", "🕵️‍♂️", "👾", "🥷"];
+const EMOJI_PADRAO = "🎲";
+
+>>>>>>> 59670e85437801d6307c4a61aefe5600b11f1bfc
 export default function Chat() {
   const route = useRoute(); // permite receber nome vindo de outra tela
   const flatListRef = useRef();
