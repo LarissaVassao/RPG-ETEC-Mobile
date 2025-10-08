@@ -642,7 +642,8 @@ ocupationCharacter: {
   flexDirection: 'column',
   alignItems: 'flex-start', 
   width: '100%',
-  marginLeft: 120
+  marginLeft: 120,
+  top: 30
 },
 ocupationContainer: {
   flexDirection: 'row', // Agora os items ficam lado a lado

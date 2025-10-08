@@ -162,8 +162,8 @@ const Grid = ({ gridWidth, gridHeight, cellSize }) => {
               style={{
                 width: cellSize,
                 height: cellSize,
-                borderWidth: 1,
-                borderColor: '#ccc',
+                borderWidth: 0.2,
+                borderColor: '#cccccc50',
               }}
             />
           ))}

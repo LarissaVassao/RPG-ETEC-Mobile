@@ -12,8 +12,8 @@ export const styles = StyleSheet.create({
     marginBottom: 60,
   },
   logo: {
-    width: 160,
-    height: 160,
+    width: 200,
+    height: 200,
   },
   welcomeText: {
     fontSize: 28,

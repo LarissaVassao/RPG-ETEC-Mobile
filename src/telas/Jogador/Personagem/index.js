@@ -629,13 +629,6 @@ const [aparencia, setAparencia] = useState({
       </Modal>
 
       <View style={styles.characterBase}>
-        <View style={styles.nameCharacter}>
-          <TextInput 
-            style={styles.name}
-            placeholder="Nome do jogador"
-            placeholderTextColor="#000"
-          />
-        </View>
 
         <View style={styles.ocupationCharacter}>
           <View style={styles.ocupationContainer}>

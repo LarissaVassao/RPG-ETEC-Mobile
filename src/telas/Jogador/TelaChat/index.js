@@ -108,7 +108,7 @@ export default function Chat() {
     >
       <StatusBar backgroundColor="#124A69" barStyle="light-content" />
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Chat Odonto</Text>
+        <Text style={styles.headerTitle}>Chat</Text>
       </View>
 
       <FlatList
@@ -121,7 +121,7 @@ export default function Chat() {
             <View style={[styles.msg, isMe ? styles.msgMinha : styles.msgOutro]}>
               {!isMe && (
                 <Text style={styles.paciente}>
-                  {userEmojis[item.paciente] || EMOJI_PADRAO} {item.paciente}
+                  {item.paciente}
                 </Text>
               )}
               <Text style={styles.texto}>{item.mensagem}</Text>
