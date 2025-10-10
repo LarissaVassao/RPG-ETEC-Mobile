@@ -7,13 +7,17 @@ $nome = $input['nome'] ?? '';
 $campanha = $input['id_campanha'] ?? '';
 $largura = $input['largura'] ?? '';
 $altura = $input['altura'] ?? ''?
+$cellSize = $input['cellSize'] ?? ''?
+
 
 try {
-    $res = $pdo->prepare("INSERT INTO mapa SET nome = :nome, id_campanha = :id_campanha, largura = :largura, altura = :altura");	
+    $res = $pdo->prepare("INSERT INTO mapa SET nome = :nome, id_campanha = :id_campanha, largura = :largura, altura = :altura, cellSize = :cellSize");	
     $res->bindValue(":nome", $nome);
     $res->bindValue(":id_campanha", $id_campanha);
     $res->bindValue(":largura", $largura);
     $res->bindValue(":altura", $altura);
+    $res->bindValue(":cellSize", $cellSize);
+
     $res->execute();
 
     $lastId = $pdo->lastInsertId();

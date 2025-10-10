@@ -638,14 +638,14 @@ export const styles = StyleSheet.create({
     color: '#000',
     fontWeight: '600'
   },
-ocupationCharacter: {
+backgroundCharacter: {
   flexDirection: 'column',
   alignItems: 'flex-start', 
   width: '100%',
   marginLeft: 120,
   top: 30
 },
-ocupationContainer: {
+backgroundContainer: {
   flexDirection: 'row', // Agora os items ficam lado a lado
   alignItems: 'center',
   marginBottom: 5, 
