@@ -85,14 +85,13 @@ export default function ListaPersonagens({ navigation }) {
                 
                 <Text style={styles.headerTitle}>Lista de Personagens</Text>
                 
-                {mestre && (
+                
                     <TouchableOpacity 
                         style={styles.createButton}
                         onPress={() => navigation.navigate("CadastrarPersonagem")}
                     >
                         <Ionicons name="add-outline" size={22} color="#fff" />
                     </TouchableOpacity>
-                )}
             </View>
 
             <ScrollView 

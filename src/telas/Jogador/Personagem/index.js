@@ -116,7 +116,7 @@ const pickImage = async () => {
     formData.append("id_personagem", user.id.toString());
 
     // Use fetch (works reliably in Expo)
-    const response = await fetch(url + "rpgetec/upload.php", {
+    const response = await fetch(`${url}rpgetec/upload.php`, {
       method: "POST",
       body: formData,
     });
@@ -699,7 +699,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('vida', vida)}
                     >
-                      <Text style={styles.resourceInputText}>{vida}</Text>
+                      <Text style={styles.resourceInputText}>{vidaAtual}/{vida}</Text>
                     </TouchableOpacity>
  
                 </View>
@@ -710,7 +710,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('mental', mental)}
                     >
-                      <Text style={styles.resourceInputText}>{mental}</Text>
+                      <Text style={styles.resourceInputText}>{mentalAtual}/{mental}</Text>
                     </TouchableOpacity>
 
                 
@@ -722,7 +722,7 @@ const [aparencia, setAparencia] = useState({
                       style={styles.resourceInputTouchable}
                       onPress={() => openEditModal('energia', energia)}
                     >
-                      <Text style={styles.resourceInputText}>{energia}</Text>
+                      <Text style={styles.resourceInputText}>{energiaAtual}/{energia}</Text>
                     </TouchableOpacity>
                  
                 </View>
@@ -1396,8 +1396,6 @@ const [aparencia, setAparencia] = useState({
             </ScrollView>
           </View>
         }
-  
-
       </View>
     </View>
   );

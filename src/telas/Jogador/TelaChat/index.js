@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   StatusBar,
   Text,
@@ -8,120 +8,90 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useFocusEffect } from "@react-navigation/native";
 import { styles } from "./styles";
+import { useUser } from "../../../context/UserContext.js";
+import api from "../../../../services/api.js";
 
-<<<<<<< HEAD
-=======
-const API_URL = "http://10.239.0.214/chatOdonto_Larissa";
-const EMOJIS_POSSIVEIS = ["🤖", "🧝", "🕵️‍♂️", "👾", "🥷"];
-const EMOJI_PADRAO = "🎲";
-
->>>>>>> 59670e85437801d6307c4a61aefe5600b11f1bfc
 export default function Chat() {
-  const route = useRoute(); // permite receber nome vindo de outra tela
+  const route = useRoute();
   const flatListRef = useRef();
-
-  // Nome do usuario vindo de outra tela, ou padrão
-  const nomeDoUsuario = route.params?.usuario || "Usuário";
-  
   const { user, campanha } = useUser();
-
-  const [usuario, setUsuario] = useState(nomeDoUsuario);
-  const [mensagem, setMensagem] = useState("");
   const [mensagens, setMensagens] = useState([]);
-
-  useEffect(() => {
-    carregarMensagens();
-    const interval = setInterval(() => {
-      carregarMensagens();
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // ---- Funções principais ----
+  const [mensagem, setMensagem] = useState("");
 
   const carregarMensagens = async () => {
     try {
-      const res = await api.get('rpgetec/listar.php');
-      const msgs = res.data.reverse();
-      setMensagens(msgs);
+      const res = await api.get('/rpgetec/listar.php', { params: { id_campanha: campanha }});
+      setMensagens(res.data.mensagens || []);
     } catch (err) {
-      console.log("Erro ao buscar mensagens", err);
+      console.error('Erro ao buscar mensagens:', err);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      carregarMensagens();
+      const interval = setInterval(carregarMensagens, 3000);
+      return () => clearInterval(interval);
+    }, [campanha])
+  );
 
   const enviarMensagem = async () => {
-    if (mensagem.trim() === "") return;
-    try {
-      await api.post(`rpgetec/enviar.php`, { user: user.id, mensagem, campanha: campanha });
-      setMensagem("");
-      carregarMensagens();
-    } catch (err) {
-      console.log("Erro ao enviar mensagem", err);
-    }
+    if (!mensagem.trim()) return;
+    // ... seu post
   };
 
-  // ---- Utilitários ----
-  const formatarHora = (dataHora) => {
-    if (!dataHora) return "";
-    const date = new Date(dataHora);
-    return date.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+  const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0;
+  // ajuste esse valor conforme seu header (iOS costuma precisar mais offset)
 
-  // ---- Interface do Chat ----
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
-      <StatusBar backgroundColor="#124A69" barStyle="light-content" />
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Chat</Text>
-      </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <StatusBar backgroundColor="#124A69" barStyle="light-content" />
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Chat</Text>
+        </View>
 
-      <FlatList
-        ref={flatListRef}
-        data={mensagens}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => {
-          const isMe = item.usuario === user.id;
-          return (
-            <View style={[styles.msg, isMe ? styles.msgMinha : styles.msgOutro]}>
-              {!isMe && (
-                <Text style={styles.usuario}>
-                  {item.usuario}
-                </Text>
-              )}
-              <Text style={styles.texto}>{item.mensagem}</Text>
-              <View style={styles.linhaHora}>
-                <Text style={styles.hora}>{formatarHora(item.data_hora)}</Text>
+        <FlatList
+          ref={flatListRef}
+          data={mensagens}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => {
+            const isMe = item.id_usuario === user.id;
+            return (
+              <View style={[styles.msg, isMe ? styles.msgMinha : styles.msgOutro]}>
+                {!isMe && <Text style={styles.usuario}>{item.usuario}</Text>}
+                <Text style={styles.texto}>{item.mensagem}</Text>
               </View>
-            </View>
-          );
-        }}
-        onContentSizeChange={() =>
-          flatListRef.current.scrollToEnd({ animated: true })
-        }
-        onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
-        style={styles.flatlistContent}
-      />
-
-      <View style={styles.inputArea}>
-        <TextInput
-          style={styles.inputMensagem}
-          placeholder="Digite sua mensagem..."
-          value={mensagem}
-          onChangeText={setMensagem}
+            );
+          }}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: 16 }}
+          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
         />
-        <TouchableOpacity style={styles.botaoEnviar} onPress={enviarMensagem}>
-          <Text style={styles.botaoTexto}>➤</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+
+        <View style={styles.inputArea}>
+          <TextInput
+            style={styles.inputMensagem}
+            placeholder="Digite sua mensagem..."
+            value={mensagem}
+            onChangeText={setMensagem}
+            returnKeyType="send"
+            onSubmitEditing={enviarMensagem}
+            blurOnSubmit={false}
+          />
+          <TouchableOpacity style={styles.botaoEnviar} onPress={enviarMensagem}>
+            <Text style={styles.botaoTexto}>➤</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
