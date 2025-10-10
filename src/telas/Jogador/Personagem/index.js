@@ -87,8 +87,36 @@ export default function Personagem({ route, navigation }) {
   // Para imagem
   const [selectedImage, setSelectedImage] = useState(null);
 
+const carregarImagemPerfil = async () => {
+  try {
+    console.log("Carregando imagem do perfil...");
+    
+    const res = await api.get("rpgetec/checarPersonagem.php", {
+      params: { id_personagem: idPersonagem }
+    });
+
+    if (res.data.success) {
+      const personagem = res.data.personagem;
+      
+      if (personagem.profileImage) {
+        // Construir a URL completa da imagem
+        const imageUrl = `${url}rpgetec/perfil/${personagem.profileImage}`;
+        console.log("URL da imagem:", imageUrl);
+        setSelectedImage(imageUrl);
+      } else {
+        console.log("Personagem não tem imagem de perfil");
+        setSelectedImage(null); // Usar imagem padrão
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao carregar imagem:", error);
+  }
+};
+
 const pickImage = async () => {
   try {
+    console.log("=== INICIANDO UPLOAD ===");
+
     // Request permissions
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -100,44 +128,87 @@ const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
-      quality: 1,
+      quality: 0.8,
+      base64: false,
     });
 
-    if (result.canceled || !result.assets || result.assets.length === 0) return;
+    console.log("Resultado do ImagePicker:", result);
+
+    if (result.canceled || !result.assets || result.assets.length === 0) {
+      console.log("Seleção cancelada pelo usuário");
+      return;
+    }
 
     const asset = result.assets[0];
-    let uri = asset.uri;
+    const uri = asset.uri;
 
-    console.log("Upload URI:", uri);
-    setSelectedImage(uri);
+    console.log("Asset selecionado:", {
+      uri: uri,
+      fileName: asset.fileName,
+      fileSize: asset.fileSize,
+      type: asset.type
+    });
 
-    // Build FormData like Postman
+    // 🔥 CORREÇÃO PRINCIPAL: FormData para React Native
     const formData = new FormData();
-    formData.append("file", {
-      uri,
-      name: asset.fileName || "upload.jpg",
-      type: asset.type || "image/jpeg",
+    
+    // Formato CORRETO para React Native
+    formData.append('file', {
+      uri: Platform.OS === 'ios' ? uri.replace('file://', '') : uri,
+      type: 'image/jpeg', // Forçar tipo JPEG
+      name: `personagem_${idPersonagem}_${Date.now()}.jpg`,
     });
-    formData.append("id_personagem", user.id.toString());
+    
+    formData.append('id_personagem', idPersonagem.toString());
 
-    // Use fetch (works reliably in Expo)
-    const response = await fetch(url + "rpgetec/upload.php", {
-      method: "POST",
-      body: formData,
+    console.log("FormData criado, enviando para API...");
+
+    // 🔥 USAR api (axios) que já funciona para os outros endpoints
+    const response = await api.post("rpgetec/upload.php", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 30000,
+      // ⚠️ IMPORTANTE: TransformRequest para axios com FormData
+      transformRequest: (data) => data,
     });
 
-    const data = await response.json();
-    console.log("Upload response:", data);
+    console.log("✅ Resposta do servidor:", response.data);
 
-    if (data.success) {
-      Alert.alert("Upload", data.message);
+    if (response.data.success) {
+      Alert.alert("Sucesso", "Imagem do personagem atualizada!");
+      setSelectedImage(uri);
+      
+      // Atualizar a imagem imediatamente
+      if (response.data.file) {
+        const imageUrl = `${url}rpgetec/perfil/${response.data.file}`;
+        setSelectedImage(imageUrl);
+      }
     } else {
-      Alert.alert("Upload failed", data.message || "Erro desconhecido");
+      Alert.alert("Erro no upload", response.data.message || "Erro desconhecido");
     }
 
   } catch (err) {
-    console.log("UPLOAD ERROR:", err);
-    Alert.alert("Upload failed", err.message);
+    console.log("❌ ERRO NO UPLOAD:", {
+      message: err.message,
+      code: err.code,
+      response: err.response?.data,
+      status: err.response?.status
+    });
+    
+    // Erros específicos
+    if (err.message === 'Network Error') {
+      Alert.alert(
+        "Erro de Rede", 
+        "Não foi possível conectar ao servidor. Verifique:\n\n• Sua conexão com internet\n• Se o servidor está online\n• URL do servidor está correta"
+      );
+    } else if (err.code === 'ECONNABORTED') {
+      Alert.alert("Timeout", "O upload demorou muito. Tente uma imagem menor.");
+    } else if (err.response?.status === 413) {
+      Alert.alert("Arquivo muito grande", "A imagem é muito grande. Tente uma com menor resolução.");
+    } else {
+      Alert.alert("Erro", err.response?.data?.message || err.message || "Erro desconhecido");
+    }
   }
 };
 
@@ -153,46 +224,54 @@ const pickImage = async () => {
 
   //Puxar do banco de dados
     useEffect(() => {
-        const checarPersonagem = async () => {
-            try {
+  const checarPersonagem = async () => {
+    try {
+      const res = await api.get("rpgetec/checarPersonagem.php", {
+        params: { id_personagem: idPersonagem }
+      });
 
-                const res = await api.get("rpgetec/checarPersonagem.php", {params: {id_personagem: idPersonagem}});
+      if (res.data.success) {
+        const p = res.data.personagem;
         
-                if (res.data.success) {
-                  const p = res.data.personagem;
-                  setVida(p.vida);
-                  setVidaAtual(p.vidaAtual || p.vida); // Use o valor atual ou o máximo como fallback
-                  setMental(p.mental);
-                  setMentalAtual(p.mentalAtual || p.mental);
-                  setEnergia(p.energia);
-                  setEnergiaAtual(p.energiaAtual || p.energia);
-                  setCa(p.ca);
-                  setCarga(p.carga);
-                  setCargaAtual(p.cargaAtual);
-                  setMovimento(p.movimento);
-                  setCredito(p.credito);
-                  setCreditoMax(p.creditoMax || p.credito); 
-                  setForca(p.forca);
-                  setAgilidade(p.agilidade);
-                  setConstituicao(p.constituicao);
-                  setVontade(p.vontade);
-                  setInteligencia(p.inteligencia);
-                  setPercepcao(p.percepcao);
-                  setSorte(p.sorte);
-                  setCharacterName(p.nome);
-                  setBackground(p.antepassado);
-                  console.log(p.antepassado);
-                  setLevel(p.nivel);
+        // Seus estados existentes...
+        setVida(p.vida);
+        setVidaAtual(p.vidaAtual || p.vida);
+        setMental(p.mental);
+        setMentalAtual(p.mentalAtual || p.mental);
+        setEnergia(p.energia);
+        setEnergiaAtual(p.energiaAtual || p.energia);
+        setCa(p.ca);
+        setCarga(p.carga);
+        setCargaAtual(p.cargaAtual);
+        setMovimento(p.movimento);
+        setCredito(p.credito);
+        setCreditoMax(p.creditoMax || p.credito); 
+        setForca(p.forca);
+        setAgilidade(p.agilidade);
+        setConstituicao(p.constituicao);
+        setVontade(p.vontade);
+        setInteligencia(p.inteligencia);
+        setPercepcao(p.percepcao);
+        setSorte(p.sorte);
+        setCharacterName(p.nome);
+        setBackground(p.antepassado);
+        setLevel(p.nivel);
+        setPericias(res.data.pericias);
 
-                  setPericias(res.data.pericias);
-                }
-            } catch (error) {
-                console.error("Erro ao buscar personagens:", error);
-            }
-        };
+        // 🔥 CARREGAR IMAGEM DO PERFIL
+        if (p.profileImage) {
+          const imageUrl = `${url}rpgetec/perfil/${p.profileImage}`;
+          console.log("Carregando imagem:", imageUrl);
+          setSelectedImage(imageUrl);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar personagem:", error);
+    }
+  };
 
-        checarPersonagem();
-    }, [vida, background]);;
+  checarPersonagem();
+}, [idPersonagem]); // Remova 'vida' e 'background' se não forem necessários
         
   
 
@@ -1490,7 +1569,7 @@ const [aparencia, setAparencia] = useState({
                       <View style={styles.modalInfoRow}>
                         <Text style={styles.modalLabel}>Valor:</Text>
                         <Text style={styles.modalValue}>
-                          {selectedItem.price} <Text style={styles.credit}>céditos</Text>
+                          {selectedItem.price} <Text style={styles.credit}>créditos</Text>
                         </Text>
                       </View>
 
