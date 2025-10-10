@@ -1,3 +1,3 @@
 {/* COLOQUE AQUI SEU ENDEREÇO IP */}
-const url =  'http:/10.239.0.214/';
+const url =  'http:/192.168.0.110/';
 export default url;

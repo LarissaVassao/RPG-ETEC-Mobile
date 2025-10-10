@@ -727,17 +727,18 @@ occupationText: {
     justifyContent: 'center',
     alignItems: 'center',
   },
+ resourceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    height: 45,
+  },
   resourceLabel: {
     color: '#fff',
     fontWeight: 'bold',
     width: 80,
     fontSize: 16,
     left: 5
-  },
-  resourceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
   },
   resourcesContainer: {
     justifyContent: 'center', 
@@ -930,4 +931,68 @@ occupationText: {
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 10,
   },
+    progressBarContainer: {
+    flex: 1,
+    height: 40,
+    marginHorizontal: 10,
+    justifyContent: 'center',
+  },
+  progressBarBackground: {
+    height: 35,
+    backgroundColor: '#0A2D42',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#fff',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 6,
+    position: 'absolute',
+    left: 0,
+  },
+  progressBarText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 14,
+    textAlign: 'center',
+    zIndex: 1,
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+
+  // Cores específicas para cada barra
+  lifeBarBackground: {
+    borderColor: '#FF6B6B',
+  },
+  lifeBarFill: {
+    backgroundColor: '#FF4444',
+  },
+
+  mentalBarBackground: {
+    borderColor: '#4FC3F7',
+  },
+  mentalBarFill: {
+    backgroundColor: '#4A90E2',
+  },
+
+  energyBarBackground: {
+    borderColor: '#FFD54F',
+  },
+  energyBarFill: {
+    backgroundColor: '#FFD700',
+  },
+  resourceInputGroup: {
+  marginBottom: 15,
+},
+// Adicione após os outros estilos de barras
+creditBarBackground: {
+  borderColor: '#4CAF50',
+},
+creditBarFill: {
+  backgroundColor: '#2E7D32',
+},
 });

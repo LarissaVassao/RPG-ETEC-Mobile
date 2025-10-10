@@ -42,6 +42,7 @@ export default function Personagem({ route, navigation }) {
   const [currentValue, setCurrentValue] = useState('');
   const [tempValue, setTempValue] = useState('');
   
+  
   // Estados para os valores dos atributos
   const [vida, setVida] = useState();
   const [vidaAtual, setVidaAtual] = useState(10);
@@ -49,6 +50,11 @@ export default function Personagem({ route, navigation }) {
   const [mentalAtual, setMentalAtual] = useState(10);
   const [energia, setEnergia] = useState(10);
   const [energiaAtual, setEnergiaAtual] = useState(10);
+  const [editingResource, setEditingResource] = useState(null);
+  const [resourceModalVisible, setResourceModalVisible] = useState(false);
+  const [tempCurrentValue, setTempCurrentValue] = useState(0);
+  const [tempMaxValue, setTempMaxValue] = useState(0);
+  
   const [ca, setCa] = useState(3);
   const [carga, setCarga] = useState(0);
   const [cargaAtual, setCargaAtual] = useState(50);
@@ -157,18 +163,18 @@ const pickImage = async () => {
           
                 if (res.data.success) {
                   const p = res.data.personagem;
-                  setVida(p.vida);
-                  setVidaAtual(p.vidaAtual);
+                 setVida(p.vida);
+                  setVidaAtual(p.vidaAtual || p.vida); // Use o valor atual ou o máximo como fallback
                   setMental(p.mental);
-                  setMentalAtual(p.mentalAtual);
+                  setMentalAtual(p.mentalAtual || p.mental);
                   setEnergia(p.energia);
-                  setEnergiaAtual(p.energiaAtual);
+                  setEnergiaAtual(p.energiaAtual || p.energia);
                   setCa(p.ca);
                   setCarga(p.carga);
                   setCargaAtual(p.cargaAtual);
                   setMovimento(p.movimento);
                   setCredito(p.credito);
-                  setCreditoMax(p.creditoMax)
+                  setCreditoMax(p.creditoMax || p.credito); 
                   setForca(p.forca);
                   setAgilidade(p.agilidade);
                   setConstituicao(p.constituicao);
@@ -248,7 +254,67 @@ const pickImage = async () => {
     setTempValue(value);
     setEditModalVisible(true);
   };
+    const openResourceEditModal = (resourceType, currentValue, maxValue) => {
+    setEditingResource(resourceType);
+    setTempCurrentValue(currentValue.toString());
+    setTempMaxValue(maxValue.toString());
+    setResourceModalVisible(true);
+  };
+const saveResourceEdit = async () => {
+  if (!editingResource) return;
 
+  const newCurrent = parseInt(tempCurrentValue) || 0;
+  const newMax = parseInt(tempMaxValue) || 0;
+
+  try {
+    const res = await api.get("rpgetec/alterarPersonagem.php", {
+      params: {
+        id_personagem: idPersonagem,
+        valor: newCurrent,
+        atributo: `${editingResource}Atual`,
+      },
+    });
+
+    const resMax = await api.get("rpgetec/alterarPersonagem.php", {
+      params: {
+        id_personagem: idPersonagem,
+        valor: newMax,
+        atributo: editingResource,
+      },
+    });
+
+    console.log("Alterar recursos:", res.data, resMax.data);
+
+    if (res.data.success && resMax.data.success) {
+      switch (editingResource) {
+        case 'vida':
+          setVida(newMax);
+          setVidaAtual(newCurrent);
+          break;
+        case 'mental':
+          setMental(newMax);
+          setMentalAtual(newCurrent);
+          break;
+        case 'energia':
+          setEnergia(newMax);
+          setEnergiaAtual(newCurrent);
+          break;
+        case 'credito':
+          setCredito(newCurrent);
+          setCreditoMax(newMax);
+          break;
+        default: break;
+      }
+    } else {
+      Alert.alert("Erro", "Falha ao atualizar recursos");
+    }
+  } catch (error) {
+    console.error("Erro ao alterar recursos:", error);
+  }
+
+  setResourceModalVisible(false);
+  setEditingResource(null);
+};
   // Função para salvar a edição de pericias
   const savePericiaEdit = () => {
     setPericias(prev => ({
@@ -475,6 +541,61 @@ const [aparencia, setAparencia] = useState({
         </View>
       </Modal>
       <Modal
+  visible={resourceModalVisible}
+  transparent={true}
+  animationType="slide"
+  onRequestClose={() => setResourceModalVisible(false)}
+>
+  <View style={styles.modalOverlay}>
+    <View style={styles.editModalContainer}>
+      <Text style={styles.editModalTitle}>
+        Editar {editingResource === 'vida' ? 'Vida' : 
+                editingResource === 'mental' ? 'Mental' : 'Energia'}
+      </Text>
+      
+      <View style={styles.resourceInputGroup}>
+        <Text style={styles.inputLabel}>Valor Atual:</Text>
+        <TextInput
+          style={styles.editModalInput}
+          value={tempCurrentValue}
+          onChangeText={setTempCurrentValue}
+          placeholder="Valor atual..."
+          placeholderTextColor="#CCC"
+          keyboardType="numeric"
+        />
+      </View>
+
+      <View style={styles.resourceInputGroup}>
+        <Text style={styles.inputLabel}>Valor Máximo:</Text>
+        <TextInput
+          style={styles.editModalInput}
+          value={tempMaxValue}
+          onChangeText={setTempMaxValue}
+          placeholder="Valor máximo..."
+          placeholderTextColor="#CCC"
+          keyboardType="numeric"
+        />
+      </View>
+      
+      <View style={styles.modalButtons}>
+        <TouchableOpacity 
+          style={[styles.modalButton, styles.cancelButton]}
+          onPress={() => setResourceModalVisible(false)}
+        >
+          <Text style={styles.cancelButtonText}>Cancelar</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={[styles.modalButton, styles.createButton]}
+          onPress={saveResourceEdit}
+        >
+          <Text style={styles.createButtonText}>Salvar</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</Modal>
+      <Modal
         visible={editAppearanceModalVisible}
         transparent={true}
         animationType="slide"
@@ -691,42 +812,50 @@ const [aparencia, setAparencia] = useState({
           <View style={styles.redView}>
             <Text style={styles.viewTitle}>ATRIBUTOS</Text>  
             <ScrollView contentContainerStyle={styles.redScrollContent}>
-              <View style={styles.resourcesContainer}>
-                <View style={styles.resourceRow}>
-                  <Text style={styles.resourceLabel}>Vida:</Text>
+<View style={styles.resourcesContainer}>
+  {/* Vida */}
+  <View style={styles.resourceRow}>
+    <Text style={styles.resourceLabel}>Vida:</Text>
+    <TouchableOpacity 
+      style={styles.progressBarContainer}
+      onPress={() => openResourceEditModal('vida', vidaAtual, vida)}
+    >
+      <View style={[styles.progressBarBackground, styles.lifeBarBackground]}>
+        <View style={[styles.progressBarFill, styles.lifeBarFill, { width: `${(vidaAtual / vida) * 100}%` }]} />
+        <Text style={styles.progressBarText}>{vidaAtual}/{vida}</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
 
-                    <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('vida', vida)}
-                    >
-                      <Text style={styles.resourceInputText}>{vida}</Text>
-                    </TouchableOpacity>
- 
-                </View>
+  {/* Mental */}
+  <View style={styles.resourceRow}>
+    <Text style={styles.resourceLabel}>Mental:</Text>
+    <TouchableOpacity 
+      style={styles.progressBarContainer}
+      onPress={() => openResourceEditModal('mental', mentalAtual, mental)}
+    >
+      <View style={[styles.progressBarBackground, styles.mentalBarBackground]}>
+        <View style={[styles.progressBarFill, styles.mentalBarFill, { width: `${(mentalAtual / mental) * 100}%` }]} />
+        <Text style={styles.progressBarText}>{mentalAtual}/{mental}</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
 
-                <View style={styles.resourceRow}>
-                  <Text style={styles.resourceLabel}>Mental:</Text>
-                    <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('mental', mental)}
-                    >
-                      <Text style={styles.resourceInputText}>{mental}</Text>
-                    </TouchableOpacity>
+  {/* Energia */}
+  <View style={styles.resourceRow}>
+    <Text style={styles.resourceLabel}>Energia:</Text>
+    <TouchableOpacity 
+      style={styles.progressBarContainer}
+      onPress={() => openResourceEditModal('energia', energiaAtual, energia)}
+    >
+      <View style={[styles.progressBarBackground, styles.energyBarBackground]}>
+        <View style={[styles.progressBarFill, styles.energyBarFill, { width: `${(energiaAtual / energia) * 100}%` }]} />
+        <Text style={styles.progressBarText}>{energiaAtual}/{energia}</Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+</View>
 
-                
-                </View>
-
-                <View style={styles.resourceRow}>
-                  <Text style={styles.resourceLabel}>Energia:</Text>
-                  <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('energia', energia)}
-                    >
-                      <Text style={styles.resourceInputText}>{energia}</Text>
-                    </TouchableOpacity>
-                 
-                </View>
-              </View>
 
               <View style={styles.verticalLine}/>
 
@@ -873,15 +1002,20 @@ const [aparencia, setAparencia] = useState({
         <View style={styles.blueView}>
           <Text style={styles.viewTitle}>INVENTÁRIO</Text>    
 
-          <View style={styles.creditContainer}>
-            <Text style={styles.creditLabel}>Crédito Usado:</Text>
-            <TouchableOpacity 
-              style={styles.creditInputTouchable}
-              onPress={() => openEditModal('credito', credito)}
-            >
-              <Text style={styles.resourceInputText}>{`${credito}/${creditoMax}`}</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={styles.resourcesContainer}>
+              <View style={styles.resourceRow}>
+                <Text style={styles.resourceLabel}>Crédito:</Text>
+                <TouchableOpacity 
+                  style={styles.progressBarContainer}
+                  onPress={() => openResourceEditModal('credito', credito, creditoMax)}
+                >
+                  <View style={[styles.progressBarBackground, styles.creditBarBackground]}>
+                    <View style={[styles.progressBarFill, styles.creditBarFill, { width: `${(credito / creditoMax) * 100}%` }]} />
+                    <Text style={styles.progressBarText}>{credito}/{creditoMax}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
 
           <TouchableOpacity 
             style={styles.createItemButton}
