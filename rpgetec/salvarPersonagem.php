@@ -31,12 +31,14 @@ try {
 
     // 🎲 1. Inserir personagem
     $res = $pdo->prepare("INSERT INTO personagem 
-        (nome, id_campanha, id_usuario, vida, vidaAtual, mental, mentalAtual, energia, energiaAtual, ca, credito, creditoMax, movimento, 
+        (nome, nivel, antepassado, id_campanha, id_usuario, vida, vidaAtual, mental, mentalAtual, energia, energiaAtual, ca, credito, creditoMax, movimento, 
          forca, agilidade, constituicao, inteligencia, percepcao, vontade, sorte, tokenImage, profileImage)
-        VALUES (:nome, :id_campanha, :id_usuario, :vida, :vida, :mental, :mental, :energia, :energia, :ca, 0, :credito, 6,
+        VALUES (:nome, :nivel, :antepassado, :id_campanha, :id_usuario, :vida, :vida, :mental, :mental, :energia, :energia, :ca, 0, :credito, 6,
                 :forca, :agilidade, :constituicao, :inteligencia, :percepcao, :vontade, :sorte, '', '')");	
     
     $res->bindValue(":nome", $nome);
+    $res->bindValue(":antepassado", $antepassado['nome']);
+    $res->bindValue(":nivel", $nivel);
     $res->bindValue(":id_campanha", $campanha);
     $res->bindValue(":id_usuario", $usuario);
     $res->bindValue(":vida", $vida);

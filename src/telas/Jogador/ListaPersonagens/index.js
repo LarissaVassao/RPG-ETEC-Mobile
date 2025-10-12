@@ -85,13 +85,21 @@ export default function ListaPersonagens({ navigation }) {
                 
                 <Text style={styles.headerTitle}>Lista de Personagens</Text>
                 
+<<<<<<< HEAD
                 
+=======
+
+>>>>>>> e605451d8deb10ecb7337b2dc6006819df02b2f1
                     <TouchableOpacity 
                         style={styles.createButton}
                         onPress={() => navigation.navigate("CadastrarPersonagem")}
                     >
                         <Ionicons name="add-outline" size={22} color="#fff" />
                     </TouchableOpacity>
+<<<<<<< HEAD
+=======
+
+>>>>>>> e605451d8deb10ecb7337b2dc6006819df02b2f1
             </View>
 
             <ScrollView 

@@ -39,8 +39,9 @@ export default function MyPager() {
             resizeMode="cover"
             source={require('../../../assets/tutorial/teste.jpg')}
           />
-          <Text style={styles.title}>Primeira página</Text>
-          <Text style={styles.text}>Deslize ➡️ para continuar</Text>
+          <Text style={styles.title}>O que é RPG?</Text>
+          <Text style={styles.text}>RPG é um jogo de interpretação de papéis onde os jogadores interpretam um personagem enquanto um deles é escolhido para controlar a narrativa.</Text>
+          <Text style={styles.text}>Acesse o nosso site para saber mais sobre.</Text>
         </View>
 
         <View style={styles.page} key="2">
@@ -49,7 +50,7 @@ export default function MyPager() {
             resizeMode="cover"
             source={require('../../../assets/tutorial/teste.jpg')}
           />
-          <Text style={styles.title}>Segunda página</Text>
+          <Text style={styles.title}></Text>
           <Text style={styles.text}>Conteúdo explicativo aqui</Text>
         </View>
 
