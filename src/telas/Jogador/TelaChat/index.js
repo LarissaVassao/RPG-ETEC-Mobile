@@ -24,7 +24,7 @@ export default function Chat() {
 
   const carregarMensagens = async () => {
     try {
-      const res = await api.get('/rpgetec/listar.php', { params: { id_campanha: campanha }});
+      const res = await api.get('rpgetec/listar.php', { params: { id_campanha: campanha }});
       setMensagens(res.data.mensagens || []);
     } catch (err) {
       console.error('Erro ao buscar mensagens:', err);
@@ -39,10 +39,36 @@ export default function Chat() {
     }, [campanha])
   );
 
-  const enviarMensagem = async () => {
-    if (!mensagem.trim()) return;
-    // ... seu post
-  };
+const enviarMensagem = async () => {
+  if (!mensagem.trim()) return;
+
+  try {
+    const mensagemParaEnviar = mensagem.trim();
+    setMensagem("");
+    const response = await api.post('rpgetec/enviar.php', {
+      user: user.id,
+      mensagem: mensagemParaEnviar,
+      campanha: campanha
+    });
+
+    if (response.data.sucesso) {
+      // Recarrega as mensagens para mostrar a nova mensagem
+      await carregarMensagens();
+    } else {
+      console.error('Erro ao enviar mensagem:', response.data.mensagem);
+      // Opcional: mostrar alerta para o usuário
+      alert('Erro ao enviar mensagem: ' + response.data.mensagem);
+      // Devolve a mensagem para o input se falhou
+      setMensagem(mensagemParaEnviar);
+    }
+  } catch (err) {
+    console.error('Erro ao enviar mensagem:', err);
+    // Opcional: mostrar alerta para o usuário
+    alert('Erro de conexão ao enviar mensagem');
+    // Devolve a mensagem para o input se falhou
+    setMensagem(mensagem);
+  }
+};
 
   const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0;
   // ajuste esse valor conforme seu header (iOS costuma precisar mais offset)

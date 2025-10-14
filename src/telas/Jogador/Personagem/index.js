@@ -161,12 +161,6 @@ const pickImage = async () => {
     
     formData.append('id_personagem', idPersonagem.toString());
 
-<<<<<<< HEAD
-    // Use fetch (works reliably in Expo)
-    const response = await fetch(`${url}rpgetec/upload.php`, {
-      method: "POST",
-      body: formData,
-=======
     console.log("FormData criado, enviando para API...");
 
     // 🔥 USAR api (axios) que já funciona para os outros endpoints
@@ -177,7 +171,6 @@ const pickImage = async () => {
       timeout: 30000,
       // ⚠️ IMPORTANTE: TransformRequest para axios com FormData
       transformRequest: (data) => data,
->>>>>>> e605451d8deb10ecb7337b2dc6006819df02b2f1
     });
 
     console.log("✅ Resposta do servidor:", response.data);
@@ -1022,40 +1015,6 @@ const [aparencia, setAparencia] = useState({
     </TouchableOpacity>
   </View>
 
-<<<<<<< HEAD
-                    <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('vida', vida)}
-                    >
-                      <Text style={styles.resourceInputText}>{vidaAtual}/{vida}</Text>
-                    </TouchableOpacity>
- 
-                </View>
-
-                <View style={styles.resourceRow}>
-                  <Text style={styles.resourceLabel}>Mental:</Text>
-                    <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('mental', mental)}
-                    >
-                      <Text style={styles.resourceInputText}>{mentalAtual}/{mental}</Text>
-                    </TouchableOpacity>
-
-                
-                </View>
-
-                <View style={styles.resourceRow}>
-                  <Text style={styles.resourceLabel}>Energia:</Text>
-                  <TouchableOpacity 
-                      style={styles.resourceInputTouchable}
-                      onPress={() => openEditModal('energia', energia)}
-                    >
-                      <Text style={styles.resourceInputText}>{energiaAtual}/{energia}</Text>
-                    </TouchableOpacity>
-                 
-                </View>
-              </View>
-=======
   {/* Mental */}
   <View style={styles.resourceRow}>
     <Text style={styles.resourceLabel}>Mental:</Text>
@@ -1085,7 +1044,6 @@ const [aparencia, setAparencia] = useState({
   </View>
 </View>
 
->>>>>>> e605451d8deb10ecb7337b2dc6006819df02b2f1
 
               <View style={styles.verticalLine}/>
 
