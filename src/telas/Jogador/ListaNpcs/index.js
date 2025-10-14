@@ -42,10 +42,10 @@ export default function ListaNpc({ navigation }) {
                         setNpcs(npcsMapeados);
                     }
                 } catch (error) {
-                    console.error("Erro ao buscar NPCs:", error);
+                    //console.error("Erro ao buscar NPCs:", error);
                 }
             } catch (error) {
-                console.error("Erro ao verificar se mestre:", error);
+                //console.error("Erro ao verificar se mestre:", error);
             }
         };
 

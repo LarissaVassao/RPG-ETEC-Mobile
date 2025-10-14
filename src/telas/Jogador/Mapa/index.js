@@ -132,6 +132,7 @@ useEffect(() => {
               onDrop={updateTokenPosition}
             />
           ))}
+        </ImageBackground>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity style={styles.button} onPress={addToken}>
               <Text style={styles.buttonText}>Criar Token</Text>
@@ -140,7 +141,6 @@ useEffect(() => {
               <Text style={styles.buttonText}>Alterar Mapa</Text>
             </TouchableOpacity>
           </View>
-        </ImageBackground>
 
           </ScrollView>
           </ScrollView>

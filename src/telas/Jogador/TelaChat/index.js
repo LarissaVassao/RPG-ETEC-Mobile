@@ -74,7 +74,6 @@ const enviarMensagem = async () => {
   // ajuste esse valor conforme seu header (iOS costuma precisar mais offset)
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -118,6 +117,5 @@ const enviarMensagem = async () => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   );
 }

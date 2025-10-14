@@ -66,6 +66,7 @@ function Tabs(){
   return(
     <Tab.Navigator
     screenOptions={({ route }) => ({
+      keyboardHidesTabBar: true,
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
         color= '#124A69'
