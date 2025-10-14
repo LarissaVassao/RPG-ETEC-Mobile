@@ -94,6 +94,13 @@ useEffect(() => {
                       
                       <Text style={styles.headerTitle}>MAPA</Text>
                       
+                                          <TouchableOpacity 
+                                              style={styles.createButton}
+                                              onPress={addToken}
+                                          >
+                                              <Ionicons name="add-outline" size={22} color="#fff" />
+                                          </TouchableOpacity>
+                      
                       
       </View>
       <View style={styles.he}>
@@ -133,15 +140,6 @@ useEffect(() => {
             />
           ))}
         </ImageBackground>
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.button} onPress={addToken}>
-              <Text style={styles.buttonText}>Criar Token</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setShowGrid(false)}>
-              <Text style={styles.buttonText}>Alterar Mapa</Text>
-            </TouchableOpacity>
-          </View>
-
           </ScrollView>
           </ScrollView>
       )}
