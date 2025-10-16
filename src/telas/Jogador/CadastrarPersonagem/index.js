@@ -63,7 +63,7 @@ async function saveData() {
   const antepassadoObj = antepassados.find(a => a.valor === antepassado)
   //limpar Valor (id)
   const { valor, ...antepassadoLimpo } = antepassadoObj;
-  if (nomePersonagem === "" || !antepassadoObj || jogador === "" || nivelPersonagem === "") {
+  if (nomePersonagem === "" || !antepassadoObj || nivelPersonagem === "") {
     console.log("saveData error empty");  
     Alert.alert("Erro!", "Preencha todos os dados!");
     return;
@@ -151,19 +151,6 @@ if (antepassadoObj.pericia3) pericias[antepassadoObj.pericia3] = antepassadoObj.
                                     placeholderTextColor="#999"
                                     value={nomePersonagem}
                                     onChangeText={setNomePersonagem}
-                                />
-                            </View>
-                        </View>
-                        
-                        <View style={styles.formRow}>
-                            <Text style={styles.label}>Jogador:</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Seu nome"
-                                    placeholderTextColor="#999"
-                                    value={jogador}
-                                    onChangeText={setJogador}
                                 />
                             </View>
                         </View>

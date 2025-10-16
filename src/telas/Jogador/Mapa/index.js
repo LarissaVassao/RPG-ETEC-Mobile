@@ -87,7 +87,7 @@ useEffect(() => {
                   <View style={styles.header}>
                       <TouchableOpacity 
                           style={styles.backButton}
-                          onPress={() => navigation.navigate("ListaMapas")}
+                          onPress={() => navigation.navigate("TelaCampanha")}
                       >
                           <Ionicons name="arrow-back-outline" size={20} color="#fff" />
                       </TouchableOpacity>

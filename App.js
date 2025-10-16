@@ -13,6 +13,7 @@ import Cadastro from './src/telas/Cadastro';
 import Tutorial from './src/telas/Tutorial';
 
 import CadastrarPersonagem from './src/telas/Jogador/CadastrarPersonagem';
+import CadastrarNpc from './src/telas/Jogador/CadastrarNpc';
 import CadastrarMapa from './src/telas/Jogador/CadastrarMapa';
 import ListaPersonagens from './src/telas/Jogador/ListaPersonagens';
 import ListaNpcs from './src/telas/Jogador/ListaNpcs';
@@ -145,7 +146,8 @@ export default function App() {
    <Stack.Screen name="CriarCampanha" component={CriarCampanha} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="EntrarCampanha" component={EntrarCampanha}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="CadastrarPersonagem" component={CadastrarPersonagem}  options={{headerShown: false}}></Stack.Screen>
-    <Stack.Screen name="CadastrarMapa" component={CadastrarMapa}  options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="CadastrarNpc" component={CadastrarNpc}  options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="CadastrarMapa" component={CadastrarMapa}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="ListaNpcs" component={ListaNpcs} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="ListaPersonagens" component={ListaPersonagens} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="Personagem" component={Personagem} options={{headerShown: false}} ></Stack.Screen>

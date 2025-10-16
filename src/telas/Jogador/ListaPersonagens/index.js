@@ -1,9 +1,8 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, StatusBar, Modal, Pressable} from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 import { styles } from './styles';
 import { useUser } from "../../../context/UserContext.js";
-
 
 import api from "../../../../services/api.js";
 
@@ -33,7 +32,9 @@ export default function ListaPersonagens({ navigation }) {
                 const personagensMapeados = res.data.personagens.map(p => ({
                     id: p.id,
                     nome: p.nome,
-                    imagem: require('../../../../assets/img/logo.png') 
+                    imagem: p.profileImage 
+                        ? { uri: `data:image/jpeg;base64,${p.profileImage}` }
+                        : require('../../../../assets/img/logo.png')
                 })); 
                 setPersonagens(personagensMapeados);
               }
@@ -45,7 +46,8 @@ export default function ListaPersonagens({ navigation }) {
         };
 
         listarPersonagens();
-    }, []);
+    }, [campanha, user.id, mestre]);
+
     // Estados para controlar o modal
     const [modalVisible, setModalVisible] = useState(false);
     const [personagemParaDeletar, setPersonagemParaDeletar] = useState(null);
@@ -57,11 +59,22 @@ export default function ListaPersonagens({ navigation }) {
     };
 
     // Função para deletar um personagem
-    const deletarPersonagem = () => {
+    const deletarPersonagem = async () => {
         if (personagemParaDeletar) {
-            setPersonagens(personagens.filter(personagem => personagem.id !== personagemParaDeletar));
-            setModalVisible(false);
-            setPersonagemParaDeletar(null);
+            try {
+                // Chamada para deletar o personagem no backend
+                await api.delete("rpgetec/deletarPersonagem.php", {
+                    data: { id_personagem: personagemParaDeletar }
+                });
+                
+                // Atualizar a lista local
+                setPersonagens(personagens.filter(personagem => personagem.id !== personagemParaDeletar));
+            } catch (error) {
+                console.error("Erro ao deletar personagem:", error);
+            } finally {
+                setModalVisible(false);
+                setPersonagemParaDeletar(null);
+            }
         }
     };
 
@@ -85,12 +98,12 @@ export default function ListaPersonagens({ navigation }) {
                 
                 <Text style={styles.headerTitle}>Lista de Personagens</Text>
                 
-                    <TouchableOpacity 
-                        style={styles.createButton}
-                        onPress={() => navigation.navigate("CadastrarPersonagem")}
-                    >
-                        <Ionicons name="add-outline" size={22} color="#fff" />
-                    </TouchableOpacity>
+                <TouchableOpacity 
+                    style={styles.createButton}
+                    onPress={() => navigation.navigate("CadastrarPersonagem")}
+                >
+                    <Ionicons name="add-outline" size={22} color="#fff" />
+                </TouchableOpacity>
             </View>
 
             <ScrollView 
@@ -118,15 +131,16 @@ export default function ListaPersonagens({ navigation }) {
                                 <View style={styles.characterInfo}>
                                     <Text style={styles.characterName}>{personagem.nome}</Text>
                                 </View>
-                                {/* 
-                                  Caso for Mestre
                                 
-                                <TouchableOpacity 
-                                    style={styles.archiveButton}
-                                    onPress={() => confirmarDelecao(personagem.id)}
-                                >
-                                    <Ionicons name="archive" size={30} color="#c00000" />
-                                </TouchableOpacity> */}
+                                {/* Botão de deletar - visível para mestres ou para o dono do personagem */}
+                                {(mestre || personagem.id_usuario === user.id) && (
+                                    <TouchableOpacity 
+                                        style={styles.archiveButton}
+                                        onPress={() => confirmarDelecao(personagem.id)}
+                                    >
+                                        <Ionicons name="trash-outline" size={24} color="#c00000" />
+                                    </TouchableOpacity>
+                                )}
                             </TouchableOpacity>
                         ))
                     )}

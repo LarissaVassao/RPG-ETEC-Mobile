@@ -8,6 +8,7 @@ $usuario = $input['id_usuario'] ?? '';
 $campanha = $input['id_campanha'] ?? '';
 $antepassado = $input['antepassado'] ?? '';
 $nivel = $input['nivel'] ?? '';
+if ($nivel > 10){$nivel = 10;}
 $periciasRecebidas = $input['pericias'] ?? []; // 👈 opcional: caso venha do front
 
 $atributos = [
@@ -20,10 +21,10 @@ $atributos = [
     'sorte' => 1
 ];
 
-$vida = $atributos['constituicao'] + 9;
-$mental = $atributos['vontade'] + 9;
-$energia = 10;
-$ca = $atributos['agilidade'] + 3;
+$vida = ($atributos['constituicao'] * $nivel) + 8;
+$mental = ($atributos['vontade'] * $nivel) + 8;
+$energia = 8 + (2 * $nivel);
+$ca = ($atributos['agilidade'] * $nivel) + 8;
 $credito = (is_array($antepassado) && isset($antepassado['credito'])) ? $antepassado['credito'] + 5 : 5;
 
 try {
