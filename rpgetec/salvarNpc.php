@@ -8,6 +8,8 @@ $campanha = $input['id_campanha'] ?? '';
 $vida = $input['vida'] ?? 10;
 $mental = $input['mental'] ?? 10;
 $energia = $input['energia'] ?? 10;
+$ca = $input['ca'] ?? 3;
+$movimento = $input['movimento'] ?? 6;
 
 $atributos = $input['atributos'] ?? [
     'forca' => 1,
@@ -24,16 +26,21 @@ try {
 
     // 🎲 1. Inserir NPC
     $res = $pdo->prepare("INSERT INTO npc 
-        (nome, id_campanha, vida, mental, energia, 
+        (nome, id_campanha, vida, vidaAtual, mental, mentalAtual, energia, energiaAtual, ca, movimento,
          forca, agilidade, constituicao, inteligencia, percepcao, vontade, sorte, tokenImage)
-        VALUES (:nome, :id_campanha, :vida, :mental, :energia,
+        VALUES (:nome, :id_campanha, :vida, :vidaAtual, :mental, :mentalAtual, :energia, :energiaAtual, :ca, :movimento,
                 :forca, :agilidade, :constituicao, :inteligencia, :percepcao, :vontade, :sorte, '')");	
     
     $res->bindValue(":nome", $nome);
     $res->bindValue(":id_campanha", $campanha);
     $res->bindValue(":vida", $vida);
-    $res->bindValue(":energia", $energia);
+    $res->bindValue(":vidaAtual", $vida); // 🔥 NOVO: vidaAtual começa igual à vida máxima
     $res->bindValue(":mental", $mental);
+    $res->bindValue(":mentalAtual", $mental); // 🔥 NOVO: mentalAtual começa igual ao mental máximo
+    $res->bindValue(":energia", $energia);
+    $res->bindValue(":energiaAtual", $energia); // 🔥 NOVO: energiaAtual começa igual à energia máxima
+    $res->bindValue(":ca", $ca);
+    $res->bindValue(":movimento", $movimento);
     $res->bindValue(":forca", $atributos['forca']);
     $res->bindValue(":agilidade", $atributos['agilidade']);
     $res->bindValue(":constituicao", $atributos['constituicao']);

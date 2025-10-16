@@ -129,7 +129,7 @@ export default function ListaNpc({ navigation }) {
                             <TouchableOpacity 
                                 key={npc.id}
                                 style={styles.npcCard}
-                                onPress={() => navigation.navigate("DetalhesNpc", { idNpc: npc.id })}
+                                onPress={() => navigation.navigate("Npc", { idNpc: npc.id })}
                             >
                                 <Image 
                                     style={styles.npcImage} 

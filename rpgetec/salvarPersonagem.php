@@ -11,7 +11,7 @@ $nivel = $input['nivel'] ?? '';
 if ($nivel > 10){$nivel = 10;}
 $periciasRecebidas = $input['pericias'] ?? []; // 👈 opcional: caso venha do front
 
-$atributos = [
+$atributos = $input['atributos'] ?? [
     'forca' => 1,
     'agilidade' => 1,
     'constituicao' => 1,
@@ -24,7 +24,7 @@ $atributos = [
 $vida = ($atributos['constituicao'] * $nivel) + 8;
 $mental = ($atributos['vontade'] * $nivel) + 8;
 $energia = 8 + (2 * $nivel);
-$ca = ($atributos['agilidade'] * $nivel) + 8;
+$ca = $atributos['agilidade']  + 3;
 $credito = (is_array($antepassado) && isset($antepassado['credito'])) ? $antepassado['credito'] + 5 : 5;
 
 try {

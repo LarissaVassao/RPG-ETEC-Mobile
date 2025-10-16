@@ -11,6 +11,8 @@ export default function CadastrarNpc({ navigation }) {
     const [vida, setVida] = useState('10');
     const [mental, setMental] = useState('10');
     const [energia, setEnergia] = useState('10');
+    const [ca, setCa] = useState('3'); // 🔥 NOVO: CA
+    const [movimento, setMovimento] = useState('6'); // 🔥 NOVO: Movimento
     const [forca, setForca] = useState('1');
     const [agilidade, setAgilidade] = useState('1');
     const [constituicao, setConstituicao] = useState('1');
@@ -43,6 +45,8 @@ export default function CadastrarNpc({ navigation }) {
                 vida: parseInt(vida) || 10,
                 mental: parseInt(mental) || 10,
                 energia: parseInt(energia) || 10,
+                ca: parseInt(ca) || 3, // 🔥 NOVO: CA
+                movimento: parseInt(movimento) || 6, // 🔥 NOVO: Movimento
                 atributos: {
                     forca: parseInt(forca) || 1,
                     agilidade: parseInt(agilidade) || 1,
@@ -67,7 +71,7 @@ export default function CadastrarNpc({ navigation }) {
             }
 
             Alert.alert("Sucesso!", "NPC criado com sucesso!");
-            navigation.navigate("ListaNpc");       
+            navigation.navigate("TelaCampanha");       
 
         } catch (error) {
             console.error("Erro ao salvar NPC:", error);
@@ -79,13 +83,7 @@ export default function CadastrarNpc({ navigation }) {
         <View style={styles.mainContainer}>
             <StatusBar backgroundColor="#F5F7FA" barStyle="dark-content" />
             
-            <View style={styles.header}>
-                <Image 
-                    style={styles.logo} 
-                    resizeMode="contain" 
-                    source={require('../../../../assets/img/logo.png')}
-                />
-            </View>
+            
 
             <TouchableOpacity 
                 style={styles.backButton}
@@ -99,6 +97,15 @@ export default function CadastrarNpc({ navigation }) {
                 keyboardShouldPersistTaps="handled"
             >
                 <View style={styles.content}>
+
+                <View style={styles.header}>
+                <Image 
+                    style={styles.logo} 
+                    resizeMode="contain" 
+                    source={require('../../../../assets/img/logo.png')}
+                />
+            </View>    
+            
                     <Text style={styles.title}>Criação de NPC</Text>
                     
                     <View style={styles.formContainer}>
@@ -147,6 +154,33 @@ export default function CadastrarNpc({ navigation }) {
                                         onChangeText={setEnergia}
                                         keyboardType="numeric"
                                     />
+                                </View>
+                            </View>
+
+                            {/* 🔥 NOVO: CA e Movimento */}
+                            <View style={styles.attributeRow}>
+                                <View style={styles.attributeContainer}>
+                                    <Text style={styles.attributeLabel}>CA</Text>
+                                    <TextInput
+                                        style={styles.attributeInput}
+                                        value={ca}
+                                        onChangeText={setCa}
+                                        keyboardType="numeric"
+                                    />
+                                </View>
+                                <View style={styles.attributeContainer}>
+                                    <Text style={styles.attributeLabel}>Movimento</Text>
+                                    <TextInput
+                                        style={styles.attributeInput}
+                                        value={movimento}
+                                        onChangeText={setMovimento}
+                                        keyboardType="numeric"
+                                    />
+                                </View>
+                                <View style={styles.attributeContainer}>
+                                    {/* Espaço vazio para manter o layout */}
+                                    <Text style={styles.attributeLabel}></Text>
+                                    <View style={styles.attributeInput} />
                                 </View>
                             </View>
                         </View>

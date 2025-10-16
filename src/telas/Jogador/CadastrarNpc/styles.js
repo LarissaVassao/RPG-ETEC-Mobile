@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: '#124A69',
         marginBottom: 25,
-        marginTop: 45,
+        marginTop:85,
         textAlign: 'center',
     },
     formRow: {
