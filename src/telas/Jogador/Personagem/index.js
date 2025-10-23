@@ -69,8 +69,8 @@ export default function Personagem({ route, navigation }) {
   const [percepcao, setPercepcao] = useState(1);
   const [sorte, setSorte] = useState(1);
 
-  const [ocupationModalVisible, setocupationModalVisible] = useState(false);
-  const [selectedocupation, setSelectedocupation] = useState('');
+  const [backgroundModalVisible, setBackgroundModalVisible] = useState(false);
+  const [selectedbackground, setSelectedBackground] = useState('');
   // Estados para as pericias
   const [pericias, setPericias] = useState({});
 
@@ -79,17 +79,44 @@ export default function Personagem({ route, navigation }) {
   const [tempCharacterName, setTempCharacterName] = useState('');
   const [editNameModalVisible, setEditNameModalVisible] = useState(false);
 
-  const [playerName, setPlayerName] = useState('Nome do Player');
-  const [playerocupation, setPlayerocupation] = useState('');
-  const [playerLevel, setPlayerLevel] = useState('');
+  const [background, setBackground] = useState('');
+  const [level, setLevel] = useState('');
   const [editingEquipment, setEditingEquipment] = useState(null);
   const [editEquipmentModalVisible, setEditEquipmentModalVisible] = useState(false);
 
   // Para imagem
   const [selectedImage, setSelectedImage] = useState(null);
 
+const carregarImagemPerfil = async () => {
+  try {
+    console.log("Carregando imagem do perfil...");
+    
+    const res = await api.get("rpgetec/checarPersonagem.php", {
+      params: { id_personagem: idPersonagem }
+    });
+
+    if (res.data.success) {
+      const personagem = res.data.personagem;
+      
+      if (personagem.profileImage) {
+        // Construir a URL completa da imagem
+        const imageUrl = `${url}rpgetec/perfil/${personagem.profileImage}`;
+        console.log("URL da imagem:", imageUrl);
+        setSelectedImage(imageUrl);
+      } else {
+        console.log("Personagem não tem imagem de perfil");
+        setSelectedImage(null); // Usar imagem padrão
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao carregar imagem:", error);
+  }
+};
+
 const pickImage = async () => {
   try {
+    console.log("=== INICIANDO UPLOAD ===");
+
     // Request permissions
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -101,44 +128,87 @@ const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
-      quality: 1,
+      quality: 0.8,
+      base64: false,
     });
 
-    if (result.canceled || !result.assets || result.assets.length === 0) return;
+    console.log("Resultado do ImagePicker:", result);
+
+    if (result.canceled || !result.assets || result.assets.length === 0) {
+      console.log("Seleção cancelada pelo usuário");
+      return;
+    }
 
     const asset = result.assets[0];
-    let uri = asset.uri;
+    const uri = asset.uri;
 
-    console.log("Upload URI:", uri);
-    setSelectedImage(uri);
+    console.log("Asset selecionado:", {
+      uri: uri,
+      fileName: asset.fileName,
+      fileSize: asset.fileSize,
+      type: asset.type
+    });
 
-    // Build FormData like Postman
+    // 🔥 CORREÇÃO PRINCIPAL: FormData para React Native
     const formData = new FormData();
-    formData.append("file", {
-      uri,
-      name: asset.fileName || "upload.jpg",
-      type: asset.type || "image/jpeg",
+    
+    // Formato CORRETO para React Native
+    formData.append('file', {
+      uri: Platform.OS === 'ios' ? uri.replace('file://', '') : uri,
+      type: 'image/jpeg', // Forçar tipo JPEG
+      name: `personagem_${idPersonagem}_${Date.now()}.jpg`,
     });
-    formData.append("id_personagem", user.id.toString());
+    
+    formData.append('id_personagem', idPersonagem.toString());
 
-    // Use fetch (works reliably in Expo)
-    const response = await fetch(url + "rpgetec/upload.php", {
-      method: "POST",
-      body: formData,
+    console.log("FormData criado, enviando para API...");
+
+    // 🔥 USAR api (axios) que já funciona para os outros endpoints
+    const response = await api.post("rpgetec/upload.php", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      timeout: 30000,
+      // ⚠️ IMPORTANTE: TransformRequest para axios com FormData
+      transformRequest: (data) => data,
     });
 
-    const data = await response.json();
-    console.log("Upload response:", data);
+    console.log("✅ Resposta do servidor:", response.data);
 
-    if (data.success) {
-      Alert.alert("Upload", data.message);
+    if (response.data.success) {
+      Alert.alert("Sucesso", "Imagem do personagem atualizada!");
+      setSelectedImage(uri);
+      
+      // Atualizar a imagem imediatamente
+      if (response.data.file) {
+        const imageUrl = `${url}rpgetec/perfil/${response.data.file}`;
+        setSelectedImage(imageUrl);
+      }
     } else {
-      Alert.alert("Upload failed", data.message || "Erro desconhecido");
+      Alert.alert("Erro no upload", response.data.message || "Erro desconhecido");
     }
 
   } catch (err) {
-    console.log("UPLOAD ERROR:", err);
-    Alert.alert("Upload failed", err.message);
+    console.log("❌ ERRO NO UPLOAD:", {
+      message: err.message,
+      code: err.code,
+      response: err.response?.data,
+      status: err.response?.status
+    });
+    
+    // Erros específicos
+    if (err.message === 'Network Error') {
+      Alert.alert(
+        "Erro de Rede", 
+        "Não foi possível conectar ao servidor. Verifique:\n\n• Sua conexão com internet\n• Se o servidor está online\n• URL do servidor está correta"
+      );
+    } else if (err.code === 'ECONNABORTED') {
+      Alert.alert("Timeout", "O upload demorou muito. Tente uma imagem menor.");
+    } else if (err.response?.status === 413) {
+      Alert.alert("Arquivo muito grande", "A imagem é muito grande. Tente uma com menor resolução.");
+    } else {
+      Alert.alert("Erro", err.response?.data?.message || err.message || "Erro desconhecido");
+    }
   }
 };
 
@@ -154,44 +224,54 @@ const pickImage = async () => {
 
   //Puxar do banco de dados
     useEffect(() => {
-        const checarPersonagem = async () => {
-            try {
+  const checarPersonagem = async () => {
+    try {
+      const res = await api.get("rpgetec/checarPersonagem.php", {
+        params: { id_personagem: idPersonagem }
+      });
 
-                const res = await api.get("rpgetec/checarPersonagem.php", {params: {id_personagem: idPersonagem}});
-                console.log("RES DATA PERSONAGEM:" + res.data.personagem);
-                console.log("RES DATA:" + res.data);
-          
-                if (res.data.success) {
-                  const p = res.data.personagem;
-                 setVida(p.vida);
-                  setVidaAtual(p.vidaAtual || p.vida); // Use o valor atual ou o máximo como fallback
-                  setMental(p.mental);
-                  setMentalAtual(p.mentalAtual || p.mental);
-                  setEnergia(p.energia);
-                  setEnergiaAtual(p.energiaAtual || p.energia);
-                  setCa(p.ca);
-                  setCarga(p.carga);
-                  setCargaAtual(p.cargaAtual);
-                  setMovimento(p.movimento);
-                  setCredito(p.credito);
-                  setCreditoMax(p.creditoMax || p.credito); 
-                  setForca(p.forca);
-                  setAgilidade(p.agilidade);
-                  setConstituicao(p.constituicao);
-                  setVontade(p.vontade);
-                  setInteligencia(p.inteligencia);
-                  setPercepcao(p.percepcao);
-                  setSorte(p.sorte);
-                  console.log("PERICIAS: " + res.data.pericias);
-                  setPericias(res.data.pericias);
-                }
-            } catch (error) {
-                console.error("Erro ao buscar personagens:", error);
-            }
-        };
+      if (res.data.success) {
+        const p = res.data.personagem;
+        
+        // Seus estados existentes...
+        setVida(p.vida);
+        setVidaAtual(p.vidaAtual || p.vida);
+        setMental(p.mental);
+        setMentalAtual(p.mentalAtual || p.mental);
+        setEnergia(p.energia);
+        setEnergiaAtual(p.energiaAtual || p.energia);
+        setCa(p.ca);
+        setCarga(p.carga);
+        setCargaAtual(p.cargaAtual);
+        setMovimento(p.movimento);
+        setCredito(p.credito);
+        setCreditoMax(p.creditoMax || p.credito); 
+        setForca(p.forca);
+        setAgilidade(p.agilidade);
+        setConstituicao(p.constituicao);
+        setVontade(p.vontade);
+        setInteligencia(p.inteligencia);
+        setPercepcao(p.percepcao);
+        setSorte(p.sorte);
+        setCharacterName(p.nome);
+        setBackground(p.antepassado);
+        setLevel(p.nivel);
+        setPericias(res.data.pericias);
 
-        checarPersonagem();
-    }, [vida]);;
+        // 🔥 CARREGAR IMAGEM DO PERFIL
+        if (p.profileImage) {
+          const imageUrl = `${url}rpgetec/perfil/${p.profileImage}`;
+          console.log("Carregando imagem:", imageUrl);
+          setSelectedImage(imageUrl);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar personagem:", error);
+    }
+  };
+
+  checarPersonagem();
+}, [idPersonagem]); // Remova 'vida' e 'background' se não forem necessários
         
   
 
@@ -199,54 +279,87 @@ const pickImage = async () => {
     setActiveView(color);
   };
 
+const carregarEquipamentos = async () => {
+    try {
+      const res = await api.get("rpgetec/listarEquipamentos.php", {
+        params: { id_personagem: idPersonagem }
+      });
+      
+      if (res.data.success) {
+        setRpgEquipments(res.data.equipamentos);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar equipamentos:", error);
+    }
+  };
+
+  useEffect(() => {
+    carregarEquipamentos();
+  }, [idPersonagem]);
+
   const handleTypeChange = (itemId, newType) => {
     setRpgEquipments(prev => prev.map(item => 
       item.id === itemId ? { ...item, type: newType } : item
     ));
   };
 
-  const openocupationModal = () => {
-    setSelectedocupation(playerocupation);
-    setocupationModalVisible(true);
+  const openbackgroundModal = () => {
+    setSelectedBackground(background);
+    setBackgroundModalVisible(true);
   };
   // Função para salvar o antepassado selecionada
-  const saveocupationSelection = () => {
-    setPlayerocupation(selectedocupation);
-    setocupationModalVisible(false);
+  const savebackgroundSelection = () => {
+    setBackground(selectedbackground);
+    setBackgroundModalVisible(false);
   };
 
-  const handleCreateEquipment = () => {
+  const handleCreateEquipment = async () => {
     if (!newEquipment.name.trim()) {
       alert('Por favor, digite um nome para o equipamento');
       return;
     }
 
-    const newItem = {
-      id: Math.max(...rpgEquipments.map(item => item.id), 0) + 1,
-      name: newEquipment.name,
-      type: newEquipment.type,
-      price: newEquipment.price, // CORRIGIDO: estava 0
-      weight: newEquipment.weight, // CORRIGIDO: estava 0
-      description: newEquipment.description,
-      requirement: newEquipment.requirement,
-      damage: newEquipment.damage,
-      critical: newEquipment.critical,
-    };
+    try {
+      const res = await api.post("rpgetec/criarEquipamento.php", {
+        id_personagem: idPersonagem,
+        nome: newEquipment.name,
+        tipo: newEquipment.type,
+        preco: parseInt(newEquipment.price) || 0,
+        volume: parseFloat(newEquipment.weight) || 0,
+        descricao: newEquipment.description,
+        requisito: newEquipment.requirement,
+        dano: newEquipment.damage,
+        critico: newEquipment.critical,
+      });
 
-    setRpgEquipments(prev => [...prev, newItem]);
-    setNewEquipment({
-      name: '',
-      type: 'item',
-      description: '',
-      requirement: '',
-      damage: '',
-      critical: '',
-      price: 0, // Mantém os valores padrão
-     weight: 0  // Mantém os valores padrão
-    });
-    setCreateModalVisible(false);
+      if (res.data.success) {
+        // Recarregar a lista de equipamentos
+        await carregarEquipamentos();
+        
+        // Resetar formulário
+        setNewEquipment({
+          name: '',
+          type: 'item',
+          description: '',
+          requirement: '',
+          damage: '',
+          critical: '',
+          price: 0,
+          weight: 0
+        });
+        setCreateModalVisible(false);
+        alert('Equipamento criado com sucesso!');
+      } else {
+        alert('Erro ao criar equipamento: ' + res.data.error);
+      }
+    } catch (error) {
+      console.error("Erro ao criar equipamento:", error);
+      alert('Erro ao criar equipamento');
+    }
   };
 
+  
+  
   // Função para abrir o modal de edição
   const openEditModal = (field, value) => {
     setEditingField(field);
@@ -400,28 +513,86 @@ const saveResourceEdit = async () => {
     setTempValue(currentValue);
     setEditModalVisible(false);
   };
+
+
+// EQUIPAMENTO
+
+
   const handleEditEquipment = (item) => {
   setEditingEquipment(item);
   setEditEquipmentModalVisible(true);
 };
 
-const handleDeleteEquipment = (itemId) => {
-  setRpgEquipments(prev => prev.filter(item => item.id !== itemId));
-};
+const handleDeleteEquipment = async (itemId) => {
+    try {
+      Alert.alert(
+        "Confirmar Exclusão",
+        "Tem certeza que deseja excluir este equipamento?",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel"
+          },
+          {
+            text: "Excluir",
+            onPress: async () => {
+              const res = await api.post("rpgetec/deletarEquipamento.php", {
+                id_equipamento: itemId
+              });
 
-const handleUpdateEquipment = () => {
-  if (!editingEquipment.name.trim()) {
-    alert('Por favor, digite um nome para o equipamento');
-    return;
-  }
+              if (res.data.success) {
+                // Recarregar a lista de equipamentos
+                await carregarEquipamentos();
+                alert('Equipamento excluído com sucesso!');
+              } else {
+                alert('Erro ao excluir equipamento: ' + res.data.error);
+              }
+            }
+          }
+        ]
+      );
+    } catch (error) {
+      console.error("Erro ao deletar equipamento:", error);
+      alert('Erro ao deletar equipamento');
+    }
+  };
 
-  setRpgEquipments(prev => prev.map(item => 
-    item.id === editingEquipment.id ? editingEquipment : item
-  ));
-  
-  setEditEquipmentModalVisible(false);
-  setEditingEquipment(null);
-};
+const handleUpdateEquipment = async () => {
+    if (!editingEquipment?.name?.trim()) {
+      alert('Por favor, digite um nome para o equipamento');
+      return;
+    }
+
+    try {
+      const res = await api.post("rpgetec/atualizarEquipamento.php", {
+        id_equipamento: editingEquipment.id,
+        nome: editingEquipment.name,
+        tipo: editingEquipment.type,
+        preco: parseInt(editingEquipment.price) || 0,
+        volume: parseFloat(editingEquipment.weight) || 0,
+        descricao: editingEquipment.description,
+        requisito: editingEquipment.requirement,
+        dano: editingEquipment.damage,
+        critico: editingEquipment.critical,
+      });
+
+      if (res.data.success) {
+        // Recarregar a lista de equipamentos
+        await carregarEquipamentos();
+        
+        setEditEquipmentModalVisible(false);
+        setEditingEquipment(null);
+        alert('Equipamento atualizado com sucesso!');
+      } else {
+        alert('Erro ao atualizar equipamento: ' + res.data.error);
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar equipamento:", error);
+      alert('Erro ao atualizar equipamento');
+    }
+  };
+
+
 // Função para abrir o modal de edição do nome
 const openNameEditModal = () => {
   setTempCharacterName(characterName);
@@ -703,10 +874,10 @@ const [aparencia, setAparencia] = useState({
       </Modal> 
       {/* Modal para seleção de antepassado */}
       <Modal
-        visible={ocupationModalVisible}
+        visible={backgroundModalVisible}
         transparent={true}
         animationType="slide"
-        onRequestClose={() => setocupationModalVisible(false)}
+        onRequestClose={() => setBackgroundModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.editModalContainer}>
@@ -714,9 +885,9 @@ const [aparencia, setAparencia] = useState({
             
             <View style={styles.pickerContainer}>
               <Picker
-                selectedValue={selectedocupation}
+                selectedValue={selectedbackground}
                 style={styles.picker}
-                onValueChange={(itemValue) => setSelectedocupation(itemValue)}
+                onValueChange={(itemValue) => setSelectedBackground(itemValue)}
               >
                 <Picker.Item label="Selecione um Antepassado" value="" />
                 <Picker.Item label="Médico" value="Médico" />
@@ -733,14 +904,14 @@ const [aparencia, setAparencia] = useState({
             <View style={styles.modalButtons}>
               <TouchableOpacity 
                 style={[styles.modalButton, styles.cancelButton]}
-                onPress={() => setocupationModalVisible(false)}
+                onPress={() => setBackgroundModalVisible(false)}
               >
                 <Text style={styles.cancelButtonText}>Cancelar</Text>
               </TouchableOpacity>
               
               <TouchableOpacity 
                 style={[styles.modalButton, styles.createButton]}
-                onPress={saveocupationSelection}
+                onPress={savebackgroundSelection}
               >
                 <Text style={styles.createButtonText}>Salvar</Text>
               </TouchableOpacity>
@@ -751,26 +922,43 @@ const [aparencia, setAparencia] = useState({
 
       <View style={styles.characterBase}>
 
-        <View style={styles.ocupationCharacter}>
-          <View style={styles.ocupationContainer}>
+        <View style={styles.backgroundCharacter}>
+          <View style={styles.backgroundContainer}>
             <View style={styles.occupationItem}>
-              <Text style={styles.occupationLabel}>Antepassado:</Text>
+              {/* <Text style={styles.occupationLabel}>Antepassado:</Text>
               <TouchableOpacity 
                 style={styles.occupationInputTouchable}
-                onPress={openocupationModal}
+                onPress={openbackgroundModal}
               >
-                <Text style={styles.occupationText}>{playerocupation || 'Selecione aqui'}</Text>
+                <Text style={styles.occupationText}>{background || 'Selecione aqui'}</Text>
               </TouchableOpacity>
-            </View>
-            
+            </View> */}
+
             <View style={styles.occupationItem}>
-              <Text style={styles.occupationLabel}>Nível:</Text>
-              <TextInput 
+              <Text style={styles.occupationLabel}>Antepassado:</Text>
+              {/* <TextInput 
                 style={styles.occupationInput}
                 placeholder="Ex: 1"
                 placeholderTextColor="#666"
                 keyboardType="numeric"
-              />
+              /> */}
+              <Text
+              style={styles.occupationInput}
+              >{background}</Text>
+            </View>
+          </View>
+            
+            <View style={styles.occupationItem}>
+              <Text style={styles.occupationLabel}>Nível:</Text>
+              {/* <TextInput 
+                style={styles.occupationInput}
+                placeholder="Ex: 1"
+                placeholderTextColor="#666"
+                keyboardType="numeric"
+              /> */}
+              <Text
+              style={styles.occupationInput}
+              >{level}</Text>
             </View>
           </View>
 </View>
@@ -1072,140 +1260,138 @@ const [aparencia, setAparencia] = useState({
           </View>
 
           <Modal
-            visible={createModalVisible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={() => setCreateModalVisible(false)}
-          >
-            <View style={styles.modalOverlay}>
-              <View style={styles.createModalContainer}>
-                <Text style={styles.createModalTitle}>Criar Novo Equipamento</Text>
+        visible={createModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setCreateModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.createModalContainer}>
+            <Text style={styles.createModalTitle}>Criar Novo Equipamento</Text>
 
-                <ScrollView 
-                  style={styles.createModalScroll}
-                  contentContainerStyle={styles.createModalScrollContent}
-                >
+            <ScrollView 
+              style={styles.createModalScroll}
+              contentContainerStyle={styles.createModalScrollContent}
+            >
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>Nome do Equipamento</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={newEquipment.name}
+                  onChangeText={(text) => setNewEquipment({...newEquipment, name: text})}
+                  placeholder="Digite o nome do equipamento"
+                  placeholderTextColor="#888"
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>Preço (Créditos)</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={newEquipment.price.toString()}
+                  onChangeText={(text) => setNewEquipment({...newEquipment, price: text})}
+                  placeholder="Digite o preço em créditos"
+                  placeholderTextColor="#888"
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>Volume</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={newEquipment.weight.toString()}
+                  onChangeText={(text) => setNewEquipment({...newEquipment, weight: text})}
+                  placeholder="Digite o volume/peso"
+                  placeholderTextColor="#888"
+                  keyboardType="numeric"
+                />
+              </View>
+
+              {(newEquipment.type === 'arma_curta' || newEquipment.type === 'arma_longa') && (
+                <>
                   <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Nome do Equipamento</Text>
+                    <Text style={styles.inputLabel}>Requisição para uso</Text>
                     <TextInput
                       style={styles.textInput}
-                      value={newEquipment.name}
-                      onChangeText={(text) => setNewEquipment({...newEquipment, name: text})}
-                      placeholder="Digite o nome do equipamento"
+                      value={newEquipment.requirement}
+                      onChangeText={(text) => setNewEquipment({ ...newEquipment, requirement: text })}
+                      placeholder="Ex: Força 2+"
                       placeholderTextColor="#888"
                     />
                   </View>
 
-                  {/* Campos de preço e volume - PRIMEIRO, ANTES DOS CAMPOS ESPECÍFICOS */}
                   <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Preço (Créditos)</Text>
+                    <Text style={styles.inputLabel}>Dano da Arma</Text>
                     <TextInput
                       style={styles.textInput}
-                      value={newEquipment.price}
-                      onChangeText={(text) => setNewEquipment({...newEquipment, price: parseInt(text) || 0})}
-                      placeholder="Digite o preço em créditos"
+                      value={newEquipment.damage}
+                      onChangeText={(text) => setNewEquipment({...newEquipment, damage: text})}
+                      placeholder="Ex: 1d6"
                       placeholderTextColor="#888"
-                      keyboardType="numeric"
                     />
                   </View>
 
                   <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Volume</Text>
+                    <Text style={styles.inputLabel}>Bônus de Crítico</Text>
                     <TextInput
                       style={styles.textInput}
-                      value={newEquipment.weight}
-                      onChangeText={(text) => setNewEquipment({...newEquipment, weight: parseFloat(text) || 0})}
-                      placeholder="Digite o volume/peso"
+                      value={newEquipment.critical}
+                      onChangeText={(text) => setNewEquipment({ ...newEquipment, critical: text })}
+                      placeholder="Ex: +2"
                       placeholderTextColor="#888"
-                      keyboardType="numeric"
                     />
                   </View>
+                </>
+              )}
 
-                  {/* Campos específicos para armas - DEPOIS DOS CAMPOS GERAIS */}
-                  {(newEquipment.type === 'arma_curta' || newEquipment.type === 'arma_longa') && (
-                    <>
-                      <View style={styles.inputGroup}>
-                        <Text style={styles.inputLabel}>Requisição para uso</Text>
-                        <TextInput
-                          style={styles.textInput}
-                          value={newEquipment.requirement}
-                          onChangeText={(text) => setNewEquipment({ ...newEquipment, requirement: text })}
-                          placeholder="Ex: Força 12+"
-                          placeholderTextColor="#888"
-                        />
-                      </View>
-
-                      <View style={styles.inputGroup}>
-                        <Text style={styles.inputLabel}>Dano da Arma</Text>
-                        <TextInput
-                          style={styles.textInput}
-                          value={newEquipment.damage}
-                          onChangeText={(text) => setNewEquipment({...newEquipment, damage: text})}
-                          placeholder="Ex: 1d6"
-                          placeholderTextColor="#888"
-                        />
-                      </View>
-
-                      <View style={styles.inputGroup}>
-                        <Text style={styles.inputLabel}>Bônus de Crítico</Text>
-                        <TextInput
-                          style={styles.textInput}
-                          value={newEquipment.critical}
-                          onChangeText={(text) => setNewEquipment({ ...newEquipment, critical: text })}
-                          placeholder="Ex: +2"
-                          placeholderTextColor="#888"
-                        />
-                      </View>
-                    </>
-                  )}
-
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Tipo do Equipamento</Text>
-                    <View style={styles.pickerContainer}>
-                      <Picker
-                        selectedValue={newEquipment.type}
-                        style={styles.picker}
-                        onValueChange={(itemValue) => setNewEquipment({...newEquipment, type: itemValue})}
-                      >
-                        <Picker.Item label="Item" value="item" />
-                        <Picker.Item label="Arma de Curta Distância" value="arma_curta" />
-                        <Picker.Item label="Arma de Longa Distância" value="arma_longa" />
-                      </Picker>
-                    </View>
-                  </View>
-
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>Descrição</Text>
-                    <TextInput
-                      style={[styles.textInput, styles.descriptionInput]}
-                      value={newEquipment.description}
-                      onChangeText={(text) => setNewEquipment({...newEquipment, description: text})}
-                      placeholder="Digite a descrição do equipamento"
-                      placeholderTextColor="#888"
-                      multiline
-                      numberOfLines={4}
-                    />
-                  </View>
-                </ScrollView>
-
-                <View style={styles.modalButtons}>
-                  <TouchableOpacity 
-                    style={[styles.modalButton, styles.cancelButton]}
-                    onPress={() => setCreateModalVisible(false)}
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>Tipo do Equipamento</Text>
+                <View style={styles.pickerContainer}>
+                  <Picker
+                    selectedValue={newEquipment.type}
+                    style={styles.picker}
+                    onValueChange={(itemValue) => setNewEquipment({...newEquipment, type: itemValue})}
                   >
-                    <Text style={styles.cancelButtonText}>Cancelar</Text>
-                  </TouchableOpacity>
-                  
-                  <TouchableOpacity 
-                    style={[styles.modalButton, styles.createButton]}
-                    onPress={handleCreateEquipment}
-                  >
-                    <Text style={styles.createButtonText}>Criar</Text>
-                  </TouchableOpacity>
+                    <Picker.Item label="Item" value="item" />
+                    <Picker.Item label="Arma de Curta Distância" value="arma_curta" />
+                    <Picker.Item label="Arma de Longa Distância" value="arma_longa" />
+                  </Picker>
                 </View>
               </View>
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>Descrição</Text>
+                <TextInput
+                  style={[styles.textInput, styles.descriptionInput]}
+                  value={newEquipment.description}
+                  onChangeText={(text) => setNewEquipment({...newEquipment, description: text})}
+                  placeholder="Digite a descrição do equipamento"
+                  placeholderTextColor="#888"
+                  multiline
+                  numberOfLines={4}
+                />
+              </View>
+            </ScrollView>
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setCreateModalVisible(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.createButton]}
+                onPress={handleCreateEquipment}
+              >
+                <Text style={styles.createButtonText}>Criar</Text>
+              </TouchableOpacity>
             </View>
-          </Modal>
+          </View>
+        </View>
+      </Modal>
                       {/* Modal de Edição de Equipamento */}
             <Modal
               visible={editEquipmentModalVisible}
@@ -1240,7 +1426,7 @@ const [aparencia, setAparencia] = useState({
                             style={styles.textInput}
                             value={editingEquipment?.requirement || ''}
                             onChangeText={(text) => setEditingEquipment({ ...editingEquipment, requirement: text })}
-                            placeholder="Ex: Força 12+"
+                            placeholder="Ex: Força 2+"
                             placeholderTextColor="#888"
                           />
                         </View>
@@ -1251,7 +1437,7 @@ const [aparencia, setAparencia] = useState({
                             style={styles.textInput}
                             value={editingEquipment?.damage || ''}
                             onChangeText={(text) => setEditingEquipment({ ...editingEquipment, damage: text })}
-                            placeholder="Ex: 1d8"
+                            placeholder="Ex: 1d6"
                             placeholderTextColor="#888"
                           />
                         </View>
@@ -1383,7 +1569,7 @@ const [aparencia, setAparencia] = useState({
                       <View style={styles.modalInfoRow}>
                         <Text style={styles.modalLabel}>Valor:</Text>
                         <Text style={styles.modalValue}>
-                          {selectedItem.price} <Text style={styles.credit}>céditos</Text>
+                          {selectedItem.price} <Text style={styles.credit}>créditos</Text>
                         </Text>
                       </View>
 
@@ -1530,8 +1716,6 @@ const [aparencia, setAparencia] = useState({
             </ScrollView>
           </View>
         }
-  
-
       </View>
     </View>
   );

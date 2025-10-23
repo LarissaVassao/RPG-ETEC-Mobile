@@ -445,8 +445,8 @@ export const styles = StyleSheet.create({
   headerWeight: { flex: 1, textAlign: 'center' },
   imageStyle: {
     position: 'absolute',
-    top: 15,
-    left: 5,
+    top: 5,
+    left: 10,
     width: 100,
     height: 100,
     zIndex: 1,
@@ -517,7 +517,7 @@ export const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    marginTop: 215,
+    // marginTop: 110,
   },
   modalButton: {
     flex: 1,
@@ -816,6 +816,7 @@ occupationText: {
     marginHorizontal: 5,
     borderWidth: 2,
     borderColor: '#fff',
+    width: "33%"
 
 
   },

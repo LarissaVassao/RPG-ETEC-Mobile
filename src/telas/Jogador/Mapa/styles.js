@@ -41,7 +41,14 @@ buttonText: {
     justifyContent: 'center',
     position: 'absolute'
   },
-
+ createButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   formContainer: {
     padding: 20,
     alignItems: 'center',

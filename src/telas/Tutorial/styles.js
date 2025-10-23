@@ -1,51 +1,154 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8fafc',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   pager: {
     flex: 1,
     width: '100%',
-    top: -40
   },
   page: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
+    paddingHorizontal: 10,
+    marginTop: height * 0.35,
   },
   image: {
-    width: '90%',
-    height: '60%',
+    width: width * 0.9,
+    height: height * 0.4,
     borderRadius: 12,
     marginBottom: 20,
   },
+  
+  // ---- ESTILOS MELHORADOS PARA TÍTULO E SUBTÍTULO ----
   title: {
-    fontSize: 20,
+    fontSize: width < 375 ? 22 : 26,
     color: '#1B4F72',
-    fontWeight: '600',
-    marginTop: 8,
+    fontWeight: '700',
+    marginTop: -30,
+    marginBottom: 16,
+    textAlign: 'center',
+    paddingHorizontal: 15,
+    lineHeight: width < 375 ? 28 : 32,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+    letterSpacing: 0.5,
   },
+  
+  subtitle: {
+    fontSize: width < 370 ? 20 : 22,
+    color: '#2295D1',
+    fontWeight: '600',
+    marginBottom: 25,
+    marginTop: -5,
+    textAlign: 'center',
+    paddingHorizontal: 15,
+    lineHeight: width < 370 ? 24 : 28,
+    fontStyle: 'italic',
+    letterSpacing: 0.3,
+  },
+  
   text: {
-    fontSize: 16,
+    fontSize: width < 375 ? 16 : 16,
     color: '#2295D1',
     textAlign: 'center',
-    marginTop: 5,
+    marginTop: 8,
+    paddingHorizontal: 15,
+    lineHeight: 22,
+  },
+  
+  // ---- ESTILOS PARA CAMPANHAS ----
+  campaignTitle: {
+    fontSize: width < 375 ? 22 : 26,
+    fontWeight: '700',
+    color: '#1B4F72',
+    textAlign: 'center',
+    marginBottom: 18,
+    lineHeight: width < 375 ? 28 : 32,
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+    letterSpacing: 0.5,
+  },
+  
+  campaignSection: {
+    fontSize: width < 375 ? 16 : 18,
+    fontWeight: '600',
+    color: '#886633',
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    letterSpacing: 1.2,
+  },
+
+  // ... (mantenha o restante dos estilos existentes)
+  
+  // Estilos para os tópicos clicáveis
+  topicsContainer: {
+    width: '95%',
+    marginBottom: 20,
+  },
+  topicItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: '#f0f8ff',
+  },
+  topicBullet: {
+    fontSize: 18,
+    color: '#2295D1',
+    marginRight: 10,
+    fontWeight: 'bold',
+  },
+  topicText: {
+    fontSize: width < 375 ? 14 : 16,
+    color: '#2295D1',
+    flex: 1,
+    textAlign: 'left',
+    fontWeight: '500',
+  },
+  introText: {
+    fontSize: width < 375 ? 12 : 14,
+    color: '#1B4F72',
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginTop: 10,
+    paddingHorizontal: 20,
   },
   arrowContainer: {
     position: 'absolute',
     bottom: 60,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    gap: 200,
   },
   homeButtonContainer: {
     position: 'absolute',
-    bottom: 60, // mesma altura das setas
+    bottom: 110,
     alignSelf: 'center',
+  },
+  campainButton: {
+    backgroundColor: '#2295D1',
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 3,
+    elevation: 3,
+    marginTop: 10
   },
   homeButton: {
     backgroundColor: '#2295D1',
@@ -69,15 +172,234 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 8,
     top: -40
-
   },
   indicator: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#2295D1',
   },
   activeIndicator: {
     backgroundColor: '#2295D1',
+  },
+  inactiveIndicator: {
+    backgroundColor: '#cce0ff',
+  },
+  fixedImage: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: height * 0.4,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: height * 0.4,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+
+  // ---- ESTILOS ESPECÍFICOS PARA PÁGINAS DE CAMPANHA (>= 8) ----
+  campaignPage: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    marginTop: 0,
+  },
+  campaignContent: {
+    backgroundColor: 'rgba(255, 255, 255, 0.96)',
+    borderRadius: 20,
+    paddingHorizontal: 25,
+    paddingVertical: 30,
+    marginHorizontal: 15,
+    width: width * 0.9,
+    maxHeight: height * 0.7,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 15,
+    elevation: 10,
+    alignItems: 'center',
+    marginTop: -height * 0.1,
+    zIndex: 10,
+  },
+  campaignText: {
+    fontSize: width < 375 ? 14 : 16,
+    color: '#003c66',
+    textAlign: 'justify',
+    lineHeight: 24,
+    marginBottom: 20,
+    width: '100%',
+  },
+  campaignHighlight: {
+    color: '#1B4F72',
+    fontWeight: '700',
+  },
+  backButton: {
+    backgroundColor: '#1B4F72',
+    paddingVertical: 12,
+    paddingHorizontal: 35,
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 4,
+    marginTop: 10,
+    minWidth: 160,
+  },
+  backButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  campaignIndicatorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 40,
+    width: '100%',
+  },
+  campaignIndicator: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginHorizontal: 4,
+  },
+  activeCampaignIndicator: {
+    backgroundColor: '#00C8FF',
+    transform: [{ scale: 1.3 }],
+  },
+  inactiveCampaignIndicator: {
+    backgroundColor: '#a0dfff',
+    opacity: 0.5,
+  },
+
+  // ---- ESTILOS PARA A PÁGINA DE DESCRIÇÃO DAS SALAS ----
+  roomsContainer: {
+    width: '100%',
+    marginBottom: 20,
+    gap: 12,
+  },
+  roomButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f8ff',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#2295D1',
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  roomButtonText: {
+    fontSize: 16,
+    color: '#1B4F72',
+    fontWeight: '600',
+    marginLeft: 12,
+    flex: 1,
+  },
+
+  // ---- ESTILOS PARA O MODAL ----
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 25,
+    width: '90%',
+    maxHeight: '80%',
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 15,
+    elevation: 10,
+  },
+  modalScrollView: {
+    maxHeight: '85%',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#1B4F72',
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 28,
+  },
+  modalSection: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#886633',
+    marginTop: 15,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  modalText: {
+    fontSize: 15,
+    color: '#003c66',
+    textAlign: 'justify',
+    lineHeight: 22,
+    marginBottom: 10,
+  },
+  modalBulletText: {
+    fontSize: 14,
+    color: '#003c66',
+    lineHeight: 20,
+    marginBottom: 4,
+    textAlign: 'left',
+  },
+  modalCloseButton: {
+    backgroundColor: '#1B4F72',
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    marginTop: 15,
+    alignSelf: 'center',
+  },
+  modalCloseButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+
+  // ---- ESTILOS PARA O LINK CLICÁVEL ----
+  linkButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+  },
+  linkText: {
+    fontSize: 16,
+    color: '#2295D1',
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+    textAlign: 'center',
+    marginRight: 6,
+  },
+  linkIcon: {
+    marginLeft: 4,
   },
 });

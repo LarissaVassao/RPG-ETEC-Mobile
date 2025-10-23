@@ -105,6 +105,7 @@ export const styles = StyleSheet.create({
     marginVertical: 5,
     padding: 10,
     borderRadius: 15,
+    marginHorizontal:5
   },
   msgMinha: {
     backgroundColor: "#31cacfff",

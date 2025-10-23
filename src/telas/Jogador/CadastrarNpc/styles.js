@@ -1,0 +1,174 @@
+import { StyleSheet } from 'react-native';
+
+export 
+const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: "#F5F7FA",
+    },
+    header: {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 75,
+        height: 100,
+    },
+    logo: {
+        top:25,
+        width: 125,
+        height: 125,
+    },
+    backButton: {
+        position: 'absolute',
+        left: 20,      
+    width: 60,
+    top: 20,
+        height: 60,
+        borderRadius: 50,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#2295D1',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10,   
+    
+    },
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingTop: 10,
+        paddingBottom: 20,
+    },
+    content: {
+        padding: 20,
+        justifyContent: 'center',
+        flex: 1,
+    },
+    formContainer: {
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: '800',
+        color: '#124A69',
+        marginBottom: 25,
+        marginTop:85,
+        textAlign: 'center',
+    },
+    formRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    label: {
+        width: 90,
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#2295D1',
+        marginRight: 7,
+        textAlign: 'right',
+    },
+    inputContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+    },
+    pickerContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        justifyContent: 'center',
+        minHeight: 50,
+    },
+    input: {
+        fontSize: 15,
+        color: '#333',
+        paddingVertical: 8,
+        minHeight: 40,
+    },
+    picker: {
+        height: 50,
+        color: '#333',
+        margin: 0,
+        padding: 0,
+        width: '100%',
+    },
+    button: {
+        backgroundColor: '#2295D1',
+        borderRadius: 8,
+        padding: 16,
+        alignItems: 'center',
+        marginTop: 25,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '700',
+    },
+sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#124A69',
+        marginTop: 20,
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    
+    attributesGrid: {
+        marginBottom: 10,
+    },
+    
+    attributeRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
+    
+    attributeContainer: {
+        flex: 1,
+        alignItems: 'center',
+        marginHorizontal: 5,
+    },
+    
+    singleAttribute: {
+        maxWidth: 120,
+        alignSelf: 'center',
+    },
+    
+    attributeLabel: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#124A69',
+        marginBottom: 5,
+    },
+    
+    attributeInput: {
+        width: '100%',
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#DDD',
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        backgroundColor: '#FFF',
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#333',
+    },
+});

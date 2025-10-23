@@ -8,9 +8,10 @@ $usuario = $input['id_usuario'] ?? '';
 $campanha = $input['id_campanha'] ?? '';
 $antepassado = $input['antepassado'] ?? '';
 $nivel = $input['nivel'] ?? '';
+if ($nivel > 10){$nivel = 10;}
 $periciasRecebidas = $input['pericias'] ?? []; // 👈 opcional: caso venha do front
 
-$atributos = [
+$atributos = $input['atributos'] ?? [
     'forca' => 1,
     'agilidade' => 1,
     'constituicao' => 1,
@@ -20,10 +21,10 @@ $atributos = [
     'sorte' => 1
 ];
 
-$vida = $atributos['constituicao'] + 9;
-$mental = $atributos['vontade'] + 9;
-$energia = 10;
-$ca = $atributos['agilidade'] + 3;
+$vida = ($atributos['constituicao'] * $nivel) + 8;
+$mental = ($atributos['vontade'] * $nivel) + 8;
+$energia = 8 + (2 * $nivel);
+$ca = $atributos['agilidade']  + 3;
 $credito = (is_array($antepassado) && isset($antepassado['credito'])) ? $antepassado['credito'] + 5 : 5;
 
 try {
@@ -31,12 +32,14 @@ try {
 
     // 🎲 1. Inserir personagem
     $res = $pdo->prepare("INSERT INTO personagem 
-        (nome, id_campanha, id_usuario, vida, vidaAtual, mental, mentalAtual, energia, energiaAtual, ca, credito, creditoMax, movimento, 
+        (nome, nivel, antepassado, id_campanha, id_usuario, vida, vidaAtual, mental, mentalAtual, energia, energiaAtual, ca, credito, creditoMax, movimento, 
          forca, agilidade, constituicao, inteligencia, percepcao, vontade, sorte, tokenImage, profileImage)
-        VALUES (:nome, :id_campanha, :id_usuario, :vida, :vida, :mental, :mental, :energia, :energia, :ca, 0, :credito, 6,
+        VALUES (:nome, :nivel, :antepassado, :id_campanha, :id_usuario, :vida, :vida, :mental, :mental, :energia, :energia, :ca, 0, :credito, 6,
                 :forca, :agilidade, :constituicao, :inteligencia, :percepcao, :vontade, :sorte, '', '')");	
     
     $res->bindValue(":nome", $nome);
+    $res->bindValue(":antepassado", $antepassado['nome']);
+    $res->bindValue(":nivel", $nivel);
     $res->bindValue(":id_campanha", $campanha);
     $res->bindValue(":id_usuario", $usuario);
     $res->bindValue(":vida", $vida);

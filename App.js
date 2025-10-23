@@ -13,12 +13,14 @@ import Cadastro from './src/telas/Cadastro';
 import Tutorial from './src/telas/Tutorial';
 
 import CadastrarPersonagem from './src/telas/Jogador/CadastrarPersonagem';
+import CadastrarNpc from './src/telas/Jogador/CadastrarNpc';
 import CadastrarMapa from './src/telas/Jogador/CadastrarMapa';
 import ListaPersonagens from './src/telas/Jogador/ListaPersonagens';
 import ListaNpcs from './src/telas/Jogador/ListaNpcs';
 import ListaMapas from './src/telas/Jogador/ListaMapas';
 
 import Personagem from './src/telas/Jogador/Personagem';
+import Npc from './src/telas/Jogador/Npc';
 import TelaCampanha from './src/telas/TelaCampanha';
 import Mapa from './src/telas/Jogador/Mapa';
 import TelaChat from './src/telas/Jogador/TelaChat';
@@ -66,6 +68,7 @@ function Tabs(){
   return(
     <Tab.Navigator
     screenOptions={({ route }) => ({
+      keyboardHidesTabBar: true,
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
         color= '#124A69'
@@ -144,10 +147,12 @@ export default function App() {
    <Stack.Screen name="CriarCampanha" component={CriarCampanha} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="EntrarCampanha" component={EntrarCampanha}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="CadastrarPersonagem" component={CadastrarPersonagem}  options={{headerShown: false}}></Stack.Screen>
-    <Stack.Screen name="CadastrarMapa" component={CadastrarMapa}  options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="CadastrarNpc" component={CadastrarNpc}  options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="CadastrarMapa" component={CadastrarMapa}  options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="ListaNpcs" component={ListaNpcs} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="ListaPersonagens" component={ListaPersonagens} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="Personagem" component={Personagem} options={{headerShown: false}} ></Stack.Screen>
+   <Stack.Screen name="Npc" component={Npc} options={{headerShown: false}} ></Stack.Screen>
    <Stack.Screen name="TelaCampanha" component={Tabs} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Mapa" component={Mapa} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="ListaMapas" component={ListaMapas} options={{headerShown: false}}></Stack.Screen>

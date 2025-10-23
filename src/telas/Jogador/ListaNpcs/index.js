@@ -37,7 +37,9 @@ export default function ListaNpc({ navigation }) {
                         const npcsMapeados = res.data.npcs.map(npc => ({
                             id: npc.id,
                             nome: npc.nome,
-                            imagem: npc.imagem ? { uri: npc.imagem } : require('../../../../assets/img/logo.png')
+                            imagem: npc.tokenImage 
+                                ? { uri: `data:image/jpeg;base64,${npc.tokenImage}` } 
+                                : require('../../../../assets/img/logo.png')
                         }));
                         setNpcs(npcsMapeados);
                     }
@@ -63,15 +65,18 @@ export default function ListaNpc({ navigation }) {
     };
 
     // Função para deletar um NPC
-    const deletarNpcs = async () => {
+    const deletarNpc = async () => {
         if (npcParaDeletar) {
             try {
-                await api.delete("rpgetec/deletarNpcs.php", {
+                // Chamada para deletar o NPC no backend
+                await api.delete("rpgetec/deletarNpc.php", {
                     data: { id_npc: npcParaDeletar }
                 });
+                
+                // Atualizar a lista local
                 setNpcs(npcs.filter(npc => npc.id !== npcParaDeletar));
             } catch (error) {
-                console.error("Erro ao deletar NPCs:", error);
+                console.error("Erro ao deletar NPC:", error);
             } finally {
                 setModalVisible(false);
                 setNpcParaDeletar(null);
@@ -124,7 +129,7 @@ export default function ListaNpc({ navigation }) {
                             <TouchableOpacity 
                                 key={npc.id}
                                 style={styles.npcCard}
-                                onPress={() => navigation.navigate("DetalhesNpc", { idNpc: npc.id })}
+                                onPress={() => navigation.navigate("Npc", { idNpc: npc.id })}
                             >
                                 <Image 
                                     style={styles.npcImage} 
@@ -176,7 +181,7 @@ export default function ListaNpc({ navigation }) {
                             </Pressable>
                             <Pressable 
                                 style={[styles.modalButton, styles.confirmButton]}
-                                onPress={deletarNpcs}
+                                onPress={deletarNpc}
                             >
                                 <Text style={styles.confirmButtonText}>Excluir</Text>
                             </Pressable>

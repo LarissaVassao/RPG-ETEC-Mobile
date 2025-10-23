@@ -54,6 +54,7 @@ CREATE TABLE personagem(
   inteligencia INT NOT NULL DEFAULT 1,
   percepcao INT NOT NULL DEFAULT 1,
   sorte INT NOT NULL DEFAULT 1,
+  nivel INT NOT NULL DEFAULT 1,
   FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE,
   FOREIGN KEY (id_campanha) REFERENCES campanha(id) ON DELETE CASCADE,
   INDEX idx_usuario (id_usuario),
@@ -65,9 +66,15 @@ CREATE TABLE npc(
   id_campanha INT NOT NULL,
   nome VARCHAR(64) NOT NULL,
   vida INT NOT NULL DEFAULT 10,
+  vidaAtual INT NOT NULL DEFAULT 10,
   tokenImage VARCHAR(256) NOT NULL,
+  profileImage VARCHAR(256) NOT NULL,
   mental INT NOT NULL DEFAULT 10,
+  mentalAtual INT NOT NULL DEFAULT 10,
   energia INT NOT NULL DEFAULT 10,
+  energiaAtual INT NOT NULL DEFAULT 10,
+  ca INT NOT NULL DEFAULT 3,
+  movimento INT NOT NULL DEFAULT 6,
   forca INT NOT NULL DEFAULT 1,
   agilidade INT NOT NULL DEFAULT 1,
   constituicao INT NOT NULL DEFAULT 1,
@@ -131,4 +138,12 @@ CREATE TABLE token(
   FOREIGN KEY (id_npc) REFERENCES npc(id) ON DELETE CASCADE
 );
 
- 
+CREATE TABLE chat (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  id_usuario INT NOT NULL,
+  id_campanha INT NOT NULL,
+  mensagem VARCHAR(256) NOT NULL,
+  data_hora TIMESTAMP NOT NULL DEFAULT NOW(),
+  FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY (id_campanha) REFERENCES campanha(id) ON DELETE CASCADE
+);

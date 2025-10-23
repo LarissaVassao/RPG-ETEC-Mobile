@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: "#F5F7FA",
@@ -17,12 +16,13 @@ const styles = StyleSheet.create({
         top:25,
         width: 125,
         height: 125,
+        position: "relative"
     },
     backButton: {
         position: 'absolute',
         left: 20,      
-    width: 60,
-    top: 20,
+        width: 60,
+        top: 20,
         height: 60,
         borderRadius: 50,
         backgroundColor: '#fff',
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 10,   
-    
     },
     scrollContainer: {
         flexGrow: 1,
@@ -53,6 +52,7 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: '#124A69',
         marginBottom: 25,
+        marginTop:85,
         textAlign: 'center',
     },
     formRow: {
@@ -116,9 +116,102 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 25,
     },
+    buttonDisabled: {
+        backgroundColor: '#CCCCCC',
+    },
     buttonText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: '700',
+    },
+
+    // Novos estilos para atributos
+    atributosSection: {
+        marginTop: 20,
+        padding: 5,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#124A69',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    extraInfo: {
+        fontSize: 12,
+        color: '#666',
+        textAlign: 'center',
+        marginBottom: 15,
+        fontStyle: 'italic',
+    },
+    atributosGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+    },
+    atributoItem: {
+        width: '48%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 12,
+        padding: 8,
+        backgroundColor: '#F8F9FA',
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: '#E9ECEF',
+    },
+    atributoLabel: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#124A69',
+        flex: 1,
+    },
+    atributoControls: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 8,
+    },
+    atributoButton: {
+        width: 22,
+        height: 22,
+        borderRadius: 11,
+        backgroundColor: '#F0F0F0',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#DDD',
+    },
+    atributoButtonDisabled: {
+        backgroundColor: '#F8F8F8',
+        borderColor: '#EEE',
+    },
+    atributoValue: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#2295D1',
+        marginHorizontal: 0,
+        minWidth: 20,
+        textAlign: 'center',
+    },
+    extraButton: {
+        backgroundColor: '#FFA500',
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        borderRadius: 4,
+    },
+    extraButtonText: {
+        fontSize: 10,
+        color: '#FFF',
+        fontWeight: 'bold',
     },
 });

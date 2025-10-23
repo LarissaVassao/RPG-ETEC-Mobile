@@ -87,12 +87,19 @@ useEffect(() => {
                   <View style={styles.header}>
                       <TouchableOpacity 
                           style={styles.backButton}
-                          onPress={() => navigation.navigate("ListaMapas")}
+                          onPress={() => navigation.navigate("TelaCampanha")}
                       >
                           <Ionicons name="arrow-back-outline" size={20} color="#fff" />
                       </TouchableOpacity>
                       
                       <Text style={styles.headerTitle}>MAPA</Text>
+                      
+                                          <TouchableOpacity 
+                                              style={styles.createButton}
+                                              onPress={addToken}
+                                          >
+                                              <Ionicons name="add-outline" size={22} color="#fff" />
+                                          </TouchableOpacity>
                       
                       
       </View>
@@ -132,16 +139,7 @@ useEffect(() => {
               onDrop={updateTokenPosition}
             />
           ))}
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.button} onPress={addToken}>
-              <Text style={styles.buttonText}>Criar Token</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setShowGrid(false)}>
-              <Text style={styles.buttonText}>Alterar Mapa</Text>
-            </TouchableOpacity>
-          </View>
         </ImageBackground>
-
           </ScrollView>
           </ScrollView>
       )}
