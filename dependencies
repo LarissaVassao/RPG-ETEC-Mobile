@@ -1,0 +1,8 @@
+10.239.0.214
+
+Dependencias:
+npx expo install  react-native-reanimated
+npm i expo install react-native-reanimated
+npm i react-native-flash-message
+npm i @react-native-picker/picker
+npm i axios
