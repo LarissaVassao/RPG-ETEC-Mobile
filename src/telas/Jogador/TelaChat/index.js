@@ -76,9 +76,8 @@ const enviarMensagem = async () => {
   return (
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        //behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <StatusBar backgroundColor="#124A69" barStyle="light-content" />
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Chat</Text>
         </View>
