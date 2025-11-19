@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { styles } from './styles';
+import { useUser } from "../../../context/UserContext.js";
+
 
 import url from '../../../../services/url.js';
 import api from "../../../../services/api.js";
@@ -21,7 +23,9 @@ import api from "../../../../services/api.js";
 const TOKEN_IMAGE = require('../../../../assets/img/logo.png');
 
 export default function Mapa({ route, navigation }) {
-  const { id } = route.params;
+  const { id } = route.params.id;
+  const { user, campanha } = useUser();
+  const [personagens,setPersonagens] = useState([]);
   const [bg, setBg] = useState('');
   const [tokens, setTokens] = useState([]);
   const [showGrid, setShowGrid] = useState(false);
@@ -78,8 +82,20 @@ useEffect(() => {
             }
         };
 
+        const listarPersonagens = async () => {
+          try{
+            const res = await api.get("rpgetec/listarPersonagens.php", {params: {id_campanha: campanha, mestre: route.params.mestre}});
+            setPersonagens(res);
+          }catch (error) {
+                console.error("Erro ao buscar personagens:", error);
+            }
+        };
+
+        listarPersonagens();
         checarMapa();
-    }, [gridHeight, bg]);;
+
+
+    }, []);;
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#124A69" barStyle="light-content" />

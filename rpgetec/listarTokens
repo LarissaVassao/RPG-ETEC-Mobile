@@ -1,0 +1,59 @@
+<?php
+header('Content-Type: application/json; charset=utf-8');
+
+include_once('conexao.php');
+
+$id_campanha = $_GET['id_campanha'] ?? '';
+$id_usuario = $_GET['id_usuario'] ?? '';
+$mestre = $_GET['mestre'] ?? '';
+
+if ($id_campanha == '') {
+    echo json_encode([
+        'success' => false,
+        'error' => 'id_campanha not provided'
+    ]);
+    exit;
+}
+
+if ($id_usuario) {
+    try {
+        $queryStr = "SELECT * FROM npc WHERE id_campanha = :id_campanha AND id_usuario = :id_usuario";
+        $query = $pdo->prepare($queryStr);
+        $query->bindParam(':id_campanha', $id_campanha);
+        $query->bindParam(':id_usuario', $id_usuario);
+
+        $query->execute();
+        $res = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode([
+            'success' => true,
+            'npcs' => $res 
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode([
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+
+if ($mestre){
+    try {
+        $queryStr = "SELECT * FROM npc WHERE id_campanha = :id_campanha";
+        $query = $pdo->prepare($queryStr);
+        $query->bindParam(':id_campanha', $id_campanha);
+        $query->execute();
+        $res = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode([
+            'success' => true,
+            'npcs' => $res 
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode([
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+?>

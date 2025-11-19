@@ -108,7 +108,7 @@ export default function ListaMapas({ navigation }) {
                             <TouchableOpacity 
                                 key={mapa.key}
                                 style={styles.mapaCard}
-                                onPress={() => navigation.navigate("Mapa", { id: mapa.key })}
+                                onPress={() => navigation.navigate("Mapa", { id: mapa.key, mestre: mestre })}
                             >
                                 <Image 
                                     style={styles.mapaImage} 
