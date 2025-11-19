@@ -62,6 +62,14 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     lineHeight: 22,
   },
+    textObs: {
+    fontSize: width < 375 ? 16 : 16,
+    color: '#154863ff',
+    textAlign: 'center',
+    marginTop: 8,
+    paddingHorizontal: 15,
+    lineHeight: 22,
+  },
   
   // ---- ESTILOS PARA CAMPANHAS ----
   campaignTitle: {

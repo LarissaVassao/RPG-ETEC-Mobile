@@ -261,6 +261,8 @@ export default function MyPager() {
         <Text style={styles.text}>
           Elas incluem tudo: personagens, inimigos, mapas e histórias prontas para você mestrar!
         </Text>
+          <Text style={styles.textObs}>
+            Observação: Apenas os mestres do jogo devem clicar no botão abaixo.  </Text>
         <TouchableOpacity
           style={styles.campainButton}
           onPress={showCampaignPages}
