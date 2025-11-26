@@ -10,7 +10,8 @@ export default function MyPager() {
   const navigation = useNavigation();
   const [page, setPage] = useState(0);
   const { height } = useWindowDimensions();
-  const [showExtraPages, setShowExtraPages] = useState(false);
+
+  // --- Modal / Sala states (necessários) ---
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
@@ -106,8 +107,8 @@ export default function MyPager() {
     }
   };
 
-  // Calcula o total de páginas baseado no estado
-  const totalPages = showExtraPages ? 14 : 7;
+  // totalPages fixo (apenas tutorial: 7 páginas)
+  const totalPages = 7;
 
   const goToPage = (index) => {
     pagerRef.current?.setPage(index);
@@ -123,25 +124,6 @@ export default function MyPager() {
   };
 
   const navigateToTopic = (topicIndex) => goToPage(topicIndex);
-
-  // Função para mostrar páginas extras e navegar
-  const showCampaignPages = () => {
-    setShowExtraPages(true);
-    setTimeout(() => {
-      goToPage(7); // vai para a primeira página de campanha
-    }, 100);
-  };
-
-  // Função para voltar às campanhas
-  const backToCampaigns = () => {
-    setShowExtraPages(false);
-    setTimeout(() => {
-      goToPage(4); // volta para a página de campanhas
-    }, 100);
-  };
-
-  // Verifica se está nas páginas de campanha (8-14)
-  const isCampaignPage = page >= 7 && page <= 13;
 
   // Modal para exibir informações da sala
   const RoomModal = () => (
@@ -182,7 +164,7 @@ export default function MyPager() {
     </Modal>
   );
 
-  // Renderiza todas as páginas de uma vez, controlando a visibilidade via estado
+  // Renderiza todas as páginas (apenas 7 páginas)
   const renderPages = () => {
     const pages = [
       // PÁGINA 1
@@ -231,28 +213,24 @@ export default function MyPager() {
         </Text>
       </View>,
 
-// PÁGINA 4 - Sistema Vale Místico (ATUALIZADA)
-<View style={styles.page} key="4">
-  <Text style={styles.title}>Sistema Vale Místico</Text>
-  <Text style={styles.text}>
-    É um sistema de RPG que é utilizado neste aplicativo. Funciona como um meio de introduzir iniciantes ao RPG de mesa.
-  </Text>
-  <TouchableOpacity 
-    style={styles.linkButton}
-    onPress={() => {
-      // Aqui você pode adicionar a navegação para onde quiser
-      // Por exemplo: navigation.navigate('SistemaDetails')
-      // Ou abrir um link externo: Linking.openURL('https://seusite.com/sistema')
-      console.log('Link para saber mais sobre o sistema foi clicado');
-      // Adicione aqui a ação desejada
-    }}
-  >
-    <Text style={styles.linkText}>Clique aqui para saber mais.</Text>
-    <Ionicons name="open-outline" size={16} color="#2295D1" style={styles.linkIcon} />
-  </TouchableOpacity>
-</View>,
+      // PÁGINA 4
+      <View style={styles.page} key="4">
+        <Text style={styles.title}>Sistema Vale Místico</Text>
+        <Text style={styles.text}>
+          É um sistema de RPG que é utilizado neste aplicativo. Funciona como um meio de introduzir iniciantes ao RPG de mesa.
+        </Text>
+        <TouchableOpacity 
+          style={styles.linkButton}
+          onPress={() => {
+            console.log('Link para saber mais sobre o sistema foi clicado');
+          }}
+        >
+          <Text style={styles.linkText}>Clique aqui para saber mais.</Text>
+          <Ionicons name="open-outline" size={16} color="#2295D1" style={styles.linkIcon} />
+        </TouchableOpacity>
+      </View>,
 
-      // PÁGINA 5 - Campanhas Prontas
+      // PÁGINA 5 - Campanhas Prontas (navega para a tela CampanhaPronta)
       <View style={styles.page} key="5">
         <Text style={styles.title}>Campanhas Prontas</Text>
         <Text style={styles.text}>
@@ -261,11 +239,12 @@ export default function MyPager() {
         <Text style={styles.text}>
           Elas incluem tudo: personagens, inimigos, mapas e histórias prontas para você mestrar!
         </Text>
-          <Text style={styles.textObs}>
-            Observação: Apenas os mestres do jogo devem clicar no botão abaixo.  </Text>
+        <Text style={styles.textObs}>
+          Observação: Apenas os mestres do jogo devem clicar no botão abaixo.
+        </Text>
         <TouchableOpacity
           style={styles.campainButton}
-          onPress={showCampaignPages}
+          onPress={() => navigation.navigate('CampanhaPronta')}
         >
           <Text style={styles.homeButtonText}>Saber mais sobre</Text>
         </TouchableOpacity>
@@ -292,153 +271,6 @@ export default function MyPager() {
       </View>,
     ];
 
-    // Adiciona páginas extras se showExtraPages for true
-    if (showExtraPages) {
-      pages.push(
-        // PÁGINA 8 – Premissa
-        <View style={styles.campaignPage} key="8">
-          <View style={styles.campaignContent}>
-            <Text style={styles.campaignTitle}>Campanha: Todos Juntos</Text>
-            <Text style={styles.campaignSection}>Premissa</Text>
-            <Text style={styles.campaignText}>
-              Vocês são adolescentes estudantes de um internato no interior de São Paulo chamado Colégio Esperança.
-              João Dias, um amigo em comum, desapareceu misteriosamente. Pior: ninguém parece se lembrar dele — exceto vocês.
-              Há algo estranho acontecendo nos corredores do colégio, e só o trabalho em grupo poderá revelar a verdade.
-            </Text>
-            <TouchableOpacity style={styles.backButton} onPress={backToCampaigns}>
-              <Text style={styles.backButtonText}>Voltar para Campanhas</Text>
-            </TouchableOpacity>
-          </View>
-        </View>,
-
-        // PÁGINA 9 – Regras
-        <View style={styles.campaignPage} key="9">
-          <View style={styles.campaignContent}>
-            <Text style={styles.campaignTitle}>Regras do Jogo</Text>
-            <Text style={styles.campaignSection}>Informações Básicas</Text>
-            <Text style={styles.campaignText}>
-              • Jogadores: 3{"\n"}
-              • Os personagens nunca podem se separar — quando o fazem, esquecem o motivo da missão.{"\n"}
-              • Antepassado obrigatório: Estudante.{"\n"}
-              {"\n"}
-              Local inicial: Sala de aula, onde a mesa de João está vazia. 
-            </Text>
-            <TouchableOpacity style={styles.backButton} onPress={backToCampaigns}>
-              <Text style={styles.backButtonText}>Voltar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>,
-
-        // PÁGINA 10 – Locais de foco
-        <View style={styles.campaignPage} key="10">
-          <View style={styles.campaignContent}>
-            <Text style={styles.campaignTitle}>Locais de Foco</Text>
-            <Text style={styles.campaignText}>
-              ① <Text style={styles.campaignHighlight}>Sala de aula:</Text> o armário de João está trancado com um cadeado de senha.{"\n\n"}
-              ② <Text style={styles.campaignHighlight}>Dormitório:</Text> João dorme sozinho desde que seu colega se mudou.{"\n\n"}
-              ③ <Text style={styles.campaignHighlight}>Biblioteca:</Text> seu canto favorito — o pôr do sol refletia sobre os livros.{"\n\n"}
-              ④ <Text style={styles.campaignHighlight}>Quadra de esportes:</Text> acessível apenas após resolver as outras áreas.
-            </Text>
-            <TouchableOpacity style={styles.backButton} onPress={backToCampaigns}>
-              <Text style={styles.backButtonText}>Voltar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>,
-
-        // PÁGINA 11 – Personagens principais
-        <View style={styles.campaignPage} key="11">
-          <View style={styles.campaignContent}>
-            <Text style={styles.campaignTitle}>Missões</Text>
-            <Text style={styles.campaignText}>
-              ✦  Investigar o desaparecimento de João.{"\n\n"}
-              ✦ Achar todos os fragmentos perdidos (4 pulseiras em formato de coração que juntos, formam um trevo de 4 folhas).{"\n\n"}
-              ✦ Libertar o amigo do Pesadelo.
-            </Text>
-            <TouchableOpacity style={styles.backButton} onPress={backToCampaigns}>
-              <Text style={styles.backButtonText}>Voltar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>,
-
-        // PÁGINA 12 – Descrição das Salas (ATUALIZADA)
-        <View style={styles.campaignPage} key="12">
-          <View style={styles.campaignContent}>
-            <Text style={styles.campaignTitle}>Descrição das Salas</Text>
-            <Text style={styles.campaignSection}>Clique em uma sala para ver os detalhes</Text>
-            
-            <View style={styles.roomsContainer}>
-              <TouchableOpacity 
-                style={styles.roomButton}
-                onPress={() => openRoomModal('Sala de Aula')}
-              >
-                <Ionicons name="school" size={24} color="#1B4F72" />
-                <Text style={styles.roomButtonText}>Sala de Aula</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.roomButton}
-                onPress={() => openRoomModal('Biblioteca')}
-              >
-                <Ionicons name="library" size={24} color="#1B4F72" />
-                <Text style={styles.roomButtonText}>Biblioteca</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.roomButton}
-                onPress={() => openRoomModal('Dormitório')}
-              >
-                <Ionicons name="bed" size={24} color="#1B4F72" />
-                <Text style={styles.roomButtonText}>Dormitório</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-                style={styles.roomButton}
-                onPress={() => openRoomModal('Quadra de Esportes')}
-              >
-                <Ionicons name="basketball" size={24} color="#1B4F72" />
-                <Text style={styles.roomButtonText}>Quadra de Esportes</Text>
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity style={styles.backButton} onPress={backToCampaigns}>
-              <Text style={styles.backButtonText}>Voltar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>,
-
-        // PÁGINA 13 – Objetivos
-        <View style={styles.campaignPage} key="13">
-          <View style={styles.campaignContent}>
-            <Text style={styles.campaignTitle}>Batalha</Text>
-            <Text style={styles.campaignText}>
-              Ao tentar despertar o amigo, o indivíduo verá uma monstruosidade que se assemelha a um polvo, porém sua pele é como espelhos fragmentados.
-              ✧ Cada jogador vê uma versão distorcida de si mesmo nos espelhos.{"\n"}
-              ✧ Para vencer, devem encontrar o espelho que reflete João e encaixar o trevo de 4 folhas (formado pelas pulseiras).{"\n"}
-              Somente então podem libertá-lo.{"\n"}
-              ✧ Se falharem: esquecem João para sempre — e a história reinicia no dia seguinte, como um loop.{"\n"}
-            </Text>
-            <TouchableOpacity style={styles.backButton} onPress={backToCampaigns}>
-              <Text style={styles.backButtonText}>Voltar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>,
-
-        // PÁGINA 14 – Epílogo
-        <View style={styles.campaignPage} key="14">
-          <View style={styles.campaignContent}>
-            <Text style={styles.campaignTitle}>Epílogo</Text>
-            <Text style={styles.campaignText}>
-              A lembrança de João talvez nunca volte completamente — mas o laço entre vocês será eterno.
-              O verdadeiro poder do RPG está em recordar as histórias que criamos juntos.
-            </Text>
-            <TouchableOpacity style={styles.backButton} onPress={backToCampaigns}>
-              <Text style={styles.backButtonText}>Mestrar Campanha pronta</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }
-
     return pages;
   };
 
@@ -462,8 +294,8 @@ export default function MyPager() {
         {renderPages()}
       </PagerView>
 
-      {/* NAVEGAÇÃO - OCULTA NAS PÁGINAS DE CAMPANHA (8-14) */}
-      {!isCampaignPage && page < totalPages - 1 ? (
+      {/* NAVEGAÇÃO */}
+      {page < totalPages - 1 ? (
         <View style={styles.arrowContainer}>
           <TouchableOpacity onPress={prevPage} disabled={page === 0}>
             <Ionicons
@@ -476,7 +308,7 @@ export default function MyPager() {
             <Ionicons name="chevron-forward-circle" size={50} color="#2295D1" />
           </TouchableOpacity>
         </View>
-      ) : !isCampaignPage && (
+      ) : (
         <View style={styles.homeButtonContainer}>
           <TouchableOpacity
             style={styles.homeButton}
@@ -488,7 +320,7 @@ export default function MyPager() {
       )}
 
       {/* INDICADORES DO TUTORIAL (1–7) */}
-      {!isCampaignPage && page < 7 && (
+      {page < 7 && (
         <View style={styles.indicatorContainer}>
           {[...Array(7)].map((_, i) => (
             <View
@@ -499,26 +331,6 @@ export default function MyPager() {
               ]}
             />
           ))}
-        </View>
-      )}
-
-      {/* INDICADORES DAS CAMPANHAS (8–14) */}
-      {isCampaignPage && (
-        <View style={styles.campaignIndicatorContainer}>
-          {[...Array(7)].map((_, i) => {
-            const campaignPage = i + 7; // 7→13
-            return (
-              <View
-                key={campaignPage}
-                style={[
-                  styles.campaignIndicator,
-                  page === campaignPage
-                    ? styles.activeCampaignIndicator
-                    : styles.inactiveCampaignIndicator,
-                ]}
-              />
-            );
-          })}
         </View>
       )}
 
