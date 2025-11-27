@@ -9,7 +9,7 @@ export default function MyPager() {
   const pagerRef = useRef(null);
   const navigation = useNavigation();
   const [page, setPage] = useState(0);
-  const { height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
   // --- Modal / Sala states (necessários) ---
   const [modalVisible, setModalVisible] = useState(false);
@@ -166,108 +166,233 @@ export default function MyPager() {
 
   // Renderiza todas as páginas (apenas 7 páginas)
   const renderPages = () => {
+    const isSmallScreen = width < 375;
+    const isLargeScreen = width > 414;
+
     const pages = [
       // PÁGINA 1
       <View style={styles.page} key="1">
-        <Text style={styles.title}>Bem-vindo(a) ao Tutorial do Vale Místico</Text>
-        <Text style={styles.subtitle}>Tópicos a se explorar:</Text>
-        <View style={styles.topicsContainer}>
-          {[
-            'O que é RPG?',
-            'O que é uma campanha de RPG?',
-            'Saiba mais sobre o sistema Vale Místico',
-            'Você pode mestrar uma campanha pronta',
-          ].map((topic, i) => (
-            <TouchableOpacity
-              key={i}
-              style={styles.topicItem}
-              onPress={() => navigateToTopic(i + 1)}
-            >
-              <Ionicons name="sparkles" size={18} color="#2295D1" />
-              <Text style={styles.topicText}>{topic}</Text>
-              <Ionicons name="chevron-forward" size={20} color="#2295D1" />
-            </TouchableOpacity>
-          ))}
+        <View style={[
+          styles.contentCard,
+          isSmallScreen && styles.smallContentCard,
+          isLargeScreen && styles.largeContentCard
+        ]}>
+          <Text style={[
+            styles.title,
+            isSmallScreen && styles.smallTitle,
+            isLargeScreen && styles.largeTitle
+          ]}>Bem-vindo(a) ao Tutorial do Vale Místico</Text>
+          <Text style={[
+            styles.subtitle,
+            isSmallScreen && styles.smallSubtitle,
+            isLargeScreen && styles.largeSubtitle
+          ]}>Tópicos a se explorar:</Text>
+          <View style={styles.topicsContainer}>
+            {[
+              'O que é RPG?',
+              'O que é uma campanha de RPG?',
+              'Saiba mais sobre o sistema Vale Místico',
+              'Você pode mestrar uma campanha pronta',
+            ].map((topic, i) => (
+              <TouchableOpacity
+                key={i}
+                style={[
+                  styles.topicItem,
+                  isSmallScreen && styles.smallTopicItem
+                ]}
+                onPress={() => navigateToTopic(i + 1)}
+              >
+                <Ionicons name="sparkles" size={isSmallScreen ? 16 : 18} color="#2295D1" />
+                <Text style={[
+                  styles.topicText,
+                  isSmallScreen && styles.smallTopicText
+                ]}>{topic}</Text>
+                <Ionicons name="chevron-forward" size={isSmallScreen ? 18 : 20} color="#2295D1" />
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </View>,
 
       // PÁGINA 2
       <View style={styles.page} key="2">
-        <Text style={styles.title}>O que é RPG?</Text>
-        <Text style={styles.text}>
-          RPG (Role-Playing Game) é um jogo de interpretação de papéis onde os jogadores criam personagens e interpretam ele em um mundo desenvolvido e narrado colaborativamente.
-        </Text>
-        <Text style={styles.text}>
-          As decisões dos jogadores moldam o destino da aventura. Um destes jogadores é chamado de mestre do jogo, ele que cria os desafios enfrentados pelos personagens, podendo ser desde resgatar um gato a lutar contra um monstro devorador de cérebros.
-        </Text>
+        <View style={[
+          styles.contentCard,
+          isSmallScreen && styles.smallContentCard,
+          isLargeScreen && styles.largeContentCard
+        ]}>
+          <Text style={[
+            styles.title,
+            isSmallScreen && styles.smallTitle,
+            isLargeScreen && styles.largeTitle
+          ]}>O que é RPG?</Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            RPG (Role-Playing Game) é um jogo de interpretação de papéis onde os jogadores criam personagens e interpretam ele em um mundo desenvolvido e narrado colaborativamente.
+          </Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            As decisões dos jogadores moldam o destino da aventura. Um destes jogadores é chamado de mestre do jogo, ele que cria os desafios enfrentados pelos personagens, podendo ser desde resgatar um gato a lutar contra um monstro devorador de cérebros.
+          </Text>
+        </View>
       </View>,
 
       // PÁGINA 3
       <View style={styles.page} key="3">
-        <Text style={styles.title}>O que é uma Campanha?</Text>
-        <Text style={styles.text}>
-          Uma campanha é uma grande jornada contada que é moldada em torno das ações dos personagens. 
-        </Text>
-        <Text style={styles.text}>
-          O mestre do jogo é aquele quem narra cenários, prepara desafios e missões.
-        </Text>
+        <View style={[
+          styles.contentCard,
+          isSmallScreen && styles.smallContentCard,
+          isLargeScreen && styles.largeContentCard
+        ]}>
+          <Text style={[
+            styles.title,
+            isSmallScreen && styles.smallTitle,
+            isLargeScreen && styles.largeTitle
+          ]}>O que é uma Campanha?</Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            Uma campanha é uma grande jornada contada que é moldada em torno das ações dos personagens. 
+          </Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            O mestre do jogo é aquele quem narra cenários, prepara desafios e missões.
+          </Text>
+        </View>
       </View>,
 
       // PÁGINA 4
       <View style={styles.page} key="4">
-        <Text style={styles.title}>Sistema Vale Místico</Text>
-        <Text style={styles.text}>
-          É um sistema de RPG que é utilizado neste aplicativo. Funciona como um meio de introduzir iniciantes ao RPG de mesa.
-        </Text>
-        <TouchableOpacity 
-          style={styles.linkButton}
-          onPress={() => {
-            console.log('Link para saber mais sobre o sistema foi clicado');
-          }}
-        >
-          <Text style={styles.linkText}>Clique aqui para saber mais.</Text>
-          <Ionicons name="open-outline" size={16} color="#2295D1" style={styles.linkIcon} />
-        </TouchableOpacity>
+        <View style={[
+          styles.contentCard,
+          isSmallScreen && styles.smallContentCard,
+          isLargeScreen && styles.largeContentCard
+        ]}>
+          <Text style={[
+            styles.title,
+            isSmallScreen && styles.smallTitle,
+            isLargeScreen && styles.largeTitle
+          ]}>Sistema Vale Místico</Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            É um sistema de RPG que é utilizado neste aplicativo. Funciona como um meio de introduzir iniciantes ao RPG de mesa.
+          </Text>
+          <TouchableOpacity 
+            style={[
+              styles.linkButton,
+              isSmallScreen && styles.smallLinkButton
+            ]}
+            onPress={() => {
+              console.log('Link para saber mais sobre o sistema foi clicado');
+            }}
+          >
+            <Text style={[
+              styles.linkText,
+              isSmallScreen && styles.smallLinkText
+            ]}>Clique aqui para saber mais.</Text>
+            <Ionicons name="open-outline" size={isSmallScreen ? 14 : 16} color="#2295D1" style={styles.linkIcon} />
+          </TouchableOpacity>
+        </View>
       </View>,
 
       // PÁGINA 5 - Campanhas Prontas (navega para a tela CampanhaPronta)
       <View style={styles.page} key="5">
-        <Text style={styles.title}>Campanhas Prontas</Text>
-        <Text style={styles.text}>
-          Não sabe por onde começar? O Vale Místico oferece uma aventura pronta para jogar.
-        </Text>
-        <Text style={styles.text}>
-          Elas incluem tudo: personagens, inimigos, mapas e histórias prontas para você mestrar!
-        </Text>
-        <Text style={styles.textObs}>
-          Observação: Apenas os mestres do jogo devem clicar no botão abaixo.
-        </Text>
-        <TouchableOpacity
-          style={styles.campainButton}
-          onPress={() => navigation.navigate('CampanhaPronta')}
-        >
-          <Text style={styles.homeButtonText}>Saber mais sobre</Text>
-        </TouchableOpacity>
+        <View style={[
+          styles.contentCard,
+          isSmallScreen && styles.smallContentCard,
+          isLargeScreen && styles.largeContentCard
+        ]}>
+          <Text style={[
+            styles.title,
+            isSmallScreen && styles.smallTitle,
+            isLargeScreen && styles.largeTitle
+          ]}>Campanhas Prontas</Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            Não sabe por onde começar? O Vale Místico oferece uma aventura pronta para jogar.
+          </Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            Elas incluem tudo: personagens, inimigos, mapas e histórias prontas para você mestrar!
+          </Text>
+          <Text style={[
+            styles.textObs,
+            isSmallScreen && styles.smallTextObs
+          ]}>
+            Observação: Apenas os mestres do jogo devem clicar no botão abaixo.
+          </Text>
+          <TouchableOpacity
+            style={[
+              styles.campainButton,
+              isSmallScreen && styles.smallCampainButton
+            ]}
+            onPress={() => navigation.navigate('CampanhaPronta')}
+          >
+            <Text style={[
+              styles.homeButtonText,
+              isSmallScreen && styles.smallHomeButtonText
+            ]}>Saber mais sobre</Text>
+          </TouchableOpacity>
+        </View>
       </View>,
 
       // PÁGINA 6
       <View style={styles.page} key="6">
-        <Text style={styles.title}>Dicas para Começar</Text>
-        <Text style={styles.text}>
-          ✧ Comece com algo simples{"\n"}
-          ✧ Dê espaço à imaginação{"\n"}
-          ✧ Use personagens prontos na primeira vez{"\n"}
-          ✧ O mais importante: divirta-se!
-        </Text>
+        <View style={[
+          styles.contentCard,
+          isSmallScreen && styles.smallContentCard,
+          isLargeScreen && styles.largeContentCard
+        ]}>
+          <Text style={[
+            styles.title,
+            isSmallScreen && styles.smallTitle,
+            isLargeScreen && styles.largeTitle
+          ]}>Dicas para Começar</Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            ✧ Comece com algo simples{"\n"}
+            ✧ Dê espaço à imaginação{"\n"}
+            ✧ Use personagens prontos na primeira vez{"\n"}
+            ✧ O mais importante: divirta-se!
+          </Text>
+        </View>
       </View>,
 
       // PÁGINA 7
       <View style={styles.page} key="7">
-        <Text style={styles.title}>Fim do Tutorial</Text>
-        <Text style={styles.text}>
-          Agora você conhece os fundamentos do RPG e do sistema Vale Místico. 
-          Que suas aventuras sejam épicas e cheias de momentos inesquecíveis!
-        </Text>
+        <View style={[
+          styles.contentCard,
+          isSmallScreen && styles.smallContentCard,
+          isLargeScreen && styles.largeContentCard
+        ]}>
+          <Text style={[
+            styles.title,
+            isSmallScreen && styles.smallTitle,
+            isLargeScreen && styles.largeTitle
+          ]}>Fim do Tutorial</Text>
+          <Text style={[
+            styles.text,
+            isSmallScreen && styles.smallText
+          ]}>
+            Agora você conhece os fundamentos do RPG e do sistema Vale Místico. 
+            Que suas aventuras sejam épicas e cheias de momentos inesquecíveis!
+          </Text>
+        </View>
       </View>,
     ];
 
@@ -276,6 +401,14 @@ export default function MyPager() {
 
   return (
     <View style={styles.container}>
+      {/* BOTÃO VOLTAR PARA HOME */}
+      <TouchableOpacity 
+        style={styles.homeBackButton}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <Ionicons name="arrow-back" size={24} color="#2295D1" />
+      </TouchableOpacity>
+
       {/* IMAGEM FIXA + DEGRADÊ */}
       <Image
         style={styles.fixedImage}
@@ -300,12 +433,12 @@ export default function MyPager() {
           <TouchableOpacity onPress={prevPage} disabled={page === 0}>
             <Ionicons
               name="chevron-back-circle"
-              size={50}
+              size={44}
               color={page === 0 ? '#cce0ff' : '#2295D1'}
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={nextPage}>
-            <Ionicons name="chevron-forward-circle" size={50} color="#2295D1" />
+            <Ionicons name="chevron-forward-circle" size={44} color="#2295D1" />
           </TouchableOpacity>
         </View>
       ) : (
