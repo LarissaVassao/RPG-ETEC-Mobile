@@ -24,6 +24,8 @@ import Npc from './src/telas/Jogador/Npc';
 import TelaCampanha from './src/telas/TelaCampanha';
 import Mapa from './src/telas/Jogador/Mapa';
 import TelaChat from './src/telas/Jogador/TelaChat';
+import CampanhaPronta from './src/telas/CampanhaPronta';
+
 
 import { UserProvider } from './src/context/UserContext';
 
@@ -158,6 +160,7 @@ export default function App() {
    <Stack.Screen name="ListaMapas" component={ListaMapas} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="Tutorial" component={Tutorial} options={{headerShown: false}}></Stack.Screen>
    <Stack.Screen name="TelaChat" component={TelaChat} options={{headerShown: false}}></Stack.Screen>
+   <Stack.Screen name="CampanhaPronta" component={CampanhaPronta} options={{headerShown: false}}></Stack.Screen>
 
 
 

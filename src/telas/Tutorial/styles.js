@@ -1,197 +1,287 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
+const isSmallScreen = width < 375;
+const isLargeScreen = width > 414;
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8fafc',
   },
+  
   pager: {
     flex: 1,
     width: '100%',
   },
+  
   page: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
     marginTop: height * 0.35,
   },
-  image: {
-    width: width * 0.9,
-    height: height * 0.4,
-    borderRadius: 12,
-    marginBottom: 20,
+  
+  // Botão voltar - minimalista
+  homeBackButton: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 50 : 40,
+    left: 20,
+    zIndex: 100,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3,
   },
   
-  // ---- ESTILOS MELHORADOS PARA TÍTULO E SUBTÍTULO ----
+  // Card de conteúdo - limpo e simples
+  contentCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 16,
+    paddingHorizontal: 24,
+    paddingVertical: 28,
+    marginHorizontal: 8,
+    width: width * 0.9,
+    maxHeight: height * 0.55,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 4,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  
+  smallContentCard: {
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+    width: width * 0.92,
+    maxHeight: height * 0.6,
+  },
+  
+  largeContentCard: {
+    paddingHorizontal: 28,
+    paddingVertical: 32,
+    width: width * 0.85,
+    maxHeight: height * 0.5,
+  },
+  
+  // ---- TIPOGRAFIA MINIMALISTA ----
   title: {
-    fontSize: width < 375 ? 22 : 26,
-    color: '#1B4F72',
+    fontSize: isSmallScreen ? 20 : 24,
+    color: '#1a365d',
     fontWeight: '700',
-    marginTop: -30,
     marginBottom: 16,
     textAlign: 'center',
-    paddingHorizontal: 15,
-    lineHeight: width < 375 ? 28 : 32,
-    textShadowColor: 'rgba(0, 0, 0, 0.1)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-    letterSpacing: 0.5,
+    lineHeight: isSmallScreen ? 26 : 30,
+  },
+  
+  smallTitle: {
+    fontSize: 18,
+    lineHeight: 24,
+    marginBottom: 14,
+  },
+  
+  largeTitle: {
+    fontSize: 26,
+    lineHeight: 32,
   },
   
   subtitle: {
-    fontSize: width < 370 ? 20 : 22,
+    fontSize: isSmallScreen ? 16 : 18,
     color: '#2295D1',
     fontWeight: '600',
-    marginBottom: 25,
-    marginTop: -5,
+    marginBottom: 20,
     textAlign: 'center',
-    paddingHorizontal: 15,
-    lineHeight: width < 370 ? 24 : 28,
-    fontStyle: 'italic',
-    letterSpacing: 0.3,
+    lineHeight: isSmallScreen ? 20 : 22,
+  },
+  
+  smallSubtitle: {
+    fontSize: 15,
+    lineHeight: 18,
+    marginBottom: 16,
   },
   
   text: {
-    fontSize: width < 375 ? 16 : 16,
-    color: '#2295D1',
+    fontSize: isSmallScreen ? 14 : 16,
+    color: '#2d3748',
     textAlign: 'center',
-    marginTop: 8,
-    paddingHorizontal: 15,
-    lineHeight: 22,
-  },
-    textObs: {
-    fontSize: width < 375 ? 16 : 16,
-    color: '#154863ff',
-    textAlign: 'center',
-    marginTop: 8,
-    paddingHorizontal: 15,
-    lineHeight: 22,
-  },
-  
-  // ---- ESTILOS PARA CAMPANHAS ----
-  campaignTitle: {
-    fontSize: width < 375 ? 22 : 26,
-    fontWeight: '700',
-    color: '#1B4F72',
-    textAlign: 'center',
-    marginBottom: 18,
-    lineHeight: width < 375 ? 28 : 32,
-    textShadowColor: 'rgba(0, 0, 0, 0.1)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-    letterSpacing: 0.5,
-  },
-  
-  campaignSection: {
-    fontSize: width < 375 ? 16 : 18,
-    fontWeight: '600',
-    color: '#886633',
     marginBottom: 12,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-    letterSpacing: 1.2,
+    lineHeight: isSmallScreen ? 20 : 22,
+    fontWeight: '400',
   },
-
-  // ... (mantenha o restante dos estilos existentes)
   
-  // Estilos para os tópicos clicáveis
-  topicsContainer: {
-    width: '95%',
-    marginBottom: 20,
+  smallText: {
+    fontSize: 13,
+    lineHeight: 18,
+    marginBottom: 10,
   },
+  
+  textObs: {
+    fontSize: isSmallScreen ? 12 : 14,
+    color: '#718096',
+    textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 16,
+    lineHeight: isSmallScreen ? 16 : 18,
+    fontStyle: 'italic',
+  },
+  
+  smallTextObs: {
+    fontSize: 11,
+    lineHeight: 15,
+  },
+  
+  // ---- TÓPICOS MINIMALISTAS ----
+  topicsContainer: {
+    width: '100%',
+    marginBottom: 8,
+  },
+  
   topicItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: 'rgba(34, 149, 209, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(34, 149, 209, 0.1)',
+  },
+  
+  smallTopicItem: {
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: '#f0f8ff',
+    marginBottom: 6,
   },
-  topicBullet: {
-    fontSize: 18,
-    color: '#2295D1',
-    marginRight: 10,
-    fontWeight: 'bold',
-  },
+  
   topicText: {
-    fontSize: width < 375 ? 14 : 16,
+    fontSize: isSmallScreen ? 13 : 15,
     color: '#2295D1',
     flex: 1,
     textAlign: 'left',
     fontWeight: '500',
+    marginLeft: 8,
+    marginRight: 8,
   },
-  introText: {
-    fontSize: width < 375 ? 12 : 14,
-    color: '#1B4F72',
-    textAlign: 'center',
-    fontStyle: 'italic',
-    marginTop: 10,
-    paddingHorizontal: 20,
+  
+  smallTopicText: {
+    fontSize: 12,
+    marginLeft: 6,
+    marginRight: 6,
   },
-  arrowContainer: {
-    position: 'absolute',
-    bottom: 60,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    gap: 200,
-  },
-  homeButtonContainer: {
-    position: 'absolute',
-    bottom: 110,
-    alignSelf: 'center',
-  },
+  
+  // ---- BOTÕES SIMPLES ----
   campainButton: {
     backgroundColor: '#2295D1',
     paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 25,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 3,
-    elevation: 3,
-    marginTop: 10
+    paddingHorizontal: 28,
+    borderRadius: 20,
+    marginTop: 12,
+    minWidth: 180,
   },
+  
+  smallCampainButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    minWidth: 160,
+  },
+  
   homeButton: {
     backgroundColor: '#2295D1',
     paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 25,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 3,
-    elevation: 3,
+    paddingHorizontal: 32,
+    borderRadius: 20,
   },
+  
   homeButtonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: isSmallScreen ? 16 : 17,
     fontWeight: '600',
+    textAlign: 'center',
   },
+  
+  smallHomeButtonText: {
+    fontSize: 15,
+  },
+  
+  // ---- LINK SIMPLES ----
+  linkButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  
+  smallLinkButton: {
+    marginTop: 10,
+  },
+  
+  linkText: {
+    fontSize: isSmallScreen ? 14 : 15,
+    color: '#2295D1',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginRight: 4,
+  },
+  
+  smallLinkText: {
+    fontSize: 13,
+  },
+  
+  // ---- NAVEGAÇÃO LIMPA ----
+  arrowContainer: {
+    position: 'absolute',
+    bottom: height * 0.08,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: width * 0.1,
+  },
+  
+  homeButtonContainer: {
+    position: 'absolute',
+    bottom: height * 0.1,
+    alignSelf: 'center',
+  },
+  
+  // ---- INDICADORES DISCRETOS ----
   indicatorContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20,
-    gap: 8,
-    top: -40
+    marginBottom: height * 0.05,
+    gap: 6,
   },
+  
   indicator: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
+  
   activeIndicator: {
     backgroundColor: '#2295D1',
   },
+  
   inactiveIndicator: {
-    backgroundColor: '#cce0ff',
+    backgroundColor: '#cbd5e0',
   },
+  
+  // ---- IMAGEM DE FUNDO - mantido original ----
   fixedImage: {
     position: 'absolute',
     top: 0,
@@ -200,6 +290,7 @@ export const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
+  
   overlay: {
     position: 'absolute',
     top: 0,
@@ -209,205 +300,77 @@ export const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
-
-  // ---- ESTILOS ESPECÍFICOS PARA PÁGINAS DE CAMPANHA (>= 8) ----
-  campaignPage: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    marginTop: 0,
-  },
-  campaignContent: {
-    backgroundColor: 'rgba(255, 255, 255, 0.96)',
-    borderRadius: 20,
-    paddingHorizontal: 25,
-    paddingVertical: 30,
-    marginHorizontal: 15,
-    width: width * 0.9,
-    maxHeight: height * 0.7,
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 15,
-    elevation: 10,
-    alignItems: 'center',
-    marginTop: -height * 0.1,
-    zIndex: 10,
-  },
-  campaignText: {
-    fontSize: width < 375 ? 14 : 16,
-    color: '#003c66',
-    textAlign: 'justify',
-    lineHeight: 24,
-    marginBottom: 20,
-    width: '100%',
-  },
-  campaignHighlight: {
-    color: '#1B4F72',
-    fontWeight: '700',
-  },
-  backButton: {
-    backgroundColor: '#1B4F72',
-    paddingVertical: 12,
-    paddingHorizontal: 35,
-    borderRadius: 25,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 4,
-    marginTop: 10,
-    minWidth: 160,
-  },
-  backButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  campaignIndicatorContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 40,
-    width: '100%',
-  },
-  campaignIndicator: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 4,
-  },
-  activeCampaignIndicator: {
-    backgroundColor: '#00C8FF',
-    transform: [{ scale: 1.3 }],
-  },
-  inactiveCampaignIndicator: {
-    backgroundColor: '#a0dfff',
-    opacity: 0.5,
-  },
-
-  // ---- ESTILOS PARA A PÁGINA DE DESCRIÇÃO DAS SALAS ----
-  roomsContainer: {
-    width: '100%',
-    marginBottom: 20,
-    gap: 12,
-  },
-  roomButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0f8ff',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#2295D1',
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  roomButtonText: {
-    fontSize: 16,
-    color: '#1B4F72',
-    fontWeight: '600',
-    marginLeft: 12,
-    flex: 1,
-  },
-
-  // ---- ESTILOS PARA O MODAL ----
+  
+  // ---- MODAL MINIMALISTA ----
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
+  
   modalContent: {
     backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 25,
+    borderRadius: 16,
+    padding: 20,
     width: '90%',
     maxHeight: '80%',
     shadowColor: '#000',
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 15,
-    elevation: 10,
+    shadowRadius: 12,
+    elevation: 8,
   },
+  
   modalScrollView: {
     maxHeight: '85%',
   },
+  
   modalTitle: {
-    fontSize: 22,
+    fontSize: isSmallScreen ? 20 : 22,
     fontWeight: '700',
-    color: '#1B4F72',
+    color: '#1a365d',
     textAlign: 'center',
-    marginBottom: 20,
-    lineHeight: 28,
+    marginBottom: 16,
   },
+  
   modalSection: {
-    fontSize: 18,
+    fontSize: isSmallScreen ? 15 : 16,
     fontWeight: '600',
-    color: '#886633',
-    marginTop: 15,
+    color: '#2295D1',
+    marginTop: 16,
     marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
   },
+  
   modalText: {
-    fontSize: 15,
-    color: '#003c66',
+    fontSize: isSmallScreen ? 14 : 15,
+    color: '#4a5568',
     textAlign: 'justify',
-    lineHeight: 22,
-    marginBottom: 10,
+    lineHeight: isSmallScreen ? 20 : 22,
+    marginBottom: 8,
   },
+  
   modalBulletText: {
-    fontSize: 14,
-    color: '#003c66',
-    lineHeight: 20,
+    fontSize: isSmallScreen ? 13 : 14,
+    color: '#4a5568',
+    lineHeight: isSmallScreen ? 18 : 20,
     marginBottom: 4,
     textAlign: 'left',
   },
+  
   modalCloseButton: {
-    backgroundColor: '#1B4F72',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    marginTop: 15,
+    backgroundColor: '#2295D1',
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    marginTop: 16,
     alignSelf: 'center',
   },
+  
   modalCloseButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: isSmallScreen ? 14 : 15,
     fontWeight: '600',
-    textAlign: 'center',
-  },
-
-  // ---- ESTILOS PARA O LINK CLICÁVEL ----
-  linkButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 15,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    backgroundColor: 'transparent',
-  },
-  linkText: {
-    fontSize: 16,
-    color: '#2295D1',
-    fontWeight: '600',
-    textDecorationLine: 'underline',
-    textAlign: 'center',
-    marginRight: 6,
-  },
-  linkIcon: {
-    marginLeft: 4,
   },
 });
