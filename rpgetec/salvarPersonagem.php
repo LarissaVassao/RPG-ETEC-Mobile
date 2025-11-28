@@ -30,7 +30,6 @@ $credito = (is_array($antepassado) && isset($antepassado['credito'])) ? $antepas
 try {
     $pdo->beginTransaction();
 
-    // 🎲 1. Inserir personagem
     $res = $pdo->prepare("INSERT INTO personagem 
         (nome, nivel, antepassado, id_campanha, id_usuario, vida, vidaAtual, mental, mentalAtual, energia, energiaAtual, ca, credito, creditoMax, movimento, 
          forca, agilidade, constituicao, inteligencia, percepcao, vontade, sorte, tokenImage, profileImage)
