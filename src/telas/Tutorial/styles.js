@@ -128,12 +128,12 @@ export const styles = StyleSheet.create({
   
   textObs: {
     fontSize: isSmallScreen ? 12 : 14,
-    color: '#718096',
+    color: '#F00',
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 16,
     lineHeight: isSmallScreen ? 16 : 18,
-    fontStyle: 'italic',
+    fontStyle: 'italic',    
   },
   
   smallTextObs: {

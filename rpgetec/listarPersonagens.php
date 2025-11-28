@@ -15,7 +15,7 @@ if ($id_campanha == '') {
 
 if($mestre == 1){
 try {
-	$queryStr = "SELECT * FROM personagem WHERE id_campanha = :id_campanha";
+    $queryStr = "SELECT id, nome, profileImage, id_usuario FROM personagem WHERE id_campanha = :id_campanha"; // ← ADICIONADO id_usuario
     $query = $pdo->prepare($queryStr);
     $query->bindParam(':id_campanha', $id_campanha);
     $query->execute();
@@ -34,7 +34,7 @@ try {
 }
 else{
     try {
-	$queryStr = "SELECT * FROM personagem WHERE id_campanha = :id_campanha AND id_usuario = :id_usuario";
+    $queryStr = "SELECT id, nome, profileImage, id_usuario FROM personagem WHERE id_campanha = :id_campanha AND id_usuario = :id_usuario"; // ← ADICIONADO id_usuario
     $query = $pdo->prepare($queryStr);
     $query->bindParam(':id_campanha', $id_campanha);
     $query->bindParam(':id_usuario', $id_usuario);

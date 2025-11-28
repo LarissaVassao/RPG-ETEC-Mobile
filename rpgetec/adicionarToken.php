@@ -17,6 +17,18 @@ if ($id_mapa == '') {
 }
 
 try {
+    // Se for um personagem, buscar a imagem do personagem
+    if ($id_personagem) {
+        $stmt = $pdo->prepare("SELECT tokenImage FROM personagem WHERE id = :id_personagem");
+        $stmt->bindParam(':id_personagem', $id_personagem);
+        $stmt->execute();
+        $personagem = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($personagem && !empty($personagem['tokenImage'])) {
+            $tokenImage = $personagem['tokenImage'];
+        }
+    }
+
     $queryStr = "INSERT INTO token (id_mapa, id_personagem, id_npc, positionX, positionY, tokenImage) 
                  VALUES (:id_mapa, :id_personagem, :id_npc, :positionX, :positionY, :tokenImage)";
     
@@ -34,7 +46,8 @@ try {
     echo json_encode([
         'success' => true,
         'id' => $id_token,
-        'message' => 'Token adicionado com sucesso'
+        'message' => 'Token adicionado com sucesso',
+        'tokenImage' => $tokenImage // Retorna a imagem usada
     ]);
 } catch (PDOException $e) {
     echo json_encode([

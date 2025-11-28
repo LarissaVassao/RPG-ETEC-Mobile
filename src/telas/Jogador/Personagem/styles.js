@@ -966,10 +966,10 @@ occupationText: {
 
   // Cores específicas para cada barra
   lifeBarBackground: {
-    borderColor: '#FF6B6B',
+    borderColor: '#4FC3F7',
   },
   lifeBarFill: {
-    backgroundColor: '#FF4444',
+    backgroundColor: '#4A90E2',
   },
 
   mentalBarBackground: {
@@ -980,10 +980,10 @@ occupationText: {
   },
 
   energyBarBackground: {
-    borderColor: '#FFD54F',
+    borderColor: '#4FC3F7',
   },
   energyBarFill: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#4A90E2',
   },
   resourceInputGroup: {
   marginBottom: 15,

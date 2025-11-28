@@ -5,6 +5,7 @@ import { styles } from './styles';
 import { useUser } from "../../../context/UserContext.js";
 
 import api from "../../../../services/api.js";
+import url from '../../../../services/url.js'; // ← ADICIONAR IMPORT DO URL
 
 export default function ListaPersonagens({ navigation }) {
     // Estado para armazenar a lista de personagens
@@ -32,9 +33,8 @@ export default function ListaPersonagens({ navigation }) {
                 const personagensMapeados = res.data.personagens.map(p => ({
                     id: p.id,
                     nome: p.nome,
-                    imagem: p.profileImage 
-                        ? { uri: `data:image/jpeg;base64,${p.profileImage}` }
-                        : require('../../../../assets/img/logo.png')
+                    profileImage: p.profileImage, // ← MANTER O NOME DO ARQUIVO
+                    id_usuario: p.id_usuario // ← ADICIONAR PARA VERIFICAÇÃO DE PERMISSÃO
                 })); 
                 setPersonagens(personagensMapeados);
               }
@@ -84,6 +84,14 @@ export default function ListaPersonagens({ navigation }) {
         setPersonagemParaDeletar(null);
     };
 
+    // Função para obter a source da imagem
+    const getImageSource = (profileImage) => {
+        if (profileImage && profileImage !== '') {
+            return { uri: `${url}rpgetec/perfil/${profileImage}` };
+        }
+        return require('../../../../assets/img/logo.png');
+    };
+
     return(
         <View style={styles.container}>
             <StatusBar backgroundColor="#124A69" barStyle="light-content" />
@@ -126,7 +134,7 @@ export default function ListaPersonagens({ navigation }) {
                                 <Image 
                                     style={styles.characterImage} 
                                     resizeMode="cover" 
-                                    source={personagem.imagem} 
+                                    source={getImageSource(personagem.profileImage)} // ← CORRIGIDO AQUI
                                 />
                                 <View style={styles.characterInfo}>
                                     <Text style={styles.characterName}>{personagem.nome}</Text>

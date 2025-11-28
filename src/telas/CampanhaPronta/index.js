@@ -253,12 +253,12 @@ export default function CampanhaPronta() {
       </ScrollView>
 
       {/* --- BOTÃO CRIAR CAMPANHA --- */}
-      <View style={styles.buttonContainer}>
+      {/* <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.createButton} onPress={criarCampanha}>
           <Ionicons name="add-circle-outline" size={24} color="#FFFFFF" />
           <Text style={styles.createButtonText}>Criar campanha pronta</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* --- MODAL DE DETALHES --- */}
       <Modal visible={modalVisible} animationType="slide" transparent={true}>
