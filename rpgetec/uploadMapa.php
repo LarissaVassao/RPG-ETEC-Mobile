@@ -30,7 +30,7 @@ if (isset($_FILES['imagem']) && isset($_POST['id_mapa'])) {
     }
     
     // Criar diretório se não existir
-    $upload_dir = 'rpgetec/mapas/';
+    $upload_dir = 'mapas/';
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }
